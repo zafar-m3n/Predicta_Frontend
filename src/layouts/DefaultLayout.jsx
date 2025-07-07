@@ -16,7 +16,6 @@ const clientMenu = [
     ],
   },
   { label: "Wallet History", icon: "mdi:wallet-outline", path: "/wallet-history" },
-  { label: "Copy Trading", icon: "mdi:content-copy", path: "/copy-trading" },
   { label: "Tickets", icon: "mdi:headset", path: "/tickets" },
   { label: "Market Events", icon: "mdi:calendar-month-outline", path: "/market-events" },
   { label: "Demo Accounts", icon: "mdi:account-multiple-outline", path: "/demo-accounts" },
