@@ -1,12 +1,12 @@
 import React from "react";
 import DefaultLayout from "@/layouts/DefaultLayout";
 
-const HomePage = () => {
+const DepositMethods = () => {
   return (
     <DefaultLayout>
-      <div>HomePage</div>
+      <div>Deposits</div>
     </DefaultLayout>
   );
 };
 
-export default HomePage;
+export default DepositMethods;

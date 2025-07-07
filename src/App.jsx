@@ -8,6 +8,7 @@ import VerifyEmailPage from "@/pages/auth/VerifyEmailPage";
 import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/auth/ResetPasswordPage";
 import HomePage from "@/pages/home/index";
+import DepositMethods from "@/pages/admin/deposit-methods";
 
 import PrivateRoute from "@/components/PrivateRoute";
 import PublicRoute from "@/components/PublicRoute";
@@ -26,8 +27,14 @@ function App() {
               </PrivateRoute>
             }
           />
-
-          {/* Auth-related public routes */}
+          <Route
+            path="/admin/deposit-methods"
+            element={
+              <PrivateRoute>
+                <DepositMethods />
+              </PrivateRoute>
+            }
+          />
           <Route
             path="/register"
             element={

@@ -40,8 +40,12 @@ const LoginPage = () => {
 
         token.setAuthToken(res.data.token);
         token.setUserData(res.data.user);
-
-        navigate("/dashboard");
+        const userData = res.data.user;
+        if (userData.role === "admin") {
+          navigate("/admin/dashboard");
+        } else {
+          navigate("/dashboard");
+        }
       } else {
         Notification.error("Unexpected response from server.");
       }
