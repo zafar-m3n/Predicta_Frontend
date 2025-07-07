@@ -9,6 +9,7 @@ import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import libphonenumber from "google-libphonenumber";
 import API from "@/services/index";
+import Notification from "@/components/ui/Notification";
 
 const schema = Yup.object().shape({
   full_name: Yup.string().required("Full name is required"),
@@ -22,6 +23,7 @@ const RegisterPage = () => {
   const options = useMemo(() => countryList().getData(), []);
   const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
   const [phoneError, setPhoneError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
     register,
@@ -30,6 +32,7 @@ const RegisterPage = () => {
     setValue,
     watch,
     trigger,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -57,7 +60,41 @@ const RegisterPage = () => {
     }
 
     setPhoneError("");
-    console.log("Form data:", data);
+    setIsSubmitting(true);
+
+    try {
+      const payload = {
+        full_name: data.full_name,
+        email: data.email,
+        password: data.password,
+        phone_number: data.phone_number,
+        country_code: data.country_code,
+      };
+
+      const res = await API.private.registerUser(payload);
+
+      if (res.status === 201) {
+        Notification.success(
+          res.data.message || "Registration successful! Please check your email to verify your account."
+        );
+        reset();
+      } else {
+        Notification.error("Unexpected response from server. Please try again.");
+      }
+    } catch (error) {
+      const status = error.response?.status;
+      let msg = "Something went wrong during registration.";
+
+      if (status === 400) {
+        msg = error.response?.data?.message || "Email already in use.";
+      } else if (status === 500) {
+        msg = "Server error. Please try again later.";
+      }
+
+      Notification.error(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -178,9 +215,12 @@ const RegisterPage = () => {
 
           <button
             type="submit"
-            className="w-full bg-accent text-white py-2 rounded font-semibold hover:bg-accent/90 transition"
+            disabled={isSubmitting}
+            className={`w-full bg-accent text-white py-2 rounded font-semibold transition ${
+              isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
+            }`}
           >
-            Register with EquityFX
+            {isSubmitting ? "Registering..." : "Register with EquityFX"}
           </button>
 
           <p className="text-center text-sm">
