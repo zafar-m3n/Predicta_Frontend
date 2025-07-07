@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/Icon";
 import logo from "@/assets/logo.png";
 import token from "@/lib/utilities";
@@ -20,6 +20,7 @@ const clientMenu = [
   { label: "Market Events", icon: "mdi:calendar-month-outline", path: "/market-events" },
   { label: "Demo Accounts", icon: "mdi:account-multiple-outline", path: "/demo-accounts" },
   { label: "Profile", icon: "mdi:account-outline", path: "/profile" },
+  { label: "Logout", icon: "mdi:logout", action: "logout" },
 ];
 
 // Menu for admins
@@ -29,12 +30,14 @@ const adminMenu = [
   { label: "Withdrawal Requests", icon: "mdi:bank-transfer-out", path: "/admin/withdrawal-requests" },
   { label: "Manage Users", icon: "mdi:account-group-outline", path: "/admin/users" },
   { label: "Settings", icon: "mdi:cog-outline", path: "/admin/settings" },
+  { label: "Logout", icon: "mdi:logout", action: "logout" },
 ];
 
 const DefaultLayout = ({ children }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [transferOpen, setTransferOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const user = token.getUserData();
   const userRole = user?.role || "client";
@@ -57,6 +60,12 @@ const DefaultLayout = ({ children }) => {
     return children?.some((child) => location.pathname === child.path);
   };
 
+  const handleLogout = () => {
+    token.removeAuthToken();
+    token.removeUserData();
+    navigate("/login");
+  };
+
   return (
     <div className="flex min-h-screen bg-gray-50 font-dm-sans">
       {/* Sidebar */}
@@ -75,6 +84,20 @@ const DefaultLayout = ({ children }) => {
 
         <nav className="mt-6 flex-1 px-3 pb-4 space-y-1 overflow-y-auto">
           {menuItems.map((item, idx) => {
+            // If it's a logout action
+            if (item.action === "logout") {
+              return (
+                <button
+                  key={idx}
+                  onClick={handleLogout}
+                  className="flex items-center w-full p-2 rounded-lg text-gray-700 hover:bg-accent/10 transition"
+                >
+                  <Icon icon={item.icon} width={20} className="mr-3 text-accent" />
+                  <span>{item.label}</span>
+                </button>
+              );
+            }
+
             const activeParent = isChildActive(item.children);
 
             return item.children ? (
