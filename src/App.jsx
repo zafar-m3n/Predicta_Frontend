@@ -1,10 +1,22 @@
+import RegisterPage from "@/pages/auth/RegisterPage";
+import LoginPage from "@/pages/auth/LoginPage";
+import VerifyEmailPage from "@/pages/auth/VerifyEmailPage";
+import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
+import ResetPasswordPage from "@/pages/auth/ResetPasswordPage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
 function App() {
   return (
-    <>
-      <h1 className="text-3xl bg-green-500 underline">Welcome to My App</h1>
-      <p>This is a simple React application.</p>
-      <p>Feel free to explore and modify the code!</p>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<h1 className="text-3xl bg-green-500 underline">Welcome to My App</h1>} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/verify-email" element={<VerifyEmailPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
+      </Routes>
+    </Router>
   );
 }
 
