@@ -8,6 +8,7 @@ import countryList from "react-select-country-list";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import libphonenumber from "google-libphonenumber";
+import API from "@/services/index";
 
 const schema = Yup.object().shape({
   full_name: Yup.string().required("Full name is required"),
