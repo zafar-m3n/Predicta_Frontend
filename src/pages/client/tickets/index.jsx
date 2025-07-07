@@ -1,7 +1,12 @@
 import React from "react";
+import DefaultLayout from "@/layouts/DefaultLayout";
 
 const Tickets = () => {
-  return <div>Tickets</div>;
+  return (
+    <DefaultLayout>
+      <div>Tickets</div>
+    </DefaultLayout>
+  );
 };
 
 export default Tickets;

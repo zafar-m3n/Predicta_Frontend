@@ -1,7 +1,12 @@
 import React from "react";
+import DefaultLayout from "@/layouts/DefaultLayout";
 
 const AdminDashboard = () => {
-  return <div>AdminDashboard</div>;
+  return (
+    <DefaultLayout>
+      <div>AdminDashboard</div>
+    </DefaultLayout>
+  );
 };
 
 export default AdminDashboard;

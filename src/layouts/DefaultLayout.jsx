@@ -26,7 +26,7 @@ const clientMenu = [
 const adminMenu = [
   { label: "Dashboard", icon: "mdi:view-dashboard-outline", path: "/admin/dashboard" },
   { label: "Deposit Methods", icon: "mdi:bank-transfer", path: "/admin/deposit-methods" },
-  { label: "Withdrawal Methods", icon: "mdi:bank-transfer-out", path: "/admin/withdrawal-methods" },
+  { label: "Withdrawal Requests", icon: "mdi:bank-transfer-out", path: "/admin/withdrawal-requests" },
   { label: "Manage Users", icon: "mdi:account-group-outline", path: "/admin/users" },
   { label: "Settings", icon: "mdi:cog-outline", path: "/admin/settings" },
 ];
@@ -67,7 +67,7 @@ const DefaultLayout = ({ children }) => {
 
         {/* Wallet block only for client */}
         {userRole === "client" && (
-          <div className="p-5 bg-gradient-to-r from-accent/10 to-transparent rounded m-4 shadow">
+          <div className="p-5 bg-gradient-to-r from-accent/20 to-transparent rounded m-4 shadow">
             <p className="text-xs text-gray-500 uppercase tracking-widest">My Wallet</p>
             <p className="font-semibold text-xl text-accent mt-1">$ 0.000</p>
           </div>
@@ -81,7 +81,7 @@ const DefaultLayout = ({ children }) => {
               <div key={idx}>
                 <button
                   onClick={() => setTransferOpen(!transferOpen)}
-                  className={`flex items-center w-full p-2 rounded-full transition hover:bg-accent/10 focus:outline-none ${
+                  className={`flex items-center w-full p-2 rounded-lg transition hover:bg-accent/10 focus:outline-none ${
                     activeParent ? "bg-accent text-white font-semibold shadow" : ""
                   }`}
                 >
@@ -99,7 +99,7 @@ const DefaultLayout = ({ children }) => {
                       <Link
                         key={cIdx}
                         to={child.path}
-                        className={`block py-2 px-3 rounded-full transition ${
+                        className={`block py-2 px-3 rounded-lg transition ${
                           location.pathname === child.path
                             ? "bg-accent text-white font-semibold shadow"
                             : "text-gray-600 hover:bg-accent/10"
@@ -115,7 +115,7 @@ const DefaultLayout = ({ children }) => {
               <Link
                 key={idx}
                 to={item.path}
-                className={`flex items-center p-2 rounded-full transition ${
+                className={`flex items-center p-2 rounded-lg transition ${
                   location.pathname === item.path
                     ? "bg-accent text-white font-semibold shadow"
                     : "text-gray-700 hover:bg-accent/10"

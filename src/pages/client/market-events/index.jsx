@@ -1,7 +1,12 @@
 import React from "react";
+import DefaultLayout from "@/layouts/DefaultLayout";
 
 const MarketEvents = () => {
-  return <div>MarketEvents</div>;
+  return (
+    <DefaultLayout>
+      <div>MarketEvents</div>
+    </DefaultLayout>
+  );
 };
 
 export default MarketEvents;

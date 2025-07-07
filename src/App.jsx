@@ -7,7 +7,6 @@ import LoginPage from "@/pages/auth/LoginPage";
 import VerifyEmailPage from "@/pages/auth/VerifyEmailPage";
 import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/auth/ResetPasswordPage";
-import DepositMethods from "@/pages/admin/deposit-methods";
 import DashboardPage from "@/pages/client/dashboard";
 import DepositsPage from "@/pages/client/deposits";
 import WithdrawalsPage from "@/pages/client/withdrawals";
@@ -15,124 +14,80 @@ import WalletHistoryPage from "@/pages/client/wallet-history";
 import TicketsPage from "@/pages/client/tickets";
 import MarketEventsPage from "@/pages/client/market-events";
 import ProfilePage from "@/pages/client/profile";
-
+import AdminDashboardPage from "@/pages/admin/dashboard";
+import DepositMethodsPage from "@/pages/admin/deposit-methods";
+import WithdrawalRequestsPage from "@/pages/admin/withdrawal-requests";
+import UsersPage from "@/pages/admin/users";
+import SettingsPage from "@/pages/admin/settings";
 import PrivateRoute from "@/components/PrivateRoute";
 import PublicRoute from "@/components/PublicRoute";
 
 function App() {
+  const clientRoutes = [
+    { path: "/dashboard", element: DashboardPage },
+    { path: "/deposits", element: DepositsPage },
+    { path: "/withdrawals", element: WithdrawalsPage },
+    { path: "/wallet-history", element: WalletHistoryPage },
+    { path: "/tickets", element: TicketsPage },
+    { path: "/market-events", element: MarketEventsPage },
+    { path: "/profile", element: ProfilePage },
+  ];
+
+  const adminRoutes = [
+    { path: "/admin/dashboard", element: AdminDashboardPage },
+    { path: "/admin/deposit-methods", element: DepositMethodsPage },
+    { path: "/admin/withdrawal-requests", element: WithdrawalRequestsPage },
+    { path: "/admin/users", element: UsersPage },
+    { path: "/admin/settings", element: SettingsPage },
+  ];
+
+  const publicRoutes = [
+    { path: "/register", element: RegisterPage },
+    { path: "/login", element: LoginPage },
+    { path: "/verify-email", element: VerifyEmailPage },
+    { path: "/forgot-password", element: ForgotPasswordPage },
+    { path: "/reset-password", element: ResetPasswordPage },
+  ];
+
   return (
     <>
       <Router>
         <Routes>
-          {/* Client private routes */}
-          <Route
-            path="/dashboard"
-            element={
-              <PrivateRoute>
-                <DashboardPage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/deposits"
-            element={
-              <PrivateRoute>
-                <DepositsPage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/withdrawals"
-            element={
-              <PrivateRoute>
-                <WithdrawalsPage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/wallet-history"
-            element={
-              <PrivateRoute>
-                <WalletHistoryPage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/tickets"
-            element={
-              <PrivateRoute>
-                <TicketsPage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/market-events"
-            element={
-              <PrivateRoute>
-                <MarketEventsPage />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <PrivateRoute>
-                <ProfilePage />
-              </PrivateRoute>
-            }
-          />
+          {clientRoutes.map((route, idx) => (
+            <Route
+              key={idx}
+              path={route.path}
+              element={
+                <PrivateRoute>
+                  <route.element />
+                </PrivateRoute>
+              }
+            />
+          ))}
 
-          {/* Admin private route */}
-          <Route
-            path="/admin/deposit-methods"
-            element={
-              <PrivateRoute>
-                <DepositMethods />
-              </PrivateRoute>
-            }
-          />
+          {adminRoutes.map((route, idx) => (
+            <Route
+              key={idx}
+              path={route.path}
+              element={
+                <PrivateRoute>
+                  <route.element />
+                </PrivateRoute>
+              }
+            />
+          ))}
 
-          {/* Public routes */}
-          <Route
-            path="/register"
-            element={
-              <PublicRoute>
-                <RegisterPage />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <PublicRoute>
-                <LoginPage />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/verify-email"
-            element={
-              <PublicRoute>
-                <VerifyEmailPage />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/forgot-password"
-            element={
-              <PublicRoute>
-                <ForgotPasswordPage />
-              </PublicRoute>
-            }
-          />
-          <Route
-            path="/reset-password"
-            element={
-              <PublicRoute>
-                <ResetPasswordPage />
-              </PublicRoute>
-            }
-          />
+          {publicRoutes.map((route, idx) => (
+            <Route
+              key={idx}
+              path={route.path}
+              element={
+                <PublicRoute>
+                  <route.element />
+                </PublicRoute>
+              }
+            />
+          ))}
         </Routes>
       </Router>
 

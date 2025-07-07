@@ -1,12 +1,12 @@
 import React from "react";
 import DefaultLayout from "@/layouts/DefaultLayout";
 
-const HomePage = () => {
+const WithdrawalRequests = () => {
   return (
     <DefaultLayout>
-      <div>HomePage</div>
+      <div>WithdrawalRequests</div>
     </DefaultLayout>
   );
 };
 
-export default HomePage;
+export default WithdrawalRequests;

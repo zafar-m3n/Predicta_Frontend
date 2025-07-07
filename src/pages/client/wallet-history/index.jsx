@@ -1,7 +1,12 @@
 import React from "react";
+import DefaultLayout from "@/layouts/DefaultLayout";
 
 const WalletHistory = () => {
-  return <div>WalletHistory</div>;
+  return (
+    <DefaultLayout>
+      <div>WalletHistory</div>
+    </DefaultLayout>
+  );
 };
 
 export default WalletHistory;

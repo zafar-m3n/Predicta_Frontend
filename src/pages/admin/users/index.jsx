@@ -1,12 +1,12 @@
 import React from "react";
 import DefaultLayout from "@/layouts/DefaultLayout";
 
-const Dashboard = () => {
+const ManageUsers = () => {
   return (
     <DefaultLayout>
-      <div>Dashboard</div>
+      <div>ManageUsers</div>
     </DefaultLayout>
   );
 };
 
-export default Dashboard;
+export default ManageUsers;
