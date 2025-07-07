@@ -1,7 +1,112 @@
-import React from "react";
+import React, { useState } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import AuthLayout from "@/layouts/AuthLayout";
+import API from "@/services/index";
+import Notification from "@/components/ui/Notification";
 
 const VerifyEmailPage = () => {
-  return <div>VerifyEmailPage</div>;
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [status, setStatus] = useState("idle"); // 'idle', 'loading', 'success', 'error'
+  const [message, setMessage] = useState("");
+
+  const handleVerify = async () => {
+    const token = searchParams.get("token");
+
+    if (!token) {
+      setStatus("error");
+      setMessage("Invalid or missing verification token.");
+      return;
+    }
+
+    setStatus("loading");
+
+    try {
+      const res = await API.private.verifyEmail(token);
+      if (res.status === 200) {
+        setStatus("success");
+        setMessage(res.data.message || "Your email has been verified successfully!");
+      } else {
+        setStatus("error");
+        setMessage("Verification failed. Please try again.");
+      }
+    } catch (error) {
+      const msg = error.response?.data?.message || "Verification failed or link expired.";
+      setStatus("error");
+      setMessage(msg);
+      Notification.error(msg);
+    }
+  };
+
+  const handleGoToLogin = () => {
+    navigate("/login");
+  };
+
+  return (
+    <AuthLayout>
+      <div className="bg-white shadow-2xl rounded-lg p-6 w-full max-w-md mx-auto border border-gray-100 text-center">
+        {status === "idle" && (
+          <>
+            <h2 className="text-2xl font-bold mb-4">Verify Your Email</h2>
+            <p className="mb-4 text-gray-600">Click the button below to verify your email address.</p>
+            <button
+              onClick={handleVerify}
+              className="bg-accent text-white py-2 px-4 rounded font-semibold hover:bg-accent/90 transition"
+            >
+              Verify Email
+            </button>
+          </>
+        )}
+
+        {status === "loading" && (
+          <>
+            <div className="flex justify-center items-center h-24">
+              <svg
+                className="animate-spin h-8 w-8 text-accent"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z"
+                ></path>
+              </svg>
+            </div>
+            <p className="mt-4 text-gray-600">Verifying your email...</p>
+          </>
+        )}
+
+        {status === "success" && (
+          <>
+            <h2 className="text-2xl font-bold text-green-600 mb-2">Email Verified!</h2>
+            <p className="mb-4 text-gray-600">{message}</p>
+            <button
+              onClick={handleGoToLogin}
+              className="bg-accent text-white py-2 px-4 rounded font-semibold hover:bg-accent/90 transition"
+            >
+              Go to Login
+            </button>
+          </>
+        )}
+
+        {status === "error" && (
+          <>
+            <h2 className="text-2xl font-bold text-red-600 mb-2">Verification Failed</h2>
+            <p className="mb-4 text-gray-600">{message}</p>
+            <button
+              onClick={handleGoToLogin}
+              className="bg-accent text-white py-2 px-4 rounded font-semibold hover:bg-accent/90 transition"
+            >
+              Go to Login
+            </button>
+          </>
+        )}
+      </div>
+    </AuthLayout>
+  );
 };
 
 export default VerifyEmailPage;
