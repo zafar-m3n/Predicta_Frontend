@@ -1,10 +1,13 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import AuthLayout from "@/layouts/AuthLayout";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import Select from "react-select";
 import countryList from "react-select-country-list";
+import { PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
+import libphonenumber from "google-libphonenumber";
 
 const schema = Yup.object().shape({
   full_name: Yup.string().required("Full name is required"),
@@ -16,16 +19,43 @@ const schema = Yup.object().shape({
 
 const RegisterPage = () => {
   const options = useMemo(() => countryList().getData(), []);
+  const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
+  const [phoneError, setPhoneError] = useState("");
+
   const {
     register,
     handleSubmit,
     control,
+    setValue,
+    watch,
+    trigger,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
+  const selectedCountryCode = watch("country_code");
+
+  const onSubmit = async (data) => {
+    const isValidForm = await trigger();
+
+    if (!isValidForm) {
+      setPhoneError("");
+      return;
+    }
+
+    try {
+      const parsedNumber = phoneUtil.parseAndKeepRawInput(data.phone_number);
+      if (!phoneUtil.isValidNumber(parsedNumber)) {
+        setPhoneError("Invalid phone number");
+        return;
+      }
+    } catch (error) {
+      setPhoneError("Invalid phone number");
+      return;
+    }
+
+    setPhoneError("");
     console.log("Form data:", data);
   };
 
@@ -42,7 +72,7 @@ const RegisterPage = () => {
               type="text"
               placeholder="Enter Your Fullname"
               {...register("full_name")}
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent ${
+              className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
                 errors.full_name ? "border-red-500" : "border-gray-300"
               }`}
             />
@@ -54,7 +84,7 @@ const RegisterPage = () => {
               type="email"
               placeholder="Enter Your Email"
               {...register("email")}
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent ${
+              className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
                 errors.email ? "border-red-500" : "border-gray-300"
               }`}
             />
@@ -70,15 +100,19 @@ const RegisterPage = () => {
                   {...field}
                   options={options}
                   placeholder="Select Country"
+                  value={options.find((opt) => opt.value === selectedCountryCode) || null}
+                  onChange={(selected) => {
+                    field.onChange(selected ? selected.value : "");
+                  }}
                   className="react-select-container"
                   classNamePrefix="react-select"
                   styles={{
                     control: (base, state) => ({
                       ...base,
-                      borderColor: errors.country_code ? "red" : "#d1d5db",
+                      borderColor: errors.country_code ? "red" : state.isFocused ? "#86efac" : "#d1d5db",
                       borderRadius: "0.375rem",
                       minHeight: "2.5rem",
-                      boxShadow: state.isFocused ? "0 0 0 2px #86efac" : "none",
+                      boxShadow: "none",
                       "&:hover": {
                         borderColor: "#86efac",
                       },
@@ -104,15 +138,24 @@ const RegisterPage = () => {
           </div>
 
           <div>
-            <input
-              type="text"
-              placeholder="Mobile number"
-              {...register("phone_number")}
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent ${
-                errors.phone_number ? "border-red-500" : "border-gray-300"
-              }`}
+            <Controller
+              name="phone_number"
+              control={control}
+              render={({ field }) => (
+                <PhoneInput
+                  defaultCountry="GB"
+                  value={field.value}
+                  onChange={(value) => {
+                    field.onChange(value);
+                    setValue("phone_number", value, { shouldValidate: true });
+                    setPhoneError("");
+                  }}
+                  className={`w-full ${errors.phone_number || phoneError ? "border-red-500" : "border-gray-300"}`}
+                  inputClassName="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent"
+                />
+              )}
             />
-            <p className="text-red-500 text-sm">{errors.phone_number?.message}</p>
+            <p className="text-red-500 text-sm">{errors.phone_number?.message || phoneError}</p>
           </div>
 
           <div>
@@ -120,7 +163,7 @@ const RegisterPage = () => {
               type="password"
               placeholder="Password"
               {...register("password")}
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent ${
+              className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
                 errors.password ? "border-red-500" : "border-gray-300"
               }`}
             />
