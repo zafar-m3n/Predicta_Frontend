@@ -4,8 +4,15 @@ import token from "@/lib/utilities";
 
 const PublicRoute = ({ children }) => {
   if (token.isAuthenticated()) {
-    return <Navigate to="/dashboard" replace />;
+    const user = token.getUserData();
+
+    if (user?.role === "admin") {
+      return <Navigate to="/admin/dashboard" replace />;
+    } else {
+      return <Navigate to="/dashboard" replace />;
+    }
   }
+
   return children;
 };
 

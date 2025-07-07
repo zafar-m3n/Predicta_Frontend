@@ -7,8 +7,14 @@ import LoginPage from "@/pages/auth/LoginPage";
 import VerifyEmailPage from "@/pages/auth/VerifyEmailPage";
 import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/auth/ResetPasswordPage";
-import HomePage from "@/pages/home/index";
 import DepositMethods from "@/pages/admin/deposit-methods";
+import DashboardPage from "@/pages/client/dashboard";
+import DepositsPage from "@/pages/client/deposits";
+import WithdrawalsPage from "@/pages/client/withdrawals";
+import WalletHistoryPage from "@/pages/client/wallet-history";
+import TicketsPage from "@/pages/client/tickets";
+import MarketEventsPage from "@/pages/client/market-events";
+import ProfilePage from "@/pages/client/profile";
 
 import PrivateRoute from "@/components/PrivateRoute";
 import PublicRoute from "@/components/PublicRoute";
@@ -18,15 +24,65 @@ function App() {
     <>
       <Router>
         <Routes>
-          {/* Private route example */}
+          {/* Client private routes */}
           <Route
             path="/dashboard"
             element={
               <PrivateRoute>
-                <HomePage />
+                <DashboardPage />
               </PrivateRoute>
             }
           />
+          <Route
+            path="/deposits"
+            element={
+              <PrivateRoute>
+                <DepositsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/withdrawals"
+            element={
+              <PrivateRoute>
+                <WithdrawalsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/wallet-history"
+            element={
+              <PrivateRoute>
+                <WalletHistoryPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/tickets"
+            element={
+              <PrivateRoute>
+                <TicketsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/market-events"
+            element={
+              <PrivateRoute>
+                <MarketEventsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <ProfilePage />
+              </PrivateRoute>
+            }
+          />
+
+          {/* Admin private route */}
           <Route
             path="/admin/deposit-methods"
             element={
@@ -35,6 +91,8 @@ function App() {
               </PrivateRoute>
             }
           />
+
+          {/* Public routes */}
           <Route
             path="/register"
             element={
