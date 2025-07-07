@@ -42,7 +42,9 @@ const RegisterPage = () => {
               type="text"
               placeholder="Enter Your Fullname"
               {...register("full_name")}
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
+              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent ${
+                errors.full_name ? "border-red-500" : "border-gray-300"
+              }`}
             />
             <p className="text-red-500 text-sm">{errors.full_name?.message}</p>
           </div>
@@ -52,7 +54,9 @@ const RegisterPage = () => {
               type="email"
               placeholder="Enter Your Email"
               {...register("email")}
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
+              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              }`}
             />
             <p className="text-red-500 text-sm">{errors.email?.message}</p>
           </div>
@@ -104,7 +108,9 @@ const RegisterPage = () => {
               type="text"
               placeholder="Mobile number"
               {...register("phone_number")}
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
+              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent ${
+                errors.phone_number ? "border-red-500" : "border-gray-300"
+              }`}
             />
             <p className="text-red-500 text-sm">{errors.phone_number?.message}</p>
           </div>
@@ -114,7 +120,9 @@ const RegisterPage = () => {
               type="password"
               placeholder="Password"
               {...register("password")}
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent"
+              className={`w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-accent ${
+                errors.password ? "border-red-500" : "border-gray-300"
+              }`}
             />
             <p className="text-red-500 text-sm">{errors.password?.message}</p>
           </div>
