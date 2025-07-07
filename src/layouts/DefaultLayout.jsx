@@ -73,7 +73,7 @@ const DefaultLayout = ({ children }) => {
           </div>
         )}
 
-        <nav className="flex-1 px-3 pb-4 space-y-1 overflow-y-auto">
+        <nav className="mt-6 flex-1 px-3 pb-4 space-y-1 overflow-y-auto">
           {menuItems.map((item, idx) => {
             const activeParent = isChildActive(item.children);
 
