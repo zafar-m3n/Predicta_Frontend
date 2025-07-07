@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import token from "@/lib/utilities";
+import Icon from "@/components/ui/Icon";
 import { useNavigate } from "react-router-dom";
 
 const schema = Yup.object().shape({
@@ -15,6 +16,7 @@ const schema = Yup.object().shape({
 
 const LoginPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -79,15 +81,21 @@ const LoginPage = () => {
             <p className="text-red-500 text-sm">{errors.email?.message}</p>
           </div>
 
-          <div>
+          <div className="relative">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Enter Your Password"
               {...register("password")}
               className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
                 errors.password ? "border-red-500" : "border-gray-300"
               }`}
             />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+            >
+              <Icon icon={showPassword ? "mdi:eye-off" : "mdi:eye"} width="20" />
+            </span>
             <p className="text-red-500 text-sm">{errors.password?.message}</p>
           </div>
 
