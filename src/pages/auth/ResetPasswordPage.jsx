@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
+import Icon from "@/components/ui/Icon";
 import { useSearchParams, useNavigate } from "react-router-dom";
 
 const schema = Yup.object().shape({
@@ -16,6 +17,8 @@ const schema = Yup.object().shape({
 
 const ResetPasswordPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
@@ -57,27 +60,39 @@ const ResetPasswordPage = () => {
         <p className="text-center text-sm text-gray-500 mb-4">Enter your new password below.</p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
-          <div>
+          <div className="relative">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="New Password"
               {...register("password")}
               className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
                 errors.password ? "border-red-500" : "border-gray-300"
               }`}
             />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+            >
+              <Icon icon={showPassword ? "mdi:eye-off" : "mdi:eye"} width="20" />
+            </span>
             <p className="text-red-500 text-sm">{errors.password?.message}</p>
           </div>
 
-          <div>
+          <div className="relative">
             <input
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               placeholder="Confirm New Password"
               {...register("confirm_password")}
               className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
                 errors.confirm_password ? "border-red-500" : "border-gray-300"
               }`}
             />
+            <span
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+            >
+              <Icon icon={showConfirmPassword ? "mdi:eye-off" : "mdi:eye"} width="20" />
+            </span>
             <p className="text-red-500 text-sm">{errors.confirm_password?.message}</p>
           </div>
 
