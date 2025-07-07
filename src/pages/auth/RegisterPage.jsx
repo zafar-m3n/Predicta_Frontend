@@ -10,6 +10,7 @@ import "react-international-phone/style.css";
 import libphonenumber from "google-libphonenumber";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
+import Icon from "@/components/ui/Icon";
 
 const schema = Yup.object().shape({
   full_name: Yup.string().required("Full name is required"),
@@ -24,6 +25,7 @@ const RegisterPage = () => {
   const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
   const [phoneError, setPhoneError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -196,15 +198,21 @@ const RegisterPage = () => {
             <p className="text-red-500 text-sm">{errors.phone_number?.message || phoneError}</p>
           </div>
 
-          <div>
+          <div className="relative">
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Password"
               {...register("password")}
               className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
                 errors.password ? "border-red-500" : "border-gray-300"
               }`}
             />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+            >
+              <Icon icon={showPassword ? "mdi:eye-off" : "mdi:eye"} width="20" />
+            </span>
             <p className="text-red-500 text-sm">{errors.password?.message}</p>
           </div>
 
