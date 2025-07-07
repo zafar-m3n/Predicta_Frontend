@@ -26,6 +26,10 @@ const removeUserData = () => {
   localStorage.removeItem("tradersroom.user");
 };
 
+const isAuthenticated = () => {
+  return !!getAuthToken();
+};
+
 const token = {
   getAuthToken,
   setAuthToken,
@@ -34,6 +38,8 @@ const token = {
   getUserData,
   setUserData,
   removeUserData,
+
+  isAuthenticated,
 };
 
 export default token;
