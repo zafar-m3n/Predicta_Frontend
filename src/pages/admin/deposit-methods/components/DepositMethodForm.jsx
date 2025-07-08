@@ -5,10 +5,16 @@ import * as Yup from "yup";
 import Switch from "@/components/ui/Switch";
 import StyledFileInput from "@/components/ui/StyledFileInput";
 
+const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
+
 const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
   const [qrCodeFile, setQrCodeFile] = useState(null);
   const [logoFile, setLogoFile] = useState(null);
   const [status, setStatus] = useState(initialData?.status === "active");
+
+  // If editing, set preview paths
+  const [qrCodePath, setQrCodePath] = useState(initialData?.qr_code_path || "");
+  const [logoPath, setLogoPath] = useState(initialData?.logo_path || "");
 
   const typeOptions = ["bank", "crypto", "other"];
 
@@ -32,10 +38,11 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: initialData || {
+    defaultValues: {
       name: "",
       type: "",
       beneficiary_name: "",
@@ -48,23 +55,48 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
       network: "",
       address: "",
       notes: "",
+      ...(initialData || {}),
     },
   });
 
   const selectedType = watch("type");
 
   useEffect(() => {
+    if (initialData) {
+      reset({
+        name: initialData.name || "",
+        type: initialData.type || "",
+        beneficiary_name: initialData.beneficiary_name || "",
+        bank_name: initialData.bank_name || "",
+        branch: initialData.branch || "",
+        account_number: initialData.account_number || "",
+        ifsc_code: initialData.ifsc_code || "",
+        banco: initialData.banco || "",
+        pix: initialData.pix || "",
+        network: initialData.network || "",
+        address: initialData.address || "",
+        notes: initialData.notes || "",
+      });
+      setStatus(initialData.status === "active");
+      setQrCodePath(initialData.qr_code_path || "");
+      setLogoPath(initialData.logo_path || "");
+    }
+  }, [initialData, reset]);
+
+  useEffect(() => {
     setValue("status", status ? "active" : "inactive");
   }, [status, setValue]);
 
-  const handleFileChange = (e, setFile) => {
+  const handleFileChange = (e, setFile, setPath) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
+      setPath(""); // Clear preview if new file selected
     }
   };
 
-  const removeFile = (setFile) => {
+  const removeFile = (setFile, setPath) => {
     setFile(null);
+    setPath(""); // Clear preview
   };
 
   const internalSubmit = (data) => {
@@ -119,7 +151,7 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
           {[
             { name: "beneficiary_name", label: "Beneficiary Name", placeholder: "Enter beneficiary name" },
             { name: "bank_name", label: "Bank Name", placeholder: "Enter bank name" },
-            { name: "branch", label: "Branch", placeholder: "Enter branch name" },
+            { name: "branch", label: "Branch", placeholder: "Enter branch" },
             { name: "account_number", label: "Account Number", placeholder: "Enter account number" },
             { name: "ifsc_code", label: "IFSC Code", placeholder: "Enter IFSC code" },
             { name: "banco", label: "Banco", placeholder: "Enter banco" },
@@ -164,16 +196,18 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
             label="QR Code"
             preferredSize="Preferred Size 200 × 200"
             file={qrCodeFile}
-            onChange={(e) => handleFileChange(e, setQrCodeFile)}
-            onRemove={() => removeFile(setQrCodeFile)}
+            filePath={qrCodePath ? `${apiBaseUrl}/${qrCodePath}` : ""}
+            onChange={(e) => handleFileChange(e, setQrCodeFile, setQrCodePath)}
+            onRemove={() => removeFile(setQrCodeFile, setQrCodePath)}
           />
 
           <StyledFileInput
             label="Logo"
             preferredSize="Preferred Size 200 × 200"
             file={logoFile}
-            onChange={(e) => handleFileChange(e, setLogoFile)}
-            onRemove={() => removeFile(setLogoFile)}
+            filePath={logoPath ? `${apiBaseUrl}/${logoPath}` : ""}
+            onChange={(e) => handleFileChange(e, setLogoFile, setLogoPath)}
+            onRemove={() => removeFile(setLogoFile, setLogoPath)}
           />
         </>
       )}
@@ -184,16 +218,18 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
             label="QR Code"
             preferredSize="Preferred Size 200 × 200"
             file={qrCodeFile}
-            onChange={(e) => handleFileChange(e, setQrCodeFile)}
-            onRemove={() => removeFile(setQrCodeFile)}
+            filePath={qrCodePath ? `${apiBaseUrl}/${qrCodePath}` : ""}
+            onChange={(e) => handleFileChange(e, setQrCodeFile, setQrCodePath)}
+            onRemove={() => removeFile(setQrCodeFile, setQrCodePath)}
           />
 
           <StyledFileInput
             label="Logo"
             preferredSize="Preferred Size 200 × 200"
             file={logoFile}
-            onChange={(e) => handleFileChange(e, setLogoFile)}
-            onRemove={() => removeFile(setLogoFile)}
+            filePath={logoPath ? `${apiBaseUrl}/${logoPath}` : ""}
+            onChange={(e) => handleFileChange(e, setLogoFile, setLogoPath)}
+            onRemove={() => removeFile(setLogoFile, setLogoPath)}
           />
 
           <div>
