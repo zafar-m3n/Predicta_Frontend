@@ -1,85 +1,136 @@
 import React from "react";
 import Modal from "@/components/ui/Modal";
 import Badge from "@/components/ui/Badge";
+import Icon from "@/components/ui/Icon";
 
 const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
   if (!method) return null;
 
   const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
+  const renderField = (label, value) => (
+    <div className="flex justify-between py-1">
+      <span className="text-gray-500">{label}:</span>
+      <span className="text-gray-700 font-medium text-right max-w-[60%] break-words">{value || "-"}</span>
+    </div>
+  );
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="View Deposit Method" size="lg" centered>
-      <div className="space-y-4">
-        {/* Basic Info */}
+    <Modal isOpen={isOpen} onClose={onClose} title="Deposit Method Details" size="lg" centered>
+      <div className="space-y-6">
+        {/* General Info */}
         <div>
-          <h3 className="font-semibold">Name:</h3>
-          <p>{method.name}</p>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <h3 className="font-semibold">Type:</h3>
-          <Badge
-            text={method.type}
-            color={method.type === "bank" ? "blue" : method.type === "crypto" ? "yellow" : "gray"}
-            size="sm"
-          />
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <h3 className="font-semibold">Status:</h3>
-          <Badge text={method.status} color={method.status === "active" ? "green" : "red"} size="sm" />
+          <div className="flex items-center mb-2">
+            <Icon icon="mdi:information-outline" width="18" className="text-accent mr-1" />
+            <h3 className="text-gray-700 font-semibold">General Info</h3>
+          </div>
+          <div className="border-t border-gray-200 mt-1 pt-2 space-y-1">
+            {renderField("Name", method.name)}
+            <div className="flex justify-between py-1">
+              <span className="text-gray-500">Type:</span>
+              <Badge
+                text={method.type}
+                color={method.type === "bank" ? "blue" : method.type === "crypto" ? "yellow" : "gray"}
+                size="sm"
+              />
+            </div>
+            <div className="flex justify-between py-1">
+              <span className="text-gray-500">Status:</span>
+              <Badge text={method.status} color={method.status === "active" ? "green" : "red"} size="sm" />
+            </div>
+          </div>
         </div>
 
         {/* Type Specific Details */}
         {method.type === "bank" && details && (
-          <div className="space-y-2">
-            <h3 className="font-semibold">Bank Details:</h3>
-            <p>Beneficiary Name: {details.beneficiary_name || "-"}</p>
-            <p>Bank Name: {details.bank_name || "-"}</p>
-            <p>Branch: {details.branch || "-"}</p>
-            <p>Account Number: {details.account_number || "-"}</p>
-            <p>IFSC Code: {details.ifsc_code || "-"}</p>
-            <p>Banco: {details.banco || "-"}</p>
-            <p>Pix: {details.pix || "-"}</p>
+          <div>
+            <div className="flex items-center mb-2">
+              <Icon icon="mdi:bank-outline" width="18" className="text-accent mr-1" />
+              <h3 className="text-gray-700 font-semibold">Bank Details</h3>
+            </div>
+            <div className="border-t border-gray-200 mt-1 pt-2 space-y-1">
+              {renderField("Beneficiary Name", details.beneficiary_name)}
+              {renderField("Bank Name", details.bank_name)}
+              {renderField("Branch", details.branch)}
+              {renderField("Account Number", details.account_number)}
+              {renderField("IFSC Code", details.ifsc_code)}
+              {renderField("Banco", details.banco)}
+              {renderField("Pix", details.pix)}
+            </div>
           </div>
         )}
 
         {method.type === "crypto" && details && (
-          <div className="space-y-2">
-            <h3 className="font-semibold">Crypto Details:</h3>
-            <p>Network: {details.network || "-"}</p>
-            <p>Address: {details.address || "-"}</p>
-            {details.qr_code_path && (
-              <div>
-                <p>QR Code:</p>
-                <img src={`${apiBaseUrl}/${details.qr_code_path}`} alt="QR Code" className="w-32 border rounded" />
-              </div>
-            )}
-            {details.logo_path && (
-              <div>
-                <p>Logo:</p>
-                <img src={`${apiBaseUrl}/${details.logo_path}`} alt="Logo" className="w-32 border rounded" />
-              </div>
-            )}
+          <div>
+            <div className="flex items-center mb-2">
+              <Icon icon="mdi:currency-btc" width="18" className="text-accent mr-1" />
+              <h3 className="text-gray-700 font-semibold">Crypto Details</h3>
+            </div>
+            <div className="border-t border-gray-200 mt-1 pt-2 space-y-1">
+              {renderField("Network", details.network)}
+              {renderField("Address", details.address)}
+
+              {(details.qr_code_path || details.logo_path) && (
+                <div className="flex flex-wrap gap-6 mt-3">
+                  {details.qr_code_path && (
+                    <div className="flex flex-col items-center">
+                      <img
+                        src={`${apiBaseUrl}/${details.qr_code_path}`}
+                        alt="QR Code"
+                        className="w-28 h-28 object-contain rounded shadow-md"
+                      />
+                      <p className="text-gray-500 text-xs mt-1">QR Code</p>
+                    </div>
+                  )}
+                  {details.logo_path && (
+                    <div className="flex flex-col items-center">
+                      <img
+                        src={`${apiBaseUrl}/${details.logo_path}`}
+                        alt="Logo"
+                        className="w-28 h-28 object-contain rounded shadow-md"
+                      />
+                      <p className="text-gray-500 text-xs mt-1">Logo</p>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         )}
 
         {method.type === "other" && details && (
-          <div className="space-y-2">
-            <h3 className="font-semibold">Other Details:</h3>
-            {details.qr_code_path && (
-              <div>
-                <p>QR Code:</p>
-                <img src={`${apiBaseUrl}/${details.qr_code_path}`} alt="QR Code" className="w-32 border rounded" />
-              </div>
-            )}
-            {details.logo_path && (
-              <div>
-                <p>Logo:</p>
-                <img src={`${apiBaseUrl}/${details.logo_path}`} alt="Logo" className="w-32 border rounded" />
-              </div>
-            )}
-            <p>Notes: {details.notes || "-"}</p>
+          <div>
+            <div className="flex items-center mb-2">
+              <Icon icon="mdi:qrcode-scan" width="18" className="text-accent mr-1" />
+              <h3 className="text-gray-700 font-semibold">Other Details</h3>
+            </div>
+            <div className="border-t border-gray-200 mt-1 pt-2 space-y-1">
+              {(details.qr_code_path || details.logo_path) && (
+                <div className="flex flex-wrap gap-6 mt-3">
+                  {details.qr_code_path && (
+                    <div className="flex flex-col items-center">
+                      <img
+                        src={`${apiBaseUrl}/${details.qr_code_path}`}
+                        alt="QR Code"
+                        className="w-28 h-28 object-contain rounded shadow-md"
+                      />
+                      <p className="text-gray-500 text-xs mt-1">QR Code</p>
+                    </div>
+                  )}
+                  {details.logo_path && (
+                    <div className="flex flex-col items-center">
+                      <img
+                        src={`${apiBaseUrl}/${details.logo_path}`}
+                        alt="Logo"
+                        className="w-28 h-28 object-contain rounded shadow-md"
+                      />
+                      <p className="text-gray-500 text-xs mt-1">Logo</p>
+                    </div>
+                  )}
+                </div>
+              )}
+              {renderField("Notes", details.notes)}
+            </div>
           </div>
         )}
       </div>

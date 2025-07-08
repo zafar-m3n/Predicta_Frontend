@@ -3,6 +3,15 @@ import Badge from "@/components/ui/Badge";
 import Icon from "@/components/ui/Icon";
 
 const DepositMethodsTable = ({ methods, onEdit, onToggleStatus, onView }) => {
+  const formatDate = (dateStr) => {
+    if (!dateStr) return "-";
+    const date = new Date(dateStr);
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(
+      2,
+      "0"
+    )} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+  };
+
   return (
     <div className="overflow-x-auto rounded shadow">
       <table className="min-w-full divide-y divide-gray-200">
@@ -12,13 +21,16 @@ const DepositMethodsTable = ({ methods, onEdit, onToggleStatus, onView }) => {
             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+            <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              Created At
+            </th>
             <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {methods.length === 0 ? (
             <tr>
-              <td colSpan="5" className="px-4 py-6 text-center text-gray-500">
+              <td colSpan="6" className="px-4 py-6 text-center text-gray-500">
                 No deposit methods found.
               </td>
             </tr>
@@ -37,6 +49,7 @@ const DepositMethodsTable = ({ methods, onEdit, onToggleStatus, onView }) => {
                 <td className="px-4 py-3 whitespace-nowrap text-sm">
                   <Badge text={method.status} color={method.status === "active" ? "green" : "red"} size="sm" />
                 </td>
+                <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">{formatDate(method.createdAt)}</td>
                 <td className="px-4 py-3 whitespace-nowrap text-sm space-x-2">
                   <button
                     onClick={() => onView(method)}
