@@ -119,12 +119,11 @@ function App() {
 
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={2500}
         hideProgressBar={true}
         closeOnClick={true}
         draggable={false}
         pauseOnHover={true}
-        theme="colored"
       />
     </>
   );

@@ -1,11 +1,12 @@
 import React from "react";
 import Icon from "@/components/ui/Icon";
+import Notification from "@/components/ui/Notification";
 const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
 const Field = ({ label, value }) => (
-  <div className="flex justify-between items-center border-b border-dashed py-2">
-    <span className="text-gray-500">{label}</span>
-    <span className="font-medium text-gray-800 text-right break-words">{value || "-"}</span>
+  <div className="flex flex-col space-y-1 border-b border-dashed py-2">
+    <span className="text-gray-500 text-sm">{label}</span>
+    <span className="font-medium text-gray-800 break-words">{value || "-"}</span>
   </div>
 );
 
@@ -20,6 +21,11 @@ const DepositMethodDetails = ({ method }) => {
   } else if (method.type === "other") {
     details = method.DepositMethodOtherDetail;
   }
+
+  const handleCopy = (text) => {
+    navigator.clipboard.writeText(text);
+    Notification.success("Address copied to clipboard.");
+  };
 
   return (
     <div className="bg-white shadow-xl rounded-2xl p-6 space-y-5 border border-gray-100">
@@ -40,8 +46,31 @@ const DepositMethodDetails = ({ method }) => {
 
       {method.type === "crypto" && details && (
         <div className="space-y-3">
-          <Field label="Network" value={details.network} />
-          <Field label="Address" value={details.address} />
+          <div>
+            <p className="text-gray-500 text-sm mb-1">Network</p>
+            <p className="font-medium text-gray-800">{details.network || "-"}</p>
+          </div>
+
+          <div>
+            <p className="text-gray-500 text-sm mb-1">Address</p>
+            <div className="flex">
+              <input
+                type="text"
+                value={details.address || ""}
+                readOnly
+                disabled
+                className="flex-1 border border-gray-300 rounded-l px-3 py-2 text-gray-700 bg-gray-50 focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => handleCopy(details.address)}
+                className="px-3 py-2 bg-accent text-white rounded-r font-medium hover:bg-accent/90 transition"
+              >
+                Copy
+              </button>
+            </div>
+          </div>
+
           {details.qr_code_path && (
             <div className="flex flex-col items-center mt-4">
               <img

@@ -15,6 +15,7 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
       .typeError("Amount must be a number")
       .required("Amount is required")
       .positive("Amount must be positive"),
+    transaction_reference: Yup.string().required("Transaction reference is required"),
   });
 
   const {
@@ -27,10 +28,9 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
     resolver: yupResolver(schema),
     defaultValues: {
       amount: "",
+      transaction_reference: "",
     },
   });
-
-  const watchedAmount = watch("amount");
 
   const handleAmountSelect = (amount) => {
     setSelectedAmount(amount);
@@ -113,6 +113,20 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
         onChange={handleFileChange}
         onRemove={removeFile}
       />
+
+      {/* Transaction Reference */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Transaction Reference</label>
+        <input
+          type="text"
+          placeholder="Enter transaction reference number"
+          {...register("transaction_reference")}
+          className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
+            errors.transaction_reference ? "border-red-500" : "border-gray-300"
+          }`}
+        />
+        <p className="text-red-500 text-sm">{errors.transaction_reference?.message}</p>
+      </div>
 
       <button
         type="submit"
