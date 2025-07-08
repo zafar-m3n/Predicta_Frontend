@@ -17,7 +17,9 @@ const Badge = ({ text, color = "blue", size = "md", icon = null, rounded = "roun
   };
 
   return (
-    <span className={`inline-flex items-center ${sizeClasses[size]} ${colorClasses[color]} ${rounded} font-medium`}>
+    <span
+      className={`inline-flex items-center ${sizeClasses[size]} ${colorClasses[color]} ${rounded} font-medium capitalize`}
+    >
       {icon && <Icon icon={icon} className="me-2 h-4 w-4" />}
       {text}
     </span>

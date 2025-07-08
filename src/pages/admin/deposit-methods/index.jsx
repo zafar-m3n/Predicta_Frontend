@@ -1,17 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import DepositMethodsTable from "./components/DepositMethodsTable";
+import ViewDepositMethodModal from "./components/ViewDepositMethodModal";
+import API from "@/services/index";
+import Notification from "@/components/ui/Notification";
 
 const DepositMethods = () => {
   const navigate = useNavigate();
 
-  // Mock data for UI display only
-  const mockMethods = [
-    { id: 1, name: "Bank Transfer", type: "bank", status: "active" },
-    { id: 2, name: "USDT Wallet", type: "crypto", status: "inactive" },
-    { id: 3, name: "Custom QR", type: "other", status: "active" },
-  ];
+  const [methods, setMethods] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedMethod, setSelectedMethod] = useState(null);
+  const [selectedDetails, setSelectedDetails] = useState(null);
+
+  useEffect(() => {
+    fetchMethods();
+  }, []);
+
+  const fetchMethods = async () => {
+    setLoading(true);
+    try {
+      const res = await API.private.getAllDepositMethods();
+      setMethods(res.data.methods || []);
+    } catch (error) {
+      Notification.error("Failed to fetch deposit methods.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleCreate = () => {
     navigate("/admin/deposit-methods/new");
@@ -21,12 +40,26 @@ const DepositMethods = () => {
     navigate(`/admin/deposit-methods/${method.id}/edit`);
   };
 
-  const handleView = (method) => {
-    alert(`Clicked view for: ${method.name}`);
+  const handleView = async (method) => {
+    try {
+      const res = await API.private.getDepositMethodById(method.id);
+      setSelectedMethod(res.data.method);
+      setSelectedDetails(res.data.details);
+      setIsModalOpen(true);
+    } catch (error) {
+      Notification.error("Failed to fetch method details.");
+    }
   };
 
-  const handleToggleStatus = (method) => {
-    alert(`Clicked toggle status for: ${method.name}`);
+  const handleToggleStatus = async (method) => {
+    try {
+      const newStatus = method.status === "active" ? "inactive" : "active";
+      await API.private.toggleDepositMethodStatus(method.id, newStatus);
+      Notification.success(`Status updated to ${newStatus}.`);
+      fetchMethods();
+    } catch (error) {
+      Notification.error("Failed to update status.");
+    }
   };
 
   return (
@@ -41,11 +74,22 @@ const DepositMethods = () => {
         </button>
       </div>
 
-      <DepositMethodsTable
-        methods={mockMethods}
-        onEdit={handleEdit}
-        onView={handleView}
-        onToggleStatus={handleToggleStatus}
+      {loading ? (
+        <p className="text-gray-500">Loading deposit methods...</p>
+      ) : (
+        <DepositMethodsTable
+          methods={methods}
+          onEdit={handleEdit}
+          onView={handleView}
+          onToggleStatus={handleToggleStatus}
+        />
+      )}
+
+      <ViewDepositMethodModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        method={selectedMethod}
+        details={selectedDetails}
       />
     </DefaultLayout>
   );
