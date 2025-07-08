@@ -1,7 +1,12 @@
 import React from "react";
+import DefaultLayout from "@/layouts/DefaultLayout";
 
 const DepositRequests = () => {
-  return <div>DepositRequests</div>;
+  return (
+    <DefaultLayout>
+      <div>Deposit Requests</div>
+    </DefaultLayout>
+  );
 };
 
 export default DepositRequests;
