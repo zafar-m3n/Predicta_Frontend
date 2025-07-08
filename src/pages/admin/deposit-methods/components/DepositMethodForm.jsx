@@ -3,10 +3,9 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import Switch from "@/components/ui/Switch";
-import Icon from "@/components/ui/Icon";
+import StyledFileInput from "@/components/ui/StyledFileInput";
 
 const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
-  // Local state for files
   const [qrCodeFile, setQrCodeFile] = useState(null);
   const [logoFile, setLogoFile] = useState(null);
   const [status, setStatus] = useState(initialData?.status === "active");
@@ -54,7 +53,6 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
 
   const selectedType = watch("type");
 
-  // Sync status field
   useEffect(() => {
     setValue("status", status ? "active" : "inactive");
   }, [status, setValue]);
@@ -70,7 +68,6 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
   };
 
   const internalSubmit = (data) => {
-    // Attach files to data
     data.qr_code = qrCodeFile;
     data.logo = logoFile;
     onSubmit(data);
@@ -80,9 +77,10 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
     <form onSubmit={handleSubmit(internalSubmit)} className="space-y-4">
       {/* Name */}
       <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Method Name</label>
         <input
           type="text"
-          placeholder="Method Name"
+          placeholder="Enter method name"
           {...register("name")}
           className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
             errors.name ? "border-red-500" : "border-gray-300"
@@ -93,13 +91,14 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
 
       {/* Type */}
       <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
         <select
           {...register("type")}
           className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
             errors.type ? "border-red-500" : "border-gray-300"
           }`}
         >
-          <option value="">Select Type</option>
+          <option value="">Select type</option>
           {typeOptions.map((option) => (
             <option key={option} value={option}>
               {option.charAt(0).toUpperCase() + option.slice(1)}
@@ -117,131 +116,94 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
       {/* Dynamic fields */}
       {selectedType === "bank" && (
         <>
-          <input
-            type="text"
-            placeholder="Beneficiary Name"
-            {...register("beneficiary_name")}
-            className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
-          />
-          <input
-            type="text"
-            placeholder="Bank Name"
-            {...register("bank_name")}
-            className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
-          />
-          <input
-            type="text"
-            placeholder="Branch"
-            {...register("branch")}
-            className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
-          />
-          <input
-            type="text"
-            placeholder="Account Number"
-            {...register("account_number")}
-            className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
-          />
-          <input
-            type="text"
-            placeholder="IFSC Code"
-            {...register("ifsc_code")}
-            className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
-          />
-          <input
-            type="text"
-            placeholder="Banco"
-            {...register("banco")}
-            className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
-          />
-          <input
-            type="text"
-            placeholder="Pix"
-            {...register("pix")}
-            className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
-          />
+          {[
+            { name: "beneficiary_name", label: "Beneficiary Name", placeholder: "Enter beneficiary name" },
+            { name: "bank_name", label: "Bank Name", placeholder: "Enter bank name" },
+            { name: "branch", label: "Branch", placeholder: "Enter branch name" },
+            { name: "account_number", label: "Account Number", placeholder: "Enter account number" },
+            { name: "ifsc_code", label: "IFSC Code", placeholder: "Enter IFSC code" },
+            { name: "banco", label: "Banco", placeholder: "Enter banco" },
+            { name: "pix", label: "Pix", placeholder: "Enter pix" },
+          ].map((field) => (
+            <div key={field.name}>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{field.label}</label>
+              <input
+                type="text"
+                placeholder={field.placeholder}
+                {...register(field.name)}
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+              />
+            </div>
+          ))}
         </>
       )}
 
       {selectedType === "crypto" && (
         <>
-          <input
-            type="text"
-            placeholder="Network"
-            {...register("network")}
-            className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
-          />
-          <input
-            type="text"
-            placeholder="Address"
-            {...register("address")}
-            className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
-          />
-
-          {/* QR Code Upload */}
           <div>
-            {!qrCodeFile ? (
-              <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, setQrCodeFile)} />
-            ) : (
-              <div className="border rounded p-3 flex items-center justify-between">
-                <span className="text-sm truncate">{qrCodeFile.name}</span>
-                <button type="button" onClick={() => removeFile(setQrCodeFile)}>
-                  <Icon icon="mdi:close" width="18" />
-                </button>
-              </div>
-            )}
+            <label className="block text-sm font-medium text-gray-700 mb-1">Network</label>
+            <input
+              type="text"
+              placeholder="Enter network"
+              {...register("network")}
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+            />
           </div>
 
-          {/* Logo Upload */}
           <div>
-            {!logoFile ? (
-              <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, setLogoFile)} />
-            ) : (
-              <div className="border rounded p-3 flex items-center justify-between">
-                <span className="text-sm truncate">{logoFile.name}</span>
-                <button type="button" onClick={() => removeFile(setLogoFile)}>
-                  <Icon icon="mdi:close" width="18" />
-                </button>
-              </div>
-            )}
+            <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+            <input
+              type="text"
+              placeholder="Enter crypto address"
+              {...register("address")}
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+            />
           </div>
+
+          <StyledFileInput
+            label="QR Code"
+            preferredSize="Preferred Size 200 × 200"
+            file={qrCodeFile}
+            onChange={(e) => handleFileChange(e, setQrCodeFile)}
+            onRemove={() => removeFile(setQrCodeFile)}
+          />
+
+          <StyledFileInput
+            label="Logo"
+            preferredSize="Preferred Size 200 × 200"
+            file={logoFile}
+            onChange={(e) => handleFileChange(e, setLogoFile)}
+            onRemove={() => removeFile(setLogoFile)}
+          />
         </>
       )}
 
       {selectedType === "other" && (
         <>
-          {/* QR Code Upload */}
-          <div>
-            {!qrCodeFile ? (
-              <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, setQrCodeFile)} />
-            ) : (
-              <div className="border rounded p-3 flex items-center justify-between">
-                <span className="text-sm truncate">{qrCodeFile.name}</span>
-                <button type="button" onClick={() => removeFile(setQrCodeFile)}>
-                  <Icon icon="mdi:close" width="18" />
-                </button>
-              </div>
-            )}
-          </div>
+          <StyledFileInput
+            label="QR Code"
+            preferredSize="Preferred Size 200 × 200"
+            file={qrCodeFile}
+            onChange={(e) => handleFileChange(e, setQrCodeFile)}
+            onRemove={() => removeFile(setQrCodeFile)}
+          />
 
-          {/* Logo Upload */}
-          <div>
-            {!logoFile ? (
-              <input type="file" accept="image/*" onChange={(e) => handleFileChange(e, setLogoFile)} />
-            ) : (
-              <div className="border rounded p-3 flex items-center justify-between">
-                <span className="text-sm truncate">{logoFile.name}</span>
-                <button type="button" onClick={() => removeFile(setLogoFile)}>
-                  <Icon icon="mdi:close" width="18" />
-                </button>
-              </div>
-            )}
-          </div>
+          <StyledFileInput
+            label="Logo"
+            preferredSize="Preferred Size 200 × 200"
+            file={logoFile}
+            onChange={(e) => handleFileChange(e, setLogoFile)}
+            onRemove={() => removeFile(setLogoFile)}
+          />
 
-          <textarea
-            placeholder="Notes"
-            {...register("notes")}
-            className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
-          ></textarea>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+            <textarea
+              placeholder="Enter any additional notes"
+              {...register("notes")}
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+            ></textarea>
+          </div>
         </>
       )}
 
