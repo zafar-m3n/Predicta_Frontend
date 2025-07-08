@@ -10,6 +10,7 @@ import ResetPasswordPage from "@/pages/auth/ResetPasswordPage";
 
 import DashboardPage from "@/pages/client/dashboard";
 import DepositsPage from "@/pages/client/deposits";
+import DepositRequestPage from "@/pages/client/deposits/DepositRequest";
 import WithdrawalsPage from "@/pages/client/withdrawals";
 import WalletHistoryPage from "@/pages/client/wallet-history";
 import TicketsPage from "@/pages/client/tickets";
@@ -32,6 +33,7 @@ function App() {
   const clientRoutes = [
     { path: "/dashboard", element: DashboardPage },
     { path: "/deposits", element: DepositsPage },
+    { path: "/deposits/new", element: DepositRequestPage },
     { path: "/withdrawals", element: WithdrawalsPage },
     { path: "/wallet-history", element: WalletHistoryPage },
     { path: "/tickets", element: TicketsPage },

@@ -4,7 +4,7 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 const ClientDeposits = () => {
   return (
     <DefaultLayout>
-      <div>ClientDeposits</div>
+      <div>Client Deposits</div>
     </DefaultLayout>
   );
 };
