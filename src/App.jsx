@@ -17,6 +17,7 @@ import MarketEventsPage from "@/pages/client/market-events";
 import ProfilePage from "@/pages/client/profile";
 
 import AdminDashboardPage from "@/pages/admin/dashboard";
+import DepositRequestsPage from "@/pages/admin/deposit-requests";
 import DepositMethodsPage from "@/pages/admin/deposit-methods";
 import AddOrEditDepositMethod from "@/pages/admin/deposit-methods/AddOrEditDepositMethod";
 import WithdrawalRequestsPage from "@/pages/admin/withdrawal-requests";
@@ -40,6 +41,7 @@ function App() {
 
   const adminRoutes = [
     { path: "/admin/dashboard", element: AdminDashboardPage },
+    { path: "/admin/deposit-requests", element: DepositRequestsPage },
     { path: "/admin/deposit-methods", element: DepositMethodsPage },
     { path: "/admin/deposit-methods/new", element: AddOrEditDepositMethod },
     { path: "/admin/deposit-methods/:id/edit", element: AddOrEditDepositMethod },
