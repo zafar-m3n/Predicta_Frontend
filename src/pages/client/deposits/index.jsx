@@ -27,10 +27,7 @@ const ClientDeposits = () => {
   };
 
   const handleSelectMethod = (method) => {
-    // Save to localStorage or state management if needed
-    localStorage.setItem("selectedDepositMethod", JSON.stringify(method));
-
-    navigate("/deposits/new");
+    navigate(`/deposits/new/${method.id}`);
   };
 
   return (

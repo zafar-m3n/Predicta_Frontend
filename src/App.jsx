@@ -33,7 +33,7 @@ function App() {
   const clientRoutes = [
     { path: "/dashboard", element: DashboardPage },
     { path: "/deposits", element: DepositsPage },
-    { path: "/deposits/new", element: DepositRequestPage },
+    { path: "/deposits/new/:methodId", element: DepositRequestPage },
     { path: "/withdrawals", element: WithdrawalsPage },
     { path: "/wallet-history", element: WalletHistoryPage },
     { path: "/tickets", element: TicketsPage },
