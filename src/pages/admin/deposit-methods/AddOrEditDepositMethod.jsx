@@ -55,8 +55,6 @@ const AddOrEditDepositMethod = () => {
         formData.append("branch", data.branch || "");
         formData.append("account_number", data.account_number || "");
         formData.append("ifsc_code", data.ifsc_code || "");
-        formData.append("banco", data.banco || "");
-        formData.append("pix", data.pix || "");
       }
 
       if (data.type === "crypto") {

@@ -54,8 +54,6 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
               {renderField("Branch", details.branch)}
               {renderField("Account Number", details.account_number)}
               {renderField("IFSC Code", details.ifsc_code)}
-              {renderField("Banco", details.banco)}
-              {renderField("Pix", details.pix)}
             </div>
           </div>
         )}

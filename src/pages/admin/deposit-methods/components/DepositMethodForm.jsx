@@ -26,8 +26,6 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
     branch: Yup.string().nullable(),
     account_number: Yup.string().nullable(),
     ifsc_code: Yup.string().nullable(),
-    banco: Yup.string().nullable(),
-    pix: Yup.string().nullable(),
     network: Yup.string().nullable(),
     address: Yup.string().nullable(),
     notes: Yup.string().nullable(),
@@ -50,8 +48,6 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
       branch: "",
       account_number: "",
       ifsc_code: "",
-      banco: "",
-      pix: "",
       network: "",
       address: "",
       notes: "",
@@ -71,8 +67,6 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
         branch: initialData.branch || "",
         account_number: initialData.account_number || "",
         ifsc_code: initialData.ifsc_code || "",
-        banco: initialData.banco || "",
-        pix: initialData.pix || "",
         network: initialData.network || "",
         address: initialData.address || "",
         notes: initialData.notes || "",
@@ -154,8 +148,6 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
             { name: "branch", label: "Branch", placeholder: "Enter branch" },
             { name: "account_number", label: "Account Number", placeholder: "Enter account number" },
             { name: "ifsc_code", label: "IFSC Code", placeholder: "Enter IFSC code" },
-            { name: "banco", label: "Banco", placeholder: "Enter banco" },
-            { name: "pix", label: "Pix", placeholder: "Enter pix" },
           ].map((field) => (
             <div key={field.name}>
               <label className="block text-sm font-medium text-gray-700 mb-1">{field.label}</label>
