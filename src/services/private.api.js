@@ -72,18 +72,44 @@ const toggleDepositMethodStatus = async (id, status) => {
   );
 };
 
+/* ========================== */
+/* Client: Deposit Requests   */
+/* ========================== */
+
+const getActiveDepositMethods = async () => {
+  return await instance.apiClient.get("/api/v1/client/deposits/methods", {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const createDepositRequest = async (formData) => {
+  return await instance.apiClient.post("/api/v1/client/deposits", formData, {
+    headers: instance.defaultHeaders("multipart/form-data"),
+  });
+};
+
+/* ========================== */
+/* Export API                 */
+/* ========================== */
+
 const privateAPI = {
+  // Auth
   registerUser,
   verifyEmail,
   loginUser,
   forgotPassword,
   resetPassword,
 
+  // Admin
   createDepositMethod,
   getAllDepositMethods,
   getDepositMethodById,
   updateDepositMethod,
   toggleDepositMethodStatus,
+
+  // Client
+  getActiveDepositMethods,
+  createDepositRequest,
 };
 
 export default privateAPI;
