@@ -12,7 +12,7 @@ const clientMenu = [
     icon: "mdi:swap-horizontal",
     children: [
       { label: "Deposit Option", path: "/deposits" },
-      { label: "Withdrawal", path: "/withdrawal" },
+      { label: "Withdrawal", path: "/withdrawals" },
     ],
   },
   { label: "Wallet History", icon: "mdi:wallet-outline", path: "/wallet-history" },
