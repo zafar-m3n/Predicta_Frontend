@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
 import RegisterPage from "@/pages/auth/RegisterPage";
@@ -7,6 +7,7 @@ import LoginPage from "@/pages/auth/LoginPage";
 import VerifyEmailPage from "@/pages/auth/VerifyEmailPage";
 import ForgotPasswordPage from "@/pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "@/pages/auth/ResetPasswordPage";
+
 import DashboardPage from "@/pages/client/dashboard";
 import DepositsPage from "@/pages/client/deposits";
 import WithdrawalsPage from "@/pages/client/withdrawals";
@@ -14,13 +15,16 @@ import WalletHistoryPage from "@/pages/client/wallet-history";
 import TicketsPage from "@/pages/client/tickets";
 import MarketEventsPage from "@/pages/client/market-events";
 import ProfilePage from "@/pages/client/profile";
+
 import AdminDashboardPage from "@/pages/admin/dashboard";
 import DepositMethodsPage from "@/pages/admin/deposit-methods";
 import WithdrawalRequestsPage from "@/pages/admin/withdrawal-requests";
 import UsersPage from "@/pages/admin/users";
 import SettingsPage from "@/pages/admin/settings";
+
 import PrivateRoute from "@/components/PrivateRoute";
 import PublicRoute from "@/components/PublicRoute";
+import token from "@/lib/utilities";
 
 function App() {
   const clientRoutes = [
@@ -53,6 +57,21 @@ function App() {
     <>
       <Router>
         <Routes>
+          <Route
+            path="/"
+            element={
+              token.isAuthenticated() ? (
+                token.getUserData()?.role === "admin" ? (
+                  <Navigate to="/admin/dashboard" replace />
+                ) : (
+                  <Navigate to="/dashboard" replace />
+                )
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+
           {clientRoutes.map((route, idx) => (
             <Route
               key={idx}
