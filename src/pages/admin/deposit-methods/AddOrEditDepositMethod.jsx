@@ -1,38 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import DepositMethodForm from "./components/DepositMethodForm";
-import privateAPI from "@/services/private.api";
+import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 
 const AddOrEditDepositMethod = () => {
-  const { id } = useParams();
   const navigate = useNavigate();
-  const [initialData, setInitialData] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [pageTitle, setPageTitle] = useState("Add Deposit Method");
-
-  useEffect(() => {
-    if (id) {
-      setPageTitle("Edit Deposit Method");
-      fetchMethod();
-    }
-  }, [id]);
-
-  const fetchMethod = async () => {
-    try {
-      const res = await privateAPI.getDepositMethodById(id);
-      const method = res.data.method;
-      const details = res.data.details;
-
-      setInitialData({
-        ...method,
-        ...(details || {}),
-      });
-    } catch (error) {
-      Notification.error("Failed to fetch deposit method.");
-    }
-  };
 
   const handleSubmit = async (data) => {
     setIsSubmitting(true);
@@ -66,17 +41,11 @@ const AddOrEditDepositMethod = () => {
         formData.append("notes", data.notes || "");
       }
 
-      if (id) {
-        await privateAPI.updateDepositMethod(id, formData);
-        Notification.success("Deposit method updated successfully.");
-      } else {
-        await privateAPI.createDepositMethod(formData);
-        Notification.success("Deposit method created successfully.");
-      }
-
+      await API.private.createDepositMethod(formData);
+      Notification.success("Deposit method created successfully.");
       navigate("/admin/deposit-methods");
     } catch (error) {
-      Notification.error("Failed to save deposit method.");
+      Notification.error("Failed to create deposit method.");
     } finally {
       setIsSubmitting(false);
     }
@@ -85,7 +54,7 @@ const AddOrEditDepositMethod = () => {
   return (
     <DefaultLayout>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">{pageTitle}</h1>
+        <h1 className="text-2xl font-bold">Add Deposit Method</h1>
         <button
           onClick={() => navigate("/admin/deposit-methods")}
           className="bg-gray-200 text-gray-700 px-4 py-2 rounded font-medium hover:bg-gray-300 transition"
@@ -95,7 +64,7 @@ const AddOrEditDepositMethod = () => {
       </div>
 
       <div className="bg-white shadow rounded p-6">
-        <DepositMethodForm initialData={initialData} onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+        <DepositMethodForm initialData={null} onSubmit={handleSubmit} isSubmitting={isSubmitting} />
       </div>
     </DefaultLayout>
   );

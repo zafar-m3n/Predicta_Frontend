@@ -37,7 +37,7 @@ const DepositMethods = () => {
           onClick={handleCreate}
           className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
         >
-          Add New
+          Add New Method
         </button>
       </div>
 
