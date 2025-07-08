@@ -147,7 +147,7 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
             { name: "bank_name", label: "Bank Name", placeholder: "Enter bank name" },
             { name: "branch", label: "Branch", placeholder: "Enter branch" },
             { name: "account_number", label: "Account Number", placeholder: "Enter account number" },
-            { name: "ifsc_code", label: "IFSC Code", placeholder: "Enter IFSC code" },
+            { name: "ifsc_code", label: "IFSC Code / Swift Code / Agency", placeholder: "Enter code" },
           ].map((field) => (
             <div key={field.name}>
               <label className="block text-sm font-medium text-gray-700 mb-1">{field.label}</label>

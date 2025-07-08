@@ -53,7 +53,7 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
               {renderField("Bank Name", details.bank_name)}
               {renderField("Branch", details.branch)}
               {renderField("Account Number", details.account_number)}
-              {renderField("IFSC Code", details.ifsc_code)}
+              {renderField("IFSC Code / Swift Code / Agency", details.ifsc_code)}
             </div>
           </div>
         )}
