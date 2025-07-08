@@ -50,14 +50,21 @@ const DepositRequest = () => {
       {loading ? (
         <p className="text-gray-500">Loading deposit method...</p>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <DepositRequestForm onSubmit={handleFormSubmit} isSubmitting={false} method={method} />
+        <>
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold">{method.name} Deposit</h1>
+            <p className="text-gray-600">Fill out the form and upload your payment proof.</p>
           </div>
-          <div className="lg:col-span-1">
-            <DepositMethodDetails method={method} />
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div>
+              <DepositRequestForm onSubmit={handleFormSubmit} isSubmitting={false} method={method} />
+            </div>
+            <div>
+              <DepositMethodDetails method={method} />
+            </div>
           </div>
-        </div>
+        </>
       )}
     </DefaultLayout>
   );

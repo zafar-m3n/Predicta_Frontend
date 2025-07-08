@@ -6,6 +6,9 @@ import StyledFileInput from "@/components/ui/StyledFileInput";
 
 const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
   const [proofFile, setProofFile] = useState(null);
+  const [selectedAmount, setSelectedAmount] = useState(null);
+
+  const predefinedAmounts = [100, 200, 500, 1000];
 
   const schema = Yup.object().shape({
     amount: Yup.number()
@@ -17,6 +20,8 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -24,6 +29,17 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
       amount: "",
     },
   });
+
+  const watchedAmount = watch("amount");
+
+  const handleAmountSelect = (amount) => {
+    setSelectedAmount(amount);
+    if (amount !== "other") {
+      setValue("amount", amount);
+    } else {
+      setValue("amount", "");
+    }
+  };
 
   const internalSubmit = (data) => {
     data.proof = proofFile;
@@ -41,21 +57,54 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(internalSubmit)} className="space-y-4 bg-white shadow rounded-lg p-6">
-      <h2 className="text-xl font-semibold text-gray-800 mb-2">Submit Deposit Request</h2>
+    <form onSubmit={handleSubmit(internalSubmit)} className="space-y-6 bg-white shadow-lg rounded-2xl p-8">
+      <h2 className="text-2xl font-bold text-gray-800">Submit Deposit Request</h2>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Amount (USD)</label>
-        <input
-          type="text"
-          placeholder="Enter amount"
-          {...register("amount")}
-          className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-            errors.amount ? "border-red-500" : "border-gray-300"
-          }`}
-        />
-        <p className="text-red-500 text-sm">{errors.amount?.message}</p>
+        <label className="block text-sm font-medium text-gray-700 mb-2">Select Amount</label>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {predefinedAmounts.map((amt) => (
+            <button
+              type="button"
+              key={amt}
+              onClick={() => handleAmountSelect(amt)}
+              className={`border rounded-lg py-2 font-semibold transition-all ${
+                selectedAmount === amt
+                  ? "bg-accent text-white border-accent"
+                  : "bg-gray-50 text-gray-700 border-gray-300 hover:bg-gray-100"
+              }`}
+            >
+              ${amt}
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => handleAmountSelect("other")}
+            className={`border rounded-lg py-2 font-semibold transition-all ${
+              selectedAmount === "other"
+                ? "bg-accent text-white border-accent"
+                : "bg-gray-50 text-gray-700 border-gray-300 hover:bg-gray-100"
+            }`}
+          >
+            Other
+          </button>
+        </div>
       </div>
+
+      {selectedAmount === "other" && (
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Enter Custom Amount (USD)</label>
+          <input
+            type="text"
+            placeholder="e.g., 150"
+            {...register("amount")}
+            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
+              errors.amount ? "border-red-500" : "border-gray-300"
+            }`}
+          />
+          <p className="text-red-500 text-sm">{errors.amount?.message}</p>
+        </div>
+      )}
 
       <StyledFileInput
         label="Proof of Payment"
@@ -68,7 +117,7 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
       <button
         type="submit"
         disabled={isSubmitting}
-        className={`w-full bg-accent text-white py-2 rounded font-semibold transition ${
+        className={`w-full bg-accent text-white py-2 rounded-md font-semibold shadow transition-all ${
           isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
         }`}
       >
