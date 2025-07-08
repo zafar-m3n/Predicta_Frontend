@@ -18,6 +18,7 @@ import ProfilePage from "@/pages/client/profile";
 
 import AdminDashboardPage from "@/pages/admin/dashboard";
 import DepositMethodsPage from "@/pages/admin/deposit-methods";
+import AddOrEditDepositMethod from "@/pages/admin/deposit-methods/AddOrEditDepositMethod";
 import WithdrawalRequestsPage from "@/pages/admin/withdrawal-requests";
 import UsersPage from "@/pages/admin/users";
 import SettingsPage from "@/pages/admin/settings";
@@ -40,6 +41,8 @@ function App() {
   const adminRoutes = [
     { path: "/admin/dashboard", element: AdminDashboardPage },
     { path: "/admin/deposit-methods", element: DepositMethodsPage },
+    { path: "/admin/deposit-methods/new", element: AddOrEditDepositMethod },
+    { path: "/admin/deposit-methods/:id/edit", element: AddOrEditDepositMethod },
     { path: "/admin/withdrawal-requests", element: WithdrawalRequestsPage },
     { path: "/admin/users", element: UsersPage },
     { path: "/admin/settings", element: SettingsPage },
