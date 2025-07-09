@@ -21,21 +21,33 @@ const VerifyEmailPage = () => {
 
     setStatus("loading");
 
-    try {
-      const res = await API.private.verifyEmail(token);
-      if (res.status === 200) {
-        setStatus("success");
-        setMessage(res.data.message || "Your email has been verified successfully!");
-      } else {
+    // Simulate delay of 2 seconds before calling API
+    setTimeout(async () => {
+      try {
+        const res = await API.private.verifyEmail(token);
+
+        if (res.status === 200) {
+          setStatus("success");
+          setMessage(res.data.message || "Your email has been verified successfully!");
+        } else {
+          setStatus("error");
+          setMessage("Verification failed. Please try again.");
+        }
+      } catch (error) {
+        const status = error.response?.status;
+        let msg = "Verification failed. Please try again.";
+
+        if (status === 400) {
+          msg = error.response?.data?.message || "Invalid or expired verification token.";
+        } else if (status === 500) {
+          msg = "Server error. Please try again later.";
+        }
+
         setStatus("error");
-        setMessage("Verification failed. Please try again.");
+        setMessage(msg);
+        Notification.error(msg);
       }
-    } catch (error) {
-      const msg = error.response?.data?.message || "Verification failed or link expired.";
-      setStatus("error");
-      setMessage(msg);
-      Notification.error(msg);
-    }
+    }, 2000);
   };
 
   const handleGoToLogin = () => {

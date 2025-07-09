@@ -25,9 +25,20 @@ const ForgotPasswordPage = () => {
     setIsSubmitting(true);
     try {
       const res = await API.private.forgotPassword(data);
-      Notification.success(res.data.message || "Password reset email sent!");
+
+      if (res.status === 200) {
+        Notification.success(res.data.message || "Password reset email sent!");
+      } 
     } catch (error) {
-      const msg = error.response?.data?.message || "Something went wrong. Please try again.";
+      const status = error.response?.status;
+      let msg = "Something went wrong. Please try again.";
+
+      if (status === 400) {
+        msg = error.response?.data?.message || "Invalid email.";
+      } else if (status === 500) {
+        msg = "Server error. Please try again later.";
+      }
+
       Notification.error(msg);
     } finally {
       setIsSubmitting(false);
