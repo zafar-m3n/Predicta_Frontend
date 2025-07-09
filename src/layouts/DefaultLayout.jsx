@@ -6,7 +6,7 @@ import token from "@/lib/utilities";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 
-// Menu for clients
+// Client menu
 const clientMenu = [
   { label: "Dashboard", icon: "mdi:view-dashboard-outline", path: "/dashboard" },
   {
@@ -20,12 +20,11 @@ const clientMenu = [
   { label: "Wallet History", icon: "mdi:wallet-outline", path: "/wallet-history" },
   { label: "Tickets", icon: "mdi:headset", path: "/tickets" },
   { label: "Market Events", icon: "mdi:calendar-month-outline", path: "/market-events" },
-  // { label: "Demo Accounts", icon: "mdi:account-multiple-outline", path: "/demo-accounts" },
   { label: "Profile", icon: "mdi:account-outline", path: "/profile" },
   { label: "Logout", icon: "mdi:logout", action: "logout" },
 ];
 
-// Menu for admins
+// Admin menu
 const adminMenu = [
   { label: "Dashboard", icon: "mdi:view-dashboard-outline", path: "/admin/dashboard" },
   { label: "Deposit Methods", icon: "mdi:bank-transfer", path: "/admin/deposit-methods" },
@@ -45,7 +44,6 @@ const DefaultLayout = ({ children }) => {
 
   const user = token.getUserData();
   const userRole = user?.role || "client";
-
   const menuItems = userRole === "admin" ? adminMenu : clientMenu;
 
   useEffect(() => {
@@ -61,26 +59,18 @@ const DefaultLayout = ({ children }) => {
     const fetchBalance = async () => {
       try {
         const res = await API.private.getWalletBalance();
-
         if (res.status === 200) {
           setWalletBalance(res.data.balance);
-        } else {
-          Notification.error("Unexpected response from server when fetching balance.");
         }
       } catch (error) {
-        const status = error.response?.status;
-        let msg = "Failed to load wallet balance.";
+        const msg = error.response?.data?.message || "Failed to load wallet balance.";
+        Notification.error(msg);
 
-        if (status === 401) {
-          msg = "Unauthorized. Please login again.";
+        if (error.response?.status === 401) {
           token.removeAuthToken();
           token.removeUserData();
           navigate("/login");
-        } else if (status === 500) {
-          msg = "Server error. Please try again later.";
         }
-
-        Notification.error(msg);
       }
     };
 
@@ -89,9 +79,7 @@ const DefaultLayout = ({ children }) => {
     }
   }, [userRole, navigate]);
 
-  const isChildActive = (children) => {
-    return children?.some((child) => location.pathname === child.path);
-  };
+  const isChildActive = (children) => children?.some((child) => location.pathname === child.path);
 
   const handleLogout = () => {
     token.removeAuthToken();
@@ -100,14 +88,12 @@ const DefaultLayout = ({ children }) => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50 font-dm-sans">
-      {/* Sidebar */}
-      <div className="hidden md:flex flex-col w-64 bg-white shadow-xl">
+    <div className="flex h-screen bg-gray-50 font-dm-sans overflow-hidden">
+      <div className="hidden md:flex flex-col w-64 bg-white shadow-xl fixed left-0 top-0 bottom-0 z-40">
         <div className="h-20 flex justify-center items-center shadow-sm">
           <img src={logo} alt="Logo" className="h-10 w-auto" />
         </div>
 
-        {/* Wallet block only for client */}
         {userRole === "client" && (
           <div className="p-5 bg-gradient-to-r from-accent/20 to-transparent rounded m-4 shadow">
             <p className="text-xs text-gray-500 uppercase tracking-widest">My Wallet</p>
@@ -188,24 +174,22 @@ const DefaultLayout = ({ children }) => {
         </nav>
       </div>
 
-      {/* Main content */}
-      <div className="flex-1 flex flex-col">
-        {/* Top bar */}
-        <div className="hidden md:flex justify-end items-center bg-white shadow px-6" style={{ height: "80px" }}>
+      <div className="flex-1 flex flex-col md:ml-64 h-full">
+        <div
+          className="hidden md:flex justify-end items-center bg-white shadow px-6 fixed top-0 right-0 left-64 z-30"
+          style={{ height: "80px" }}
+        >
           <Icon icon="mdi:account-circle" width={34} className="cursor-pointer text-gray-600" />
           <div className="bg-accent text-white text-xs font-semibold px-3 py-1 rounded-full ml-4 shadow">ENG</div>
         </div>
 
-        {/* Mobile header */}
-        <div className="md:hidden flex items-center justify-between p-4 bg-white shadow">
+        <div className="md:hidden flex items-center justify-between p-4 bg-white shadow fixed top-0 left-0 right-0 z-30">
           <img src={logo} alt="Logo" className="h-8 w-auto" />
           <button onClick={() => setMenuOpen(!menuOpen)}>
             <Icon icon="mdi:menu" width={26} className="text-accent" />
           </button>
         </div>
-
-        {/* Page content */}
-        <main className="p-6 flex-1">{children}</main>
+        <main className="mt-[80px] p-6 overflow-y-auto flex-1">{children}</main>
       </div>
     </div>
   );
