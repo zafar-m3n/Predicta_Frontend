@@ -70,19 +70,19 @@ const DepositMethodsTable = ({ methods, onEdit, onToggleStatus, onView }) => {
                   <td className="px-4 py-3 whitespace-nowrap text-sm space-x-2">
                     <button
                       onClick={() => onView(method)}
-                      className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100"
+                      className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100 transition"
                     >
                       <Icon icon="mdi:eye" width="18" />
                     </button>
                     <button
                       onClick={() => onEdit(method)}
-                      className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100"
+                      className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100 transition"
                     >
                       <Icon icon="mdi:pencil" width="18" />
                     </button>
                     <button
                       onClick={() => handleToggleClick(method)}
-                      className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100"
+                      className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100 transition"
                     >
                       <Icon
                         icon={method.status === "active" ? "mdi:toggle-switch" : "mdi:toggle-switch-off-outline"}
@@ -111,11 +111,14 @@ const DepositMethodsTable = ({ methods, onEdit, onToggleStatus, onView }) => {
           <div className="flex justify-end space-x-2">
             <button
               onClick={() => setConfirmModal({ open: false, method: null })}
-              className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100"
+              className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 transition"
             >
               Cancel
             </button>
-            <button onClick={confirmToggle} className="px-4 py-2 bg-accent text-white rounded hover:bg-accent/90">
+            <button
+              onClick={confirmToggle}
+              className="px-4 py-2 bg-accent text-white rounded font-semibold hover:bg-accent/90 transition"
+            >
               Confirm
             </button>
           </div>
