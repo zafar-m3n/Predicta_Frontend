@@ -24,9 +24,12 @@ const DepositMethods = () => {
     setLoading(true);
     try {
       const res = await API.private.getAllDepositMethods();
-      setMethods(res.data.methods || []);
+      if (res.status === 200) {
+        setMethods(res.data.methods || []);
+      }
     } catch (error) {
-      Notification.error("Failed to fetch deposit methods.");
+      const msg = error.response?.data?.message || "Failed to fetch deposit methods.";
+      Notification.error(msg);
     } finally {
       setLoading(false);
     }
@@ -43,22 +46,29 @@ const DepositMethods = () => {
   const handleView = async (method) => {
     try {
       const res = await API.private.getDepositMethodById(method.id);
-      setSelectedMethod(res.data.method);
-      setSelectedDetails(res.data.details);
-      setIsModalOpen(true);
+      if (res.status === 200) {
+        setSelectedMethod(res.data.method);
+        setSelectedDetails(res.data.details);
+        setIsModalOpen(true);
+      }
     } catch (error) {
-      Notification.error("Failed to fetch method details.");
+      const msg = error.response?.data?.message || "Failed to fetch method details.";
+      Notification.error(msg);
     }
   };
 
   const handleToggleStatus = async (method) => {
     try {
       const newStatus = method.status === "active" ? "inactive" : "active";
-      await API.private.toggleDepositMethodStatus(method.id, newStatus);
-      Notification.success(`Status updated to ${newStatus}.`);
-      fetchMethods();
+      const res = await API.private.toggleDepositMethodStatus(method.id, newStatus);
+
+      if (res.status === 200) {
+        Notification.success(res.data.message || `Status updated to ${newStatus}.`);
+        fetchMethods();
+      }
     } catch (error) {
-      Notification.error("Failed to update status.");
+      const msg = error.response?.data?.message || "Failed to update status.";
+      Notification.error(msg);
     }
   };
 
