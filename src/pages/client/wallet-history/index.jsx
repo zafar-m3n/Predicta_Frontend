@@ -42,8 +42,8 @@ const WalletHistory = () => {
   return (
     <DefaultLayout>
       <div className="mb-6">
-        <h1 className="text-xl font-bold text-gray-800">Wallet History</h1>
-        <p className="text-gray-500 text-sm">Track your deposit activity here.</p>
+        <h1 className="text-2xl font-bold">Wallet History</h1>
+        <p className="text-gray-600">Track your deposit activity here.</p>
       </div>
 
       {/* Tabs */}
