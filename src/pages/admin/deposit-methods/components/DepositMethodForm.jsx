@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import Switch from "@/components/ui/Switch";
 import StyledFileInput from "@/components/ui/StyledFileInput";
+import Select from "react-select";
 
 const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
@@ -12,15 +13,18 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
   const [logoFile, setLogoFile] = useState(null);
   const [status, setStatus] = useState(initialData?.status === "active");
 
-  // If editing, set preview paths
   const [qrCodePath, setQrCodePath] = useState(initialData?.qr_code_path || "");
   const [logoPath, setLogoPath] = useState(initialData?.logo_path || "");
 
-  const typeOptions = ["bank", "crypto", "other"];
+  const typeOptions = [
+    { value: "bank", label: "Bank" },
+    { value: "crypto", label: "Crypto" },
+    { value: "other", label: "Other" },
+  ];
 
   const schema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
-    type: Yup.string().oneOf(typeOptions).required("Type is required"),
+    type: Yup.string().oneOf(["bank", "crypto", "other"]).required("Type is required"),
     beneficiary_name: Yup.string().nullable(),
     bank_name: Yup.string().nullable(),
     branch: Yup.string().nullable(),
@@ -34,6 +38,7 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
   const {
     register,
     handleSubmit,
+    control,
     watch,
     setValue,
     reset,
@@ -84,13 +89,13 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
   const handleFileChange = (e, setFile, setPath) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
-      setPath(""); // Clear preview if new file selected
+      setPath("");
     }
   };
 
   const removeFile = (setFile, setPath) => {
     setFile(null);
-    setPath(""); // Clear preview
+    setPath("");
   };
 
   const internalSubmit = (data) => {
@@ -118,19 +123,37 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
       {/* Type */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
-        <select
-          {...register("type")}
-          className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-            errors.type ? "border-red-500" : "border-gray-300"
-          }`}
-        >
-          <option value="">Select type</option>
-          {typeOptions.map((option) => (
-            <option key={option} value={option}>
-              {option.charAt(0).toUpperCase() + option.slice(1)}
-            </option>
-          ))}
-        </select>
+        <Controller
+          name="type"
+          control={control}
+          render={({ field }) => (
+            <Select
+              {...field}
+              options={typeOptions}
+              placeholder="Select type"
+              value={typeOptions.find((opt) => opt.value === field.value) || null}
+              onChange={(selected) => field.onChange(selected ? selected.value : "")}
+              className="react-select-container"
+              classNamePrefix="react-select"
+              styles={{
+                control: (base, state) => ({
+                  ...base,
+                  borderColor: errors.type ? "red" : state.isFocused ? "#86efac" : "#d1d5db",
+                  borderRadius: "0.375rem",
+                  minHeight: "2.5rem",
+                  boxShadow: "none",
+                  "&:hover": {
+                    borderColor: "#86efac",
+                  },
+                }),
+                valueContainer: (base) => ({
+                  ...base,
+                  paddingLeft: "0.75rem",
+                }),
+              }}
+            />
+          )}
+        />
         <p className="text-red-500 text-sm">{errors.type?.message}</p>
       </div>
 
