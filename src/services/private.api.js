@@ -72,6 +72,12 @@ const toggleDepositMethodStatus = async (id, status) => {
   );
 };
 
+const getAllDepositRequests = async () => {
+  return await instance.apiClient.get("/api/v1/admin/deposit-requests", {
+    headers: instance.defaultHeaders(),
+  });
+};
+
 const approveDepositRequest = async (id) => {
   return await instance.apiClient.patch(
     `/api/v1/admin/deposit-requests/${id}/approve`,
@@ -126,6 +132,7 @@ const privateAPI = {
   getDepositMethodById,
   updateDepositMethod,
   toggleDepositMethodStatus,
+  getAllDepositRequests,
   approveDepositRequest,
   rejectDepositRequest,
 
