@@ -28,7 +28,6 @@ const AddOrEditDepositMethod = () => {
       const combinedData = {
         ...method,
         ...(details || {}),
-        // Important: set files as null in form (they'll not be preloaded)
         qr_code: null,
         logo: null,
       };
@@ -70,11 +69,15 @@ const AddOrEditDepositMethod = () => {
         formData.append("notes", data.notes || "");
       }
 
-      await API.private.updateDepositMethod(id, formData);
-      Notification.success("Deposit method updated successfully.");
-      navigate("/admin/deposit-methods");
+      const res = await API.private.updateDepositMethod(id, formData);
+
+      if (res.status === 200) {
+        Notification.success(res.data.message || "Deposit method updated successfully.");
+        navigate("/admin/deposit-methods");
+      }
     } catch (error) {
-      Notification.error("Failed to update deposit method.");
+      const msg = error.response?.data?.message || "Failed to update deposit method.";
+      Notification.error(msg);
     } finally {
       setIsSubmitting(false);
     }
@@ -86,7 +89,10 @@ const AddOrEditDepositMethod = () => {
         <h1 className="text-2xl font-bold">{pageTitle}</h1>
         <button
           onClick={() => navigate("/admin/deposit-methods")}
-          className="bg-gray-200 text-gray-700 px-4 py-2 rounded font-medium hover:bg-gray-300 transition"
+          className={`bg-gray-200 text-gray-700 px-4 py-2 rounded font-medium transition ${
+            isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-300"
+          }`}
+          disabled={isSubmitting}
         >
           Back
         </button>
