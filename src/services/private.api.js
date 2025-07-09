@@ -72,6 +72,26 @@ const toggleDepositMethodStatus = async (id, status) => {
   );
 };
 
+const approveDepositRequest = async (id) => {
+  return await instance.apiClient.patch(
+    `/api/v1/admin/deposit-requests/${id}/approve`,
+    {},
+    {
+      headers: instance.defaultHeaders(),
+    }
+  );
+};
+
+const rejectDepositRequest = async (id, admin_note) => {
+  return await instance.apiClient.patch(
+    `/api/v1/admin/deposit-requests/${id}/reject`,
+    { admin_note },
+    {
+      headers: instance.defaultHeaders(),
+    }
+  );
+};
+
 /* ========================== */
 /* Client: Deposit Requests   */
 /* ========================== */
@@ -106,6 +126,8 @@ const privateAPI = {
   getDepositMethodById,
   updateDepositMethod,
   toggleDepositMethodStatus,
+  approveDepositRequest,
+  rejectDepositRequest,
 
   // Client
   getActiveDepositMethods,
