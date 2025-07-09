@@ -21,19 +21,21 @@ const DepositRequest = () => {
     setLoading(true);
     try {
       const res = await API.private.getActiveDepositMethods();
-      const allMethods = res.data.methods || [];
+      if (res.status === 200) {
+        const allMethods = res.data.methods || [];
+        const selected = allMethods.find((m) => m.id.toString() === methodId);
 
-      const selected = allMethods.find((m) => m.id.toString() === methodId);
+        if (!selected) {
+          Notification.error("Deposit method not found.");
+          navigate("/deposits");
+          return;
+        }
 
-      if (!selected) {
-        Notification.error("Deposit method not found.");
-        navigate("/deposits");
-        return;
+        setMethod(selected);
       }
-
-      setMethod(selected);
     } catch (error) {
-      Notification.error("Failed to load deposit methods.");
+      const msg = error.response?.data?.message || "Failed to load deposit methods.";
+      Notification.error(msg);
       navigate("/deposits");
     } finally {
       setLoading(false);
@@ -52,32 +54,18 @@ const DepositRequest = () => {
       }
 
       const res = await API.private.createDepositRequest(formData);
-
-      // Check if status is 201 explicitly if needed
       if (res.status === 201) {
         Notification.success(res.data.message || "Deposit request submitted successfully.");
         navigate("/wallet-history");
-      } else {
-        // Unexpected success code
-        Notification.error("Unexpected response from server.");
       }
     } catch (error) {
-      if (error.response) {
-        const { status, data } = error.response;
-        if (status === 400) {
-          Notification.error(data.message || "Method and amount are required.");
-        } else if (status === 404) {
-          Notification.error(data.message || "Deposit method not found or inactive.");
-          navigate("/deposits");
-        } else if (status === 500) {
-          Notification.error("Server error. Please try again later.");
-        } else {
-          Notification.error(data.message || "An error occurred.");
-        }
-      } else {
-        Notification.error("Network or unexpected error.");
+      const msg = error.response?.data?.message || "Failed to submit deposit request.";
+      Notification.error(msg);
+
+      // Handle special statuses if you want
+      if (error.response?.status === 404) {
+        navigate("/deposits");
       }
-      console.error(error);
     }
   };
 

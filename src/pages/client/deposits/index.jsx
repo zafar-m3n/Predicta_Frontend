@@ -18,9 +18,12 @@ const ClientDeposits = () => {
     setLoading(true);
     try {
       const res = await API.private.getActiveDepositMethods();
-      setMethods(res.data.methods || []);
+      if (res.status === 200) {
+        setMethods(res.data.methods || []);
+      }
     } catch (error) {
-      Notification.error("Failed to load deposit methods.");
+      const msg = error.response?.data?.message || "Failed to load deposit methods.";
+      Notification.error(msg);
     } finally {
       setLoading(false);
     }
