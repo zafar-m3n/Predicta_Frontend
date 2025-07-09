@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import Badge from "@/components/ui/Badge";
 import Icon from "@/components/ui/Icon";
 import Modal from "@/components/ui/Modal";
+import Pagination from "@/components/ui/Pagination";
 
-const DepositRequestsTable = ({ requests, onApprove, onReject }) => {
+const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
+
+const DepositRequestsTable = ({ requests, onApprove, onReject, currentPage, totalPages, onPageChange }) => {
   const [confirmModal, setConfirmModal] = useState({ open: false, action: null, request: null });
   const [rejectionNote, setRejectionNote] = useState("");
+  const [proofModal, setProofModal] = useState({ open: false, proofPath: "" });
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "-";
@@ -28,6 +32,10 @@ const DepositRequestsTable = ({ requests, onApprove, onReject }) => {
       onReject(confirmModal.request, rejectionNote);
     }
     setConfirmModal({ open: false, action: null, request: null });
+  };
+
+  const handleViewProof = (proofPath) => {
+    setProofModal({ open: true, proofPath });
   };
 
   return (
@@ -61,7 +69,8 @@ const DepositRequestsTable = ({ requests, onApprove, onReject }) => {
                 <tr key={request.id} className="odd:bg-gray-50 even:bg-white">
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{request.id}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
-                    {request.User?.full_name} <br />
+                    {request.User?.full_name}
+                    <br />
                     <span className="text-gray-500 text-xs">{request.User?.email}</span>
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{request.DepositMethod?.name}</td>
@@ -73,21 +82,25 @@ const DepositRequestsTable = ({ requests, onApprove, onReject }) => {
                       size="sm"
                     />
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">
-                    {formatDate(request.createdAt)}
-                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">{formatDate(request.createdAt)}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm space-x-2">
+                    <button
+                      onClick={() => handleViewProof(request.proof_path)}
+                      className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100 transition"
+                    >
+                      <Icon icon="mdi:eye" width="18" />
+                    </button>
                     {request.status === "pending" && (
                       <>
                         <button
                           onClick={() => handleActionClick("approve", request)}
-                          className="inline-flex items-center px-2 py-1 border border-green-300 rounded hover:bg-green-50"
+                          className="inline-flex items-center px-2 py-1 border border-green-300 rounded hover:bg-green-50 transition"
                         >
                           <Icon icon="mdi:check" width="18" />
                         </button>
                         <button
                           onClick={() => handleActionClick("reject", request)}
-                          className="inline-flex items-center px-2 py-1 border border-red-300 rounded hover:bg-red-50"
+                          className="inline-flex items-center px-2 py-1 border border-red-300 rounded hover:bg-red-50 transition"
                         >
                           <Icon icon="mdi:close" width="18" />
                         </button>
@@ -101,7 +114,10 @@ const DepositRequestsTable = ({ requests, onApprove, onReject }) => {
         </table>
       </div>
 
-      {/* Confirmation Modal */}
+      {/* Pagination */}
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} className="mt-4" />
+
+      {/* Confirm modal */}
       <Modal
         isOpen={confirmModal.open}
         onClose={() => setConfirmModal({ open: false, action: null, request: null })}
@@ -117,20 +133,44 @@ const DepositRequestsTable = ({ requests, onApprove, onReject }) => {
               value={rejectionNote}
               onChange={(e) => setRejectionNote(e.target.value)}
               placeholder="Enter rejection note (optional)"
-              className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent"
             />
           )}
           <div className="flex justify-end space-x-2">
             <button
               onClick={() => setConfirmModal({ open: false, action: null, request: null })}
-              className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100"
+              className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 transition"
             >
               Cancel
             </button>
-            <button onClick={confirmAction} className="px-4 py-2 bg-accent text-white rounded hover:bg-accent/90">
+            <button
+              onClick={confirmAction}
+              className="px-4 py-2 bg-accent text-white rounded font-medium hover:bg-accent/90 transition"
+            >
               Confirm
             </button>
           </div>
+        </div>
+      </Modal>
+
+      {/* Proof modal */}
+      <Modal
+        isOpen={proofModal.open}
+        onClose={() => setProofModal({ open: false, proofPath: "" })}
+        title="Proof of Deposit"
+        size="md"
+        centered
+      >
+        <div className="flex justify-center items-center">
+          {proofModal.proofPath ? (
+            <img
+              src={`${apiBaseUrl}/${proofModal.proofPath}`}
+              alt="Proof"
+              className="max-w-full max-h-[400px] rounded shadow"
+            />
+          ) : (
+            <p className="text-gray-500">No proof available.</p>
+          )}
         </div>
       </Modal>
     </>

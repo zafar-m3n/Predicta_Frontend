@@ -1,7 +1,7 @@
 import React from "react";
 import Icon from "@/components/ui/Icon";
 
-const Pagination = ({ currentPage, totalPages, onPageChange, className = "", text = true }) => {
+const Pagination = ({ currentPage, totalPages, onPageChange, className = "", text = false }) => {
   const getPageNumbers = () => {
     const pages = [];
     const startPage = 1;
@@ -11,6 +11,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange, className = "", tex
       pages.push(i);
     }
 
+    // Keep logic for ellipsis if > 10 pages
     return pages.length > 10 ? [1, 2, 3, "...", totalPages - 2, totalPages - 1, totalPages] : pages;
   };
 
@@ -44,7 +45,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange, className = "", tex
           onClick={() => handleClick(page)}
           disabled={page === "..."}
           className={`px-4 py-2 text-sm ${
-            page === "..." ? "cursor-not-allowed" : page === currentPage ? "font-bold" : "hover:underline"
+            page === "..." ? "cursor-not-allowed" : page === currentPage ? "font-bold text-accent" : "hover:underline"
           }`}
         >
           {page}

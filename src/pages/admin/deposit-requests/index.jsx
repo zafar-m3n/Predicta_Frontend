@@ -7,52 +7,59 @@ import Notification from "@/components/ui/Notification";
 const DepositRequests = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  const fetchRequests = async () => {
+  useEffect(() => {
+    fetchRequests(1);
+  }, []);
+
+  const fetchRequests = async (page = 1) => {
+    setLoading(true);
     try {
-      setLoading(true);
-      const res = await API.private.getAllDepositRequests();
-      setRequests(res.data.requests);
+      const res = await API.private.getAllDepositRequests(page);
+      if (res.status === 200) {
+        setRequests(res.data.requests || []);
+        setCurrentPage(res.data.page || 1);
+        setTotalPages(res.data.totalPages || 1);
+      }
     } catch (error) {
-      console.error(error);
-      Notification.error("Failed to fetch deposit requests.");
+      const msg = error.response?.data?.message || "Failed to fetch deposit requests.";
+      Notification.error(msg);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchRequests();
-  }, []);
-
   const handleApprove = async (request) => {
     try {
       const res = await API.private.approveDepositRequest(request.id);
-      Notification.success(res.data.message || "Deposit request approved.");
-      fetchRequests();
-    } catch (error) {
-      console.error(error);
-      if (error.response) {
-        Notification.error(error.response.data.message || "Failed to approve request.");
-      } else {
-        Notification.error("Server error.");
+      if (res.status === 200) {
+        Notification.success(res.data.message || "Deposit request approved.");
+        fetchRequests(currentPage);
       }
+    } catch (error) {
+      const msg = error.response?.data?.message || "Failed to approve request.";
+      Notification.error(msg);
     }
   };
 
   const handleReject = async (request, note) => {
     try {
       const res = await API.private.rejectDepositRequest(request.id, note);
-      Notification.success(res.data.message || "Deposit request rejected.");
-      fetchRequests();
-    } catch (error) {
-      console.error(error);
-      if (error.response) {
-        Notification.error(error.response.data.message || "Failed to reject request.");
-      } else {
-        Notification.error("Server error.");
+      if (res.status === 200) {
+        Notification.success(res.data.message || "Deposit request rejected.");
+        fetchRequests(currentPage);
       }
+    } catch (error) {
+      const msg = error.response?.data?.message || "Failed to reject request.";
+      Notification.error(msg);
     }
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchRequests(page);
   };
 
   return (
@@ -64,7 +71,14 @@ const DepositRequests = () => {
       {loading ? (
         <div className="text-center text-gray-600 py-10">Loading...</div>
       ) : (
-        <DepositRequestsTable requests={requests} onApprove={handleApprove} onReject={handleReject} />
+        <DepositRequestsTable
+          requests={requests}
+          onApprove={handleApprove}
+          onReject={handleReject}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       )}
     </DefaultLayout>
   );
