@@ -8,36 +8,34 @@ const WalletHistory = () => {
   const [deposits, setDeposits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("deposits");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    const fetchDepositHistory = async () => {
-      setLoading(true);
-      try {
-        const res = await API.private.getDepositHistory();
-
-        if (res.status === 200) {
-          setDeposits(res.data.deposits);
-        } else {
-          Notification.error("Unexpected response from server while fetching history.");
-        }
-      } catch (error) {
-        const status = error.response?.status;
-        let msg = "Failed to load deposit history.";
-
-        if (status === 401) {
-          msg = "Unauthorized. Please login again.";
-        } else if (status === 500) {
-          msg = "Server error. Please try again later.";
-        }
-
-        Notification.error(msg);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDepositHistory();
+    fetchDepositHistory(1);
   }, []);
+
+  const fetchDepositHistory = async (page = 1) => {
+    setLoading(true);
+    try {
+      const res = await API.private.getDepositHistory(page);
+      if (res.status === 200) {
+        setDeposits(res.data.deposits || []);
+        setCurrentPage(res.data.page || 1);
+        setTotalPages(res.data.totalPages || 1);
+      }
+    } catch (error) {
+      const msg = error.response?.data?.message || "Failed to load deposit history.";
+      Notification.error(msg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchDepositHistory(page);
+  };
 
   return (
     <DefaultLayout>
@@ -64,7 +62,12 @@ const WalletHistory = () => {
       {loading ? (
         <div className="text-center text-gray-500">Loading deposit history...</div>
       ) : (
-        <DepositHistoryTable deposits={deposits} />
+        <DepositHistoryTable
+          deposits={deposits}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       )}
     </DefaultLayout>
   );
