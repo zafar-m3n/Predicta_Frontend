@@ -115,6 +115,22 @@ const createDepositRequest = async (formData) => {
 };
 
 /* ========================== */
+/* Client: Wallet             */
+/* ========================== */
+
+const getWalletBalance = async () => {
+  return await instance.apiClient.get("/api/v1/client/wallet/balance", {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const getDepositHistory = async () => {
+  return await instance.apiClient.get("/api/v1/client/wallet/deposit-history", {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+/* ========================== */
 /* Export API                 */
 /* ========================== */
 
@@ -139,6 +155,10 @@ const privateAPI = {
   // Client
   getActiveDepositMethods,
   createDepositRequest,
+
+  // Client Wallet
+  getWalletBalance,
+  getDepositHistory,
 };
 
 export default privateAPI;
