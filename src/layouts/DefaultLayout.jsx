@@ -3,6 +3,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/Icon";
 import logo from "@/assets/logo.png";
 import token from "@/lib/utilities";
+import API from "@/services/index";
+import Notification from "@/components/ui/Notification";
 
 // Menu for clients
 const clientMenu = [
@@ -37,16 +39,15 @@ const adminMenu = [
 const DefaultLayout = ({ children }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [transferOpen, setTransferOpen] = useState(false);
+  const [walletBalance, setWalletBalance] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
 
   const user = token.getUserData();
   const userRole = user?.role || "client";
 
-  // Choose correct menu
   const menuItems = userRole === "admin" ? adminMenu : clientMenu;
 
-  // Check if Transfer submenu should be open by default
   useEffect(() => {
     if (
       userRole === "client" &&
@@ -56,7 +57,38 @@ const DefaultLayout = ({ children }) => {
     }
   }, [location.pathname, userRole]);
 
-  // Check if any child is active
+  useEffect(() => {
+    const fetchBalance = async () => {
+      try {
+        const res = await API.private.getWalletBalance();
+
+        if (res.status === 200) {
+          setWalletBalance(res.data.balance);
+        } else {
+          Notification.error("Unexpected response from server when fetching balance.");
+        }
+      } catch (error) {
+        const status = error.response?.status;
+        let msg = "Failed to load wallet balance.";
+
+        if (status === 401) {
+          msg = "Unauthorized. Please login again.";
+          token.removeAuthToken();
+          token.removeUserData();
+          navigate("/login");
+        } else if (status === 500) {
+          msg = "Server error. Please try again later.";
+        }
+
+        Notification.error(msg);
+      }
+    };
+
+    if (userRole === "client") {
+      fetchBalance();
+    }
+  }, [userRole, navigate]);
+
   const isChildActive = (children) => {
     return children?.some((child) => location.pathname === child.path);
   };
@@ -79,13 +111,12 @@ const DefaultLayout = ({ children }) => {
         {userRole === "client" && (
           <div className="p-5 bg-gradient-to-r from-accent/20 to-transparent rounded m-4 shadow">
             <p className="text-xs text-gray-500 uppercase tracking-widest">My Wallet</p>
-            <p className="font-semibold text-xl text-accent mt-1">$ 0.000</p>
+            <p className="font-semibold text-xl text-accent mt-1">${parseFloat(walletBalance).toFixed(2)}</p>
           </div>
         )}
 
         <nav className="mt-6 flex-1 px-3 pb-4 space-y-1 overflow-y-auto">
           {menuItems.map((item, idx) => {
-            // If it's a logout action
             if (item.action === "logout") {
               return (
                 <button
