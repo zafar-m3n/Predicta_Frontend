@@ -3,6 +3,7 @@ import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Modal from "@/components/ui/Modal";
 import AddWithdrawalMethodForm from "./AddWithdrawalMethodsForm";
+import IconComponent from "@/components/ui/Icon"; // Your custom Icon component
 
 const WithdrawalMethodsTable = () => {
   const [methods, setMethods] = useState([]);
@@ -47,7 +48,7 @@ const WithdrawalMethodsTable = () => {
   return (
     <div className="w-full space-y-10">
       {/* Bank methods table */}
-      <div className="bg-white shadow-md rounded-lg p-6 border border-gray-100">
+      <div className="bg-white shadow rounded-lg p-6 border border-gray-100">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Bank Withdrawal Methods</h2>
           <button
@@ -58,38 +59,57 @@ const WithdrawalMethodsTable = () => {
           </button>
         </div>
 
-        {bankMethods.length > 0 ? (
-          <table className="w-full text-left border">
-            <thead>
+        <div className="overflow-x-auto rounded">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
               <tr>
-                <th className="py-2 px-3 border-b">Bank Name</th>
-                <th className="py-2 px-3 border-b">Account Number</th>
-                <th className="py-2 px-3 border-b">Account Name</th>
-                <th className="py-2 px-3 border-b">Actions</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Bank Name
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Account Number
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Account Name
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
-            <tbody>
-              {bankMethods.map((method) => (
-                <tr key={method.id}>
-                  <td className="py-2 px-3 border-b">{method.bank_name}</td>
-                  <td className="py-2 px-3 border-b">{method.account_number}</td>
-                  <td className="py-2 px-3 border-b">{method.account_name}</td>
-                  <td className="py-2 px-3 border-b">
-                    <button onClick={() => handleDelete(method.id)} className="text-red-500 hover:underline">
-                      Deactivate
-                    </button>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {bankMethods.length === 0 ? (
+                <tr>
+                  <td colSpan="5" className="px-4 py-6 text-center text-gray-500">
+                    No active bank withdrawal methods found.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                bankMethods.map((method) => (
+                  <tr key={method.id} className="odd:bg-gray-50 even:bg-white">
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{method.id}</td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{method.bank_name}</td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{method.account_number}</td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{method.account_name}</td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm">
+                      <button
+                        onClick={() => handleDelete(method.id)}
+                        className="inline-flex items-center px-2 py-1 border border-red-300 rounded hover:bg-red-50 transition"
+                      >
+                        <IconComponent icon="mdi:delete-outline" width="18" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
-        ) : (
-          <p>No active bank withdrawal methods found.</p>
-        )}
+        </div>
       </div>
 
       {/* Crypto methods table */}
-      <div className="bg-white shadow-md rounded-lg p-6 border border-gray-100">
+      <div className="bg-white shadow rounded-lg p-6 border border-gray-100">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Crypto Withdrawal Methods</h2>
           <button
@@ -100,32 +120,49 @@ const WithdrawalMethodsTable = () => {
           </button>
         </div>
 
-        {cryptoMethods.length > 0 ? (
-          <table className="w-full text-left border">
-            <thead>
+        <div className="overflow-x-auto rounded">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
               <tr>
-                <th className="py-2 px-3 border-b">Network</th>
-                <th className="py-2 px-3 border-b">Wallet Address</th>
-                <th className="py-2 px-3 border-b">Actions</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Network
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Wallet Address
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
             </thead>
-            <tbody>
-              {cryptoMethods.map((method) => (
-                <tr key={method.id}>
-                  <td className="py-2 px-3 border-b">{method.network}</td>
-                  <td className="py-2 px-3 border-b">{method.wallet_address}</td>
-                  <td className="py-2 px-3 border-b">
-                    <button onClick={() => handleDelete(method.id)} className="text-red-500 hover:underline">
-                      Deactivate
-                    </button>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {cryptoMethods.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className="px-4 py-6 text-center text-gray-500">
+                    No active crypto withdrawal methods found.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                cryptoMethods.map((method) => (
+                  <tr key={method.id} className="odd:bg-gray-50 even:bg-white">
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{method.id}</td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{method.network}</td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{method.wallet_address}</td>
+                    <td className="px-4 py-3 whitespace-nowrap text-sm">
+                      <button
+                        onClick={() => handleDelete(method.id)}
+                        className="inline-flex items-center px-2 py-1 border border-red-300 rounded hover:bg-red-50 transition"
+                      >
+                        <IconComponent icon="mdi:delete-outline" width="18" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
-        ) : (
-          <p>No active crypto withdrawal methods found.</p>
-        )}
+        </div>
       </div>
 
       {/* Bank Modal */}

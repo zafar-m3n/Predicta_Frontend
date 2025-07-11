@@ -1,58 +1,58 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
+import React, { useState, useEffect } from "react";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 
-const schema = Yup.object().shape({
-  type: Yup.string().required(),
-  bank_name: Yup.string().when("type", {
-    is: "bank",
-    then: Yup.string().required("Bank name is required"),
-  }),
-  branch: Yup.string().when("type", {
-    is: "bank",
-    then: Yup.string().required("Branch is required"),
-  }),
-  account_number: Yup.string().when("type", {
-    is: "bank",
-    then: Yup.string().required("Account number is required"),
-  }),
-  account_name: Yup.string().when("type", {
-    is: "bank",
-    then: Yup.string().required("Account name is required"),
-  }),
-  swift_code: Yup.string(),
-  iban: Yup.string(),
-  network: Yup.string().when("type", {
-    is: "crypto",
-    then: Yup.string().required("Network is required"),
-  }),
-  wallet_address: Yup.string().when("type", {
-    is: "crypto",
-    then: Yup.string().required("Wallet address is required"),
-  }),
-});
-
 const AddWithdrawalMethodForm = ({ type, onSuccess, onClose }) => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: { type },
-  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onSubmit = async (data) => {
+  // State for each field
+  const [bankName, setBankName] = useState("");
+  const [branch, setBranch] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [accountName, setAccountName] = useState("");
+  const [swiftCode, setSwiftCode] = useState("");
+  const [iban, setIban] = useState("");
+  const [network, setNetwork] = useState("");
+  const [walletAddress, setWalletAddress] = useState("");
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    let payload = { type };
+
+    if (type === "bank") {
+      if (!bankName || !branch || !accountNumber || !accountName || !swiftCode || !iban) {
+        Notification.error("Please fill in all required bank fields.");
+        return;
+      }
+      payload = {
+        ...payload,
+        bank_name: bankName,
+        branch,
+        account_number: accountNumber,
+        account_name: accountName,
+        swift_code: swiftCode,
+        iban,
+      };
+    }
+
+    if (type === "crypto") {
+      if (!network || !walletAddress) {
+        Notification.error("Please fill in all required crypto fields.");
+        return;
+      }
+      payload = {
+        ...payload,
+        network,
+        wallet_address: walletAddress,
+      };
+    }
+
+    setIsSubmitting(true);
     try {
-      const res = await API.private.addWithdrawalMethod(data);
-
+      const res = await API.private.addWithdrawalMethod(payload);
       if (res.status === 201) {
         Notification.success(res.data.message || "Withdrawal method added successfully!");
-        reset();
         onSuccess();
         onClose();
       }
@@ -62,98 +62,119 @@ const AddWithdrawalMethodForm = ({ type, onSuccess, onClose }) => {
         msg = error.response.data.message;
       }
       Notification.error(msg);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+    <form onSubmit={onSubmit} className="space-y-3 bg-white rounded-2xl">
       {type === "bank" && (
         <>
-          <input
-            type="text"
-            placeholder="Bank Name"
-            {...register("bank_name")}
-            className={`w-full border rounded px-3 py-2 focus:outline-none ${
-              errors.bank_name ? "border-red-500" : "border-gray-300"
-            }`}
-          />
-          <p className="text-red-500 text-sm">{errors.bank_name?.message}</p>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Bank Name</label>
+            <input
+              type="text"
+              placeholder="Enter bank name"
+              value={bankName}
+              onChange={(e) => setBankName(e.target.value)}
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+            />
+          </div>
 
-          <input
-            type="text"
-            placeholder="Branch"
-            {...register("branch")}
-            className={`w-full border rounded px-3 py-2 focus:outline-none ${
-              errors.branch ? "border-red-500" : "border-gray-300"
-            }`}
-          />
-          <p className="text-red-500 text-sm">{errors.branch?.message}</p>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Branch</label>
+            <input
+              type="text"
+              placeholder="Enter branch"
+              value={branch}
+              onChange={(e) => setBranch(e.target.value)}
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+            />
+          </div>
 
-          <input
-            type="text"
-            placeholder="Account Number"
-            {...register("account_number")}
-            className={`w-full border rounded px-3 py-2 focus:outline-none ${
-              errors.account_number ? "border-red-500" : "border-gray-300"
-            }`}
-          />
-          <p className="text-red-500 text-sm">{errors.account_number?.message}</p>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Account Number</label>
+            <input
+              type="text"
+              placeholder="Enter account number"
+              value={accountNumber}
+              onChange={(e) => setAccountNumber(e.target.value)}
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+            />
+          </div>
 
-          <input
-            type="text"
-            placeholder="Account Name"
-            {...register("account_name")}
-            className={`w-full border rounded px-3 py-2 focus:outline-none ${
-              errors.account_name ? "border-red-500" : "border-gray-300"
-            }`}
-          />
-          <p className="text-red-500 text-sm">{errors.account_name?.message}</p>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Account Name</label>
+            <input
+              type="text"
+              placeholder="Enter account name"
+              value={accountName}
+              onChange={(e) => setAccountName(e.target.value)}
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+            />
+          </div>
 
-          <input
-            type="text"
-            placeholder="SWIFT Code (optional)"
-            {...register("swift_code")}
-            className="w-full border rounded px-3 py-2 focus:outline-none border-gray-300"
-          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">SWIFT Code</label>
+              <input
+                type="text"
+                placeholder="Enter SWIFT code"
+                value={swiftCode}
+                onChange={(e) => setSwiftCode(e.target.value)}
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+              />
+            </div>
 
-          <input
-            type="text"
-            placeholder="IBAN (optional)"
-            {...register("iban")}
-            className="w-full border rounded px-3 py-2 focus:outline-none border-gray-300"
-          />
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">IBAN</label>
+              <input
+                type="text"
+                placeholder="Enter IBAN"
+                value={iban}
+                onChange={(e) => setIban(e.target.value)}
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+              />
+            </div>
+          </div>
         </>
       )}
 
       {type === "crypto" && (
         <>
-          <input
-            type="text"
-            placeholder="Network"
-            {...register("network")}
-            className={`w-full border rounded px-3 py-2 focus:outline-none ${
-              errors.network ? "border-red-500" : "border-gray-300"
-            }`}
-          />
-          <p className="text-red-500 text-sm">{errors.network?.message}</p>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Network</label>
+            <input
+              type="text"
+              placeholder="Enter network (e.g., ERC20)"
+              value={network}
+              onChange={(e) => setNetwork(e.target.value)}
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+            />
+          </div>
 
-          <input
-            type="text"
-            placeholder="Wallet Address"
-            {...register("wallet_address")}
-            className={`w-full border rounded px-3 py-2 focus:outline-none ${
-              errors.wallet_address ? "border-red-500" : "border-gray-300"
-            }`}
-          />
-          <p className="text-red-500 text-sm">{errors.wallet_address?.message}</p>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Wallet Address</label>
+            <input
+              type="text"
+              placeholder="Enter wallet address"
+              value={walletAddress}
+              onChange={(e) => setWalletAddress(e.target.value)}
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+            />
+          </div>
         </>
       )}
 
       <button
         type="submit"
-        className="w-full bg-accent text-white py-2 rounded font-semibold hover:bg-accent/90 transition"
+        disabled={isSubmitting}
+        className={`w-full bg-accent text-white py-2 rounded font-semibold shadow transition-all ${
+          isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
+        }`}
       >
-        Add Method
+        {isSubmitting ? "Adding..." : "Add Method"}
       </button>
     </form>
   );
