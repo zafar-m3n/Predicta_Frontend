@@ -3,7 +3,6 @@ import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Modal from "@/components/ui/Modal";
 import AddWithdrawalMethodForm from "./AddWithdrawalMethodsForm";
-import IconComponent from "@/components/ui/Icon"; // Your custom Icon component
 
 const WithdrawalMethodsTable = () => {
   const [methods, setMethods] = useState([]);
@@ -27,18 +26,6 @@ const WithdrawalMethodsTable = () => {
   useEffect(() => {
     fetchMethods();
   }, []);
-
-  const handleDelete = async (id) => {
-    try {
-      const res = await API.private.deleteWithdrawalMethod(id);
-      if (res.status === 200) {
-        Notification.success(res.data.message || "Method deactivated successfully.");
-        fetchMethods();
-      }
-    } catch (error) {
-      Notification.error("Failed to deactivate method.");
-    }
-  };
 
   const bankMethods = methods.filter((m) => m.type === "bank" && m.status === "active");
   const cryptoMethods = methods.filter((m) => m.type === "crypto" && m.status === "active");
@@ -73,15 +60,12 @@ const WithdrawalMethodsTable = () => {
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Account Name
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {bankMethods.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="px-4 py-6 text-center text-gray-500">
+                  <td colSpan="4" className="px-4 py-6 text-center text-gray-500">
                     No active bank withdrawal methods found.
                   </td>
                 </tr>
@@ -92,14 +76,6 @@ const WithdrawalMethodsTable = () => {
                     <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{method.bank_name}</td>
                     <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{method.account_number}</td>
                     <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{method.account_name}</td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm">
-                      <button
-                        onClick={() => handleDelete(method.id)}
-                        className="inline-flex items-center px-2 py-1 border border-red-300 rounded hover:bg-red-50 transition"
-                      >
-                        <IconComponent icon="mdi:delete-outline" width="18" />
-                      </button>
-                    </td>
                   </tr>
                 ))
               )}
@@ -131,15 +107,12 @@ const WithdrawalMethodsTable = () => {
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Wallet Address
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {cryptoMethods.length === 0 ? (
                 <tr>
-                  <td colSpan="4" className="px-4 py-6 text-center text-gray-500">
+                  <td colSpan="3" className="px-4 py-6 text-center text-gray-500">
                     No active crypto withdrawal methods found.
                   </td>
                 </tr>
@@ -149,14 +122,6 @@ const WithdrawalMethodsTable = () => {
                     <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{method.id}</td>
                     <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{method.network}</td>
                     <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{method.wallet_address}</td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm">
-                      <button
-                        onClick={() => handleDelete(method.id)}
-                        className="inline-flex items-center px-2 py-1 border border-red-300 rounded hover:bg-red-50 transition"
-                      >
-                        <IconComponent icon="mdi:delete-outline" width="18" />
-                      </button>
-                    </td>
                   </tr>
                 ))
               )}
