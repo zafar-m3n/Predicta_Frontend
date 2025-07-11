@@ -63,9 +63,10 @@ const ChangePasswordForm = () => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Current Password */}
         <div className="relative">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
           <input
             type={showCurrent ? "text" : "password"}
-            placeholder="Current Password"
+            placeholder="Enter current password"
             {...register("current_password")}
             className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
               errors.current_password ? "border-red-500" : "border-gray-300"
@@ -73,7 +74,7 @@ const ChangePasswordForm = () => {
           />
           <span
             onClick={() => setShowCurrent(!showCurrent)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+            className="absolute right-3 top-1/2 cursor-pointer text-gray-500"
           >
             <Icon icon={showCurrent ? "mdi:eye-off" : "mdi:eye"} width="20" />
           </span>
@@ -82,9 +83,10 @@ const ChangePasswordForm = () => {
 
         {/* New Password */}
         <div className="relative">
+          <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
           <input
             type={showNew ? "text" : "password"}
-            placeholder="New Password"
+            placeholder="Enter new password"
             {...register("new_password")}
             className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
               errors.new_password ? "border-red-500" : "border-gray-300"
@@ -92,7 +94,7 @@ const ChangePasswordForm = () => {
           />
           <span
             onClick={() => setShowNew(!showNew)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+            className="absolute right-3 top-1/2 cursor-pointer text-gray-500"
           >
             <Icon icon={showNew ? "mdi:eye-off" : "mdi:eye"} width="20" />
           </span>
@@ -101,9 +103,10 @@ const ChangePasswordForm = () => {
 
         {/* Confirm New Password */}
         <div className="relative">
+          <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
           <input
             type={showConfirm ? "text" : "password"}
-            placeholder="Confirm New Password"
+            placeholder="Re-enter new password"
             {...register("confirm_password")}
             className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
               errors.confirm_password ? "border-red-500" : "border-gray-300"
@@ -111,7 +114,7 @@ const ChangePasswordForm = () => {
           />
           <span
             onClick={() => setShowConfirm(!showConfirm)}
-            className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+            className="absolute right-3 top-1/2 cursor-pointer text-gray-500"
           >
             <Icon icon={showConfirm ? "mdi:eye-off" : "mdi:eye"} width="20" />
           </span>

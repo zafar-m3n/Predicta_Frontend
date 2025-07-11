@@ -33,9 +33,9 @@ const WithdrawalMethodsTable = () => {
   if (loading) return <div>Loading withdrawal methods...</div>;
 
   return (
-    <div className="w-full space-y-10">
+    <div className="w-full">
       {/* Bank methods table */}
-      <div className="bg-white shadow rounded-lg p-6 border border-gray-100">
+      <div className="bg-white shadow rounded-lg p-6 border border-gray-100 mb-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Bank Withdrawal Methods</h2>
           <button
