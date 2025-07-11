@@ -264,7 +264,7 @@ const createWithdrawalRequest = async (data) => {
   });
 };
 
-const getWithdrawalEligibility = async () => {
+const checkWithdrawalEligibility = async () => {
   return await instance.apiClient.get("/api/v1/client/withdrawals/eligibility", {
     headers: instance.defaultHeaders(),
   });
@@ -325,7 +325,7 @@ const privateAPI = {
   // Client Withdrawal
   getActiveWithdrawalMethods,
   createWithdrawalRequest,
-  getWithdrawalEligibility,
+  checkWithdrawalEligibility,
 };
 
 export default privateAPI;
