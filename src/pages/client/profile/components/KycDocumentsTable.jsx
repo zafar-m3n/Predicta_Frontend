@@ -37,7 +37,7 @@ const KycDocumentsTable = () => {
     return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(
       2,
       "0"
-    )}`;
+    )} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
   };
 
   const getDocumentLabel = (type) => {
@@ -102,7 +102,7 @@ const KycDocumentsTable = () => {
                       size="sm"
                     />
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap">{formatDate(doc.submitted_at)}</td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">{formatDate(doc.submitted_at)}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
                     {doc.admin_note ? doc.admin_note : "N/A"}
                   </td>
