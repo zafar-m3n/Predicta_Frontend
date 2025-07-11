@@ -69,14 +69,19 @@ const AddOrEditDepositMethod = () => {
         formData.append("notes", data.notes || "");
       }
 
-      const res = await API.private.updateDepositMethod(id, formData);
+      let res;
+      if (id) {
+        res = await API.private.updateDepositMethod(id, formData);
+      } else {
+        res = await API.private.createDepositMethod(formData);
+      }
 
-      if (res.status === 200) {
-        Notification.success(res.data.message || "Deposit method updated successfully.");
+      if (res.status === 200 || res.status === 201) {
+        Notification.success(res.data.message || "Deposit method saved successfully.");
         navigate("/admin/deposit-methods");
       }
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to update deposit method.";
+      const msg = error.response?.data?.message || "Failed to save deposit method.";
       Notification.error(msg);
     } finally {
       setIsSubmitting(false);
