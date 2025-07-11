@@ -131,6 +131,58 @@ const getDepositHistory = async () => {
 };
 
 /* ========================== */
+/* Client: Profile            */
+/* ========================== */
+
+const getProfile = async () => {
+  return await instance.apiClient.get("/api/v1/client/profile", {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const updateProfile = async (data) => {
+  return await instance.apiClient.put("/api/v1/client/profile", data, {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const uploadKycDocument = async (formData) => {
+  return await instance.apiClient.post("/api/v1/client/profile/kyc", formData, {
+    headers: instance.defaultHeaders("multipart/form-data"),
+  });
+};
+
+const getKycDocuments = async () => {
+  return await instance.apiClient.get("/api/v1/client/profile/kyc", {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const addWithdrawalMethod = async (data) => {
+  return await instance.apiClient.post("/api/v1/client/profile/withdrawal-methods", data, {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const getWithdrawalMethods = async () => {
+  return await instance.apiClient.get("/api/v1/client/profile/withdrawal-methods", {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const deleteWithdrawalMethod = async (id) => {
+  return await instance.apiClient.delete(`/api/v1/client/profile/withdrawal-methods/${id}`, {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const changePassword = async (data) => {
+  return await instance.apiClient.patch("/api/v1/client/profile/change-password", data, {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+/* ========================== */
 /* Export API                 */
 /* ========================== */
 
@@ -159,6 +211,16 @@ const privateAPI = {
   // Client Wallet
   getWalletBalance,
   getDepositHistory,
+
+  // Client Profile
+  getProfile,
+  updateProfile,
+  uploadKycDocument,
+  getKycDocuments,
+  addWithdrawalMethod,
+  getWithdrawalMethods,
+  deleteWithdrawalMethod,
+  changePassword,
 };
 
 export default privateAPI;
