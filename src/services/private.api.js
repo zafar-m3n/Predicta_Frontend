@@ -130,6 +130,12 @@ const getDepositHistory = async () => {
   });
 };
 
+const getWithdrawalHistory = async () => {
+  return await instance.apiClient.get("/api/v1/client/wallet/withdrawal-history", {
+    headers: instance.defaultHeaders(),
+  });
+};
+
 /* ========================== */
 /* Client: Profile            */
 /* ========================== */
@@ -336,6 +342,7 @@ const privateAPI = {
   // Client Wallet
   getWalletBalance,
   getDepositHistory,
+  getWithdrawalHistory,
 
   // Client Profile
   getProfile,
