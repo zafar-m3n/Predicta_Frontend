@@ -24,6 +24,7 @@ import DepositMethodsPage from "@/pages/admin/deposit-methods";
 import AddOrEditDepositMethod from "@/pages/admin/deposit-methods/AddOrEditDepositMethod";
 import WithdrawalRequestsPage from "@/pages/admin/withdrawal-requests";
 import UsersPage from "@/pages/admin/users";
+import ViewUser from "@/pages/admin/users/ViewUser";
 import SettingsPage from "@/pages/admin/settings";
 
 import PrivateRoute from "@/components/PrivateRoute";
@@ -51,6 +52,7 @@ function App() {
     { path: "/admin/deposit-methods/:id/edit", element: AddOrEditDepositMethod },
     { path: "/admin/withdrawal-requests", element: WithdrawalRequestsPage },
     { path: "/admin/users", element: UsersPage },
+    { path: "/admin/users/:id", element: ViewUser },
     { path: "/admin/settings", element: SettingsPage },
   ];
 
