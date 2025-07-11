@@ -37,7 +37,7 @@ const WithdrawalMethodsTable = () => {
       {/* Bank methods table */}
       <div className="bg-white shadow rounded-lg p-6 border border-gray-100 mb-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Bank Withdrawal Methods</h2>
+          <h2 className="text-xl font-semibold">Bank Withdrawal Details</h2>
           <button
             onClick={() => setIsBankModalOpen(true)}
             className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
@@ -87,7 +87,7 @@ const WithdrawalMethodsTable = () => {
       {/* Crypto methods table */}
       <div className="bg-white shadow rounded-lg p-6 border border-gray-100">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Crypto Withdrawal Methods</h2>
+          <h2 className="text-xl font-semibold">Crypto Withdrawal Details</h2>
           <button
             onClick={() => setIsCryptoModalOpen(true)}
             className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
