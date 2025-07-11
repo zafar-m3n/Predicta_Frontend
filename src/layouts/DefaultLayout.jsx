@@ -31,7 +31,7 @@ const adminMenu = [
   { label: "Deposit Methods", icon: "mdi:bank-transfer", path: "/admin/deposit-methods" },
   { label: "Deposit Requests", icon: "mdi:bank-transfer-in", path: "/admin/deposit-requests" },
   { label: "Withdrawal Requests", icon: "mdi:bank-transfer-out", path: "/admin/withdrawal-requests" },
-  { label: "Manage Users", icon: "mdi:account-group-outline", path: "/admin/users" },
+  // { label: "Manage Users", icon: "mdi:account-group-outline", path: "/admin/users" },
   // { label: "Settings", icon: "mdi:cog-outline", path: "/admin/settings" },
   { label: "Logout", icon: "mdi:logout", action: "logout" },
 ];
