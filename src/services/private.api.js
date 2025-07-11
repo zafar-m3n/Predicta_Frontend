@@ -249,6 +249,22 @@ const deleteUser = async (id) => {
 };
 
 /* ========================== */
+/* Client: Withdrawal Requests */
+/* ========================== */
+
+const getActiveWithdrawalMethods = async () => {
+  return await instance.apiClient.get("/api/v1/client/withdrawals/methods", {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const createWithdrawalRequest = async (data) => {
+  return await instance.apiClient.post("/api/v1/client/withdrawals", data, {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+/* ========================== */
 /* Export API                 */
 /* ========================== */
 
@@ -299,6 +315,10 @@ const privateAPI = {
   getAllKycDocuments,
   approveKycDocument,
   rejectKycDocument,
+
+  // Client Withdrawal
+  getActiveWithdrawalMethods,
+  createWithdrawalRequest,
 };
 
 export default privateAPI;
