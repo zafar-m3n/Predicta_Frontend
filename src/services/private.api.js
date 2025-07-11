@@ -214,6 +214,41 @@ const rejectKycDocument = async (id, admin_note) => {
 };
 
 /* ========================== */
+/* Admin: User Management     */
+/* ========================== */
+
+const getAllUsers = async (params = {}) => {
+  return await instance.apiClient.get("/api/v1/admin/users", {
+    headers: instance.defaultHeaders(),
+    params,
+  });
+};
+
+const createUser = async (data) => {
+  return await instance.apiClient.post("/api/v1/admin/users", data, {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const getUserById = async (id) => {
+  return await instance.apiClient.get(`/api/v1/admin/users/${id}`, {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const updateUser = async (id, data) => {
+  return await instance.apiClient.patch(`/api/v1/admin/users/${id}`, data, {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const deleteUser = async (id) => {
+  return await instance.apiClient.delete(`/api/v1/admin/users/${id}`, {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+/* ========================== */
 /* Export API                 */
 /* ========================== */
 
@@ -234,6 +269,13 @@ const privateAPI = {
   getAllDepositRequests,
   approveDepositRequest,
   rejectDepositRequest,
+
+  // Admin User Management
+  getAllUsers,
+  createUser,
+  getUserById,
+  updateUser,
+  deleteUser,
 
   // Client
   getActiveDepositMethods,
