@@ -271,6 +271,36 @@ const checkWithdrawalEligibility = async () => {
 };
 
 /* ========================== */
+/* Admin: Withdrawal Requests */
+/* ========================== */
+
+const getAllWithdrawalRequests = async () => {
+  return await instance.apiClient.get("/api/v1/admin/withdrawal-requests", {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const approveWithdrawalRequest = async (id) => {
+  return await instance.apiClient.patch(
+    `/api/v1/admin/withdrawal-requests/${id}/approve`,
+    {},
+    {
+      headers: instance.defaultHeaders(),
+    }
+  );
+};
+
+const rejectWithdrawalRequest = async (id, admin_note) => {
+  return await instance.apiClient.patch(
+    `/api/v1/admin/withdrawal-requests/${id}/reject`,
+    { admin_note },
+    {
+      headers: instance.defaultHeaders(),
+    }
+  );
+};
+
+/* ========================== */
 /* Export API                 */
 /* ========================== */
 
@@ -326,6 +356,11 @@ const privateAPI = {
   getActiveWithdrawalMethods,
   createWithdrawalRequest,
   checkWithdrawalEligibility,
+
+  // Admin Withdrawal
+  getAllWithdrawalRequests,
+  approveWithdrawalRequest,
+  rejectWithdrawalRequest,
 };
 
 export default privateAPI;
