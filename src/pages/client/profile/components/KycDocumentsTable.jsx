@@ -77,6 +77,9 @@ const KycDocumentsTable = () => {
                 Submitted
               </th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Admin Note
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
@@ -84,7 +87,7 @@ const KycDocumentsTable = () => {
           <tbody className="bg-white divide-y divide-gray-200">
             {documents.length === 0 ? (
               <tr>
-                <td colSpan="4" className="px-4 py-6 text-center text-gray-500">
+                <td colSpan="5" className="px-4 py-6 text-center text-gray-500">
                   No KYC documents found.
                 </td>
               </tr>
@@ -100,6 +103,9 @@ const KycDocumentsTable = () => {
                     />
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap">{formatDate(doc.submitted_at)}</td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                    {doc.admin_note ? doc.admin_note : "N/A"}
+                  </td>
                   <td className="px-4 py-3 whitespace-nowrap">
                     <button
                       onClick={() => setPreviewModal({ open: true, documentPath: doc.document_path })}

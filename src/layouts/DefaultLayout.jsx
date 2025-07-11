@@ -27,6 +27,7 @@ const clientMenu = [
 // Admin menu
 const adminMenu = [
   { label: "Dashboard", icon: "mdi:view-dashboard-outline", path: "/admin/dashboard" },
+  { label: "Documents", icon: "mdi:account-check-outline", path: "/admin/documents" },
   { label: "Deposit Methods", icon: "mdi:bank-transfer", path: "/admin/deposit-methods" },
   { label: "Deposit Requests", icon: "mdi:bank-transfer-in", path: "/admin/deposit-requests" },
   { label: "Withdrawal Requests", icon: "mdi:bank-transfer-out", path: "/admin/withdrawal-requests" },
