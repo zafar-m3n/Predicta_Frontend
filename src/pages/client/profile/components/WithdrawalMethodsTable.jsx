@@ -30,7 +30,7 @@ const WithdrawalMethodsTable = () => {
   const bankMethods = methods.filter((m) => m.type === "bank" && m.status === "active");
   const cryptoMethods = methods.filter((m) => m.type === "crypto" && m.status === "active");
 
-  if (loading) return <div>Loading withdrawal methods...</div>;
+  if (loading) return <div>Loading withdrawal details...</div>;
 
   return (
     <div className="w-full">
@@ -42,7 +42,7 @@ const WithdrawalMethodsTable = () => {
             onClick={() => setIsBankModalOpen(true)}
             className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
           >
-            Add Bank Method
+            Add Bank Details
           </button>
         </div>
 
@@ -66,7 +66,7 @@ const WithdrawalMethodsTable = () => {
               {bankMethods.length === 0 ? (
                 <tr>
                   <td colSpan="4" className="px-4 py-6 text-center text-gray-500">
-                    No active bank withdrawal methods found.
+                    No bank details methods found.
                   </td>
                 </tr>
               ) : (
@@ -92,7 +92,7 @@ const WithdrawalMethodsTable = () => {
             onClick={() => setIsCryptoModalOpen(true)}
             className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
           >
-            Add Crypto Method
+            Add Crypto Details
           </button>
         </div>
 
@@ -113,7 +113,7 @@ const WithdrawalMethodsTable = () => {
               {cryptoMethods.length === 0 ? (
                 <tr>
                   <td colSpan="3" className="px-4 py-6 text-center text-gray-500">
-                    No active crypto withdrawal methods found.
+                    No crypto withdrawal details found.
                   </td>
                 </tr>
               ) : (
@@ -131,7 +131,7 @@ const WithdrawalMethodsTable = () => {
       </div>
 
       {/* Bank Modal */}
-      <Modal isOpen={isBankModalOpen} onClose={() => setIsBankModalOpen(false)} title="Add Bank Withdrawal Method">
+      <Modal isOpen={isBankModalOpen} onClose={() => setIsBankModalOpen(false)} title="Add Bank Withdrawal Details">
         <AddWithdrawalMethodForm type="bank" onSuccess={fetchMethods} onClose={() => setIsBankModalOpen(false)} />
       </Modal>
 
@@ -139,7 +139,7 @@ const WithdrawalMethodsTable = () => {
       <Modal
         isOpen={isCryptoModalOpen}
         onClose={() => setIsCryptoModalOpen(false)}
-        title="Add Crypto Withdrawal Method"
+        title="Add Crypto Withdrawal Details"
       >
         <AddWithdrawalMethodForm type="crypto" onSuccess={fetchMethods} onClose={() => setIsCryptoModalOpen(false)} />
       </Modal>
