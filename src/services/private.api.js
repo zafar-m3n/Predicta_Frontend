@@ -183,6 +183,37 @@ const changePassword = async (data) => {
 };
 
 /* ========================== */
+/* Admin: KYC Documents       */
+/* ========================== */
+
+const getAllKycDocuments = async (params = {}) => {
+  return await instance.apiClient.get("/api/v1/admin/kyc-documents", {
+    headers: instance.defaultHeaders(),
+    params,
+  });
+};
+
+const approveKycDocument = async (id) => {
+  return await instance.apiClient.patch(
+    `/api/v1/admin/kyc-documents/${id}/approve`,
+    {},
+    {
+      headers: instance.defaultHeaders(),
+    }
+  );
+};
+
+const rejectKycDocument = async (id, admin_note) => {
+  return await instance.apiClient.patch(
+    `/api/v1/admin/kyc-documents/${id}/reject`,
+    { admin_note },
+    {
+      headers: instance.defaultHeaders(),
+    }
+  );
+};
+
+/* ========================== */
 /* Export API                 */
 /* ========================== */
 
@@ -221,6 +252,11 @@ const privateAPI = {
   getWithdrawalMethods,
   deleteWithdrawalMethod,
   changePassword,
+
+  // Admin KYC
+  getAllKycDocuments,
+  approveKycDocument,
+  rejectKycDocument,
 };
 
 export default privateAPI;
