@@ -13,7 +13,7 @@ const schema = Yup.object().shape({
 
 const options = [
   { value: "id_card", label: "Identity Card" },
-  { value: "driver_license", label: "Driver’s License" },
+  { value: "drivers_license", label: "Driver’s License" },
   { value: "utility_bill", label: "Utility Bill" },
 ];
 
