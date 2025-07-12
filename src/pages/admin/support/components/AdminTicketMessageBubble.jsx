@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import Modal from "@/components/ui/Modal";
+import { formatDate } from "@/utils/formatDate";
 
 const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
 const AdminTicketMessageBubble = ({ message }) => {
-  // Change logic: client messages should be on left
+  // Client messages on left
   const isClient = message.sender === "client";
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -45,15 +46,6 @@ const AdminTicketMessageBubble = ({ message }) => {
       </Modal>
     </div>
   );
-};
-
-const formatDate = (dateStr) => {
-  if (!dateStr) return "-";
-  const date = new Date(dateStr);
-  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(
-    2,
-    "0"
-  )} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
 };
 
 export default AdminTicketMessageBubble;
