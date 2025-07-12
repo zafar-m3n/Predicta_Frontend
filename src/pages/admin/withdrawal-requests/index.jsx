@@ -17,14 +17,17 @@ const WithdrawalRequests = () => {
   const fetchRequests = async (page = 1) => {
     setLoading(true);
     try {
-      const res = await API.private.getAllWithdrawalRequests();
-      if (res.status === 200) {
-        setRequests(res.data.requests || []);
-        setCurrentPage(res.data.page || 1);
-        setTotalPages(res.data.totalPages || 1);
+      const res = await API.private.getAllWithdrawalRequests(page);
+      if (res.status === 200 && res.data.code === "OK") {
+        const data = res.data.data;
+        setRequests(data.requests || []);
+        setCurrentPage(data.page || 1);
+        setTotalPages(data.totalPages || 1);
+      } else {
+        Notification.error(res.data.error || "Failed to fetch withdrawal requests.");
       }
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to fetch withdrawal requests.";
+      const msg = error.response?.data?.error || "Failed to fetch withdrawal requests.";
       Notification.error(msg);
     } finally {
       setLoading(false);
@@ -34,12 +37,14 @@ const WithdrawalRequests = () => {
   const handleApprove = async (request) => {
     try {
       const res = await API.private.approveWithdrawalRequest(request.id);
-      if (res.status === 200) {
-        Notification.success(res.data.message || "Withdrawal request approved.");
+      if (res.status === 200 && res.data.code === "OK") {
+        Notification.success(res.data.data?.message || "Withdrawal request approved.");
         fetchRequests(currentPage);
+      } else {
+        Notification.error(res.data.error || "Failed to approve request.");
       }
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to approve request.";
+      const msg = error.response?.data?.error || "Failed to approve request.";
       Notification.error(msg);
     }
   };
@@ -47,12 +52,14 @@ const WithdrawalRequests = () => {
   const handleReject = async (request, note) => {
     try {
       const res = await API.private.rejectWithdrawalRequest(request.id, note);
-      if (res.status === 200) {
-        Notification.success(res.data.message || "Withdrawal request rejected.");
+      if (res.status === 200 && res.data.code === "OK") {
+        Notification.success(res.data.data?.message || "Withdrawal request rejected.");
         fetchRequests(currentPage);
+      } else {
+        Notification.error(res.data.error || "Failed to reject request.");
       }
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to reject request.";
+      const msg = error.response?.data?.error || "Failed to reject request.";
       Notification.error(msg);
     }
   };
