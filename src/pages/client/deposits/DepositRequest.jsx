@@ -21,8 +21,8 @@ const DepositRequest = () => {
     setLoading(true);
     try {
       const res = await API.private.getActiveDepositMethods();
-      if (res.status === 200) {
-        const allMethods = res.data.methods || [];
+      if (res.status === 200 && res.data.code === "OK") {
+        const allMethods = res.data.data.methods || [];
         const selected = allMethods.find((m) => m.id.toString() === methodId);
 
         if (!selected) {
@@ -54,15 +54,14 @@ const DepositRequest = () => {
       }
 
       const res = await API.private.createDepositRequest(formData);
-      if (res.status === 201) {
-        Notification.success(res.data.message || "Deposit request submitted successfully.");
+      if (res.status === 201 && res.data.code === "OK") {
+        Notification.success(res.data.data.message || "Deposit request submitted successfully.");
         navigate("/wallet-history");
       }
     } catch (error) {
       const msg = error.response?.data?.message || "Failed to submit deposit request.";
       Notification.error(msg);
 
-      // Handle special statuses if you want
       if (error.response?.status === 404) {
         navigate("/deposits");
       }
