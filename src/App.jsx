@@ -14,6 +14,7 @@ import DepositRequestPage from "@/pages/client/deposits/DepositRequest";
 import WithdrawalsPage from "@/pages/client/withdrawals";
 import WalletHistoryPage from "@/pages/client/wallet-history";
 import TicketsPage from "@/pages/client/tickets";
+import SupportTicketDetails from "@/pages/client/tickets/SupportTicketDetails";
 import MarketEventsPage from "@/pages/client/market-events";
 import ProfilePage from "@/pages/client/profile";
 
@@ -39,6 +40,7 @@ function App() {
     { path: "/withdrawals", element: WithdrawalsPage },
     { path: "/wallet-history", element: WalletHistoryPage },
     { path: "/tickets", element: TicketsPage },
+    { path: "/tickets/:ticketId", element: SupportTicketDetails },
     { path: "/market-events", element: MarketEventsPage },
     { path: "/profile", element: ProfilePage },
   ];
