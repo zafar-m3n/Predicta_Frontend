@@ -365,6 +365,16 @@ const closeSupportTicket = async (id) => {
 };
 
 /* ========================== */
+/* Admin: Dashboard           */
+/* ========================== */
+
+const getAdminDashboardStats = async () => {
+  return await instance.apiClient.get("/api/v1/admin/dashboard/stats", {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+/* ========================== */
 /* Export API                 */
 /* ========================== */
 
@@ -436,6 +446,9 @@ const privateAPI = {
   getSupportTicketById,
   addAdminSupportMessage,
   closeSupportTicket,
+
+  // Admin Dashboard
+  getAdminDashboardStats,
 };
 
 export default privateAPI;
