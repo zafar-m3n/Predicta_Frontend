@@ -21,9 +21,9 @@ const ClientWithdrawals = () => {
     setLoading(true);
     try {
       const eligibilityRes = await API.private.checkWithdrawalEligibility();
-      if (eligibilityRes.status === 200) {
-        const eligible = eligibilityRes.data.eligible;
-        const reason = eligibilityRes.data.reason || "";
+      if (eligibilityRes.status === 200 && eligibilityRes.data.code === "OK") {
+        const eligible = eligibilityRes.data.data.eligible;
+        const reason = eligibilityRes.data.data.reason || "";
 
         if (!eligible) {
           Notification.error(reason || "You are not eligible to request a withdrawal.");
@@ -31,18 +31,21 @@ const ClientWithdrawals = () => {
           return;
         }
 
-        setBalance(eligibilityRes.data.balance || 0);
+        setBalance(eligibilityRes.data.data.balance || 0);
 
-        // If eligible, fetch withdrawal methods
         const methodsRes = await API.private.getActiveWithdrawalMethods();
-        if (methodsRes.status === 200) {
-          setMethods(methodsRes.data.methods || []);
+        if (methodsRes.status === 200 && methodsRes.data.code === "OK") {
+          setMethods(methodsRes.data.data.methods || []);
+        } else {
+          Notification.error(methodsRes.data.error || "Failed to load withdrawal methods.");
         }
+      } else {
+        Notification.error(eligibilityRes.data.error || "Eligibility check failed.");
+        navigate("/profile");
       }
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to check eligibility.";
+      const msg = error.response?.data?.error || "Failed to check eligibility.";
       Notification.error(msg);
-      console.log("Eligibility check error:", error);
       navigate("/profile");
     } finally {
       setLoading(false);
@@ -53,12 +56,14 @@ const ClientWithdrawals = () => {
     setIsSubmitting(true);
     try {
       const res = await API.private.createWithdrawalRequest(formData);
-      if (res.status === 201) {
-        Notification.success(res.data.message || "Withdrawal request submitted successfully.");
+      if (res.status === 201 && res.data.code === "OK") {
+        Notification.success(res.data.data.message || "Withdrawal request submitted successfully.");
         navigate("/wallet-history");
+      } else {
+        Notification.error(res.data.error || "Unexpected error during withdrawal request.");
       }
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to submit withdrawal request.";
+      const msg = error.response?.data?.error || "Failed to submit withdrawal request.";
       Notification.error(msg);
     } finally {
       setIsSubmitting(false);
@@ -78,7 +83,7 @@ const ClientWithdrawals = () => {
       <DefaultLayout>
         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
           <p className="text-yellow-700 font-medium">
-            You do not have any active withdrawal methods. Please add one before requesting a withdrawal.
+            You do not have any active withdrawal details. Please add one before requesting a withdrawal.
           </p>
         </div>
       </DefaultLayout>
