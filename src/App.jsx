@@ -27,6 +27,7 @@ import WithdrawalRequestsPage from "@/pages/admin/withdrawal-requests";
 import UsersPage from "@/pages/admin/users";
 import ViewUser from "@/pages/admin/users/ViewUser";
 import CustomerSupport from "@/pages/admin/support";
+import AdminSupportTicketDetails from "@/pages/admin/support/AdminSupportTicketDetails";
 
 import PrivateRoute from "@/components/PrivateRoute";
 import PublicRoute from "@/components/PublicRoute";
@@ -56,6 +57,7 @@ function App() {
     { path: "/admin/users", element: UsersPage },
     { path: "/admin/users/:id", element: ViewUser },
     { path: "/admin/support", element: CustomerSupport },
+    { path: "admin/support/:ticketId", element: AdminSupportTicketDetails },
   ];
 
   const publicRoutes = [

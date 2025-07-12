@@ -11,6 +11,8 @@ const DepositMethods = () => {
 
   const [methods, setMethods] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMethod, setSelectedMethod] = useState(null);
@@ -20,12 +22,14 @@ const DepositMethods = () => {
     fetchMethods();
   }, []);
 
-  const fetchMethods = async () => {
+  const fetchMethods = async (page = 1) => {
     setLoading(true);
     try {
-      const res = await API.private.getAllDepositMethods();
+      const res = await API.private.getAllDepositMethods({ page });
       if (res.status === 200) {
         setMethods(res.data.methods || []);
+        setCurrentPage(res.data.page || 1);
+        setTotalPages(res.data.totalPages || 1);
       }
     } catch (error) {
       const msg = error.response?.data?.message || "Failed to fetch deposit methods.";
@@ -33,6 +37,11 @@ const DepositMethods = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchMethods(page);
   };
 
   const handleCreate = () => {
@@ -64,7 +73,7 @@ const DepositMethods = () => {
 
       if (res.status === 200) {
         Notification.success(res.data.message || `Status updated to ${newStatus}.`);
-        fetchMethods();
+        fetchMethods(currentPage);
       }
     } catch (error) {
       const msg = error.response?.data?.message || "Failed to update status.";
@@ -89,6 +98,9 @@ const DepositMethods = () => {
       ) : (
         <DepositMethodsTable
           methods={methods}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
           onEdit={handleEdit}
           onView={handleView}
           onToggleStatus={handleToggleStatus}

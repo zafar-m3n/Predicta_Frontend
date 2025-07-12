@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import Badge from "@/components/ui/Badge";
 import Icon from "@/components/ui/Icon";
 import Modal from "@/components/ui/Modal";
+import Pagination from "@/components/ui/Pagination";
 
-const DepositMethodsTable = ({ methods, onEdit, onToggleStatus, onView }) => {
+const DepositMethodsTable = ({ methods, currentPage, totalPages, onPageChange, onEdit, onToggleStatus, onView }) => {
   const [confirmModal, setConfirmModal] = useState({ open: false, method: null });
 
   const formatDate = (dateStr) => {
@@ -96,6 +97,8 @@ const DepositMethodsTable = ({ methods, onEdit, onToggleStatus, onView }) => {
           </tbody>
         </table>
       </div>
+
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} className="mt-4" />
 
       {/* Confirmation Modal */}
       <Modal

@@ -6,7 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Badge from "@/components/ui/Badge";
-import TicketMessageBubble from "./components/TicketMessageBubble";
+import AdminTicketMessageBubble from "./components/AdminTicketMessageBubble";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import Icon from "@/components/ui/Icon";
 
@@ -14,7 +14,7 @@ const schema = yup.object().shape({
   message: yup.string().required("Message is required"),
 });
 
-const SupportTicketDetails = () => {
+const AdminSupportTicketDetails = () => {
   const { ticketId } = useParams();
   const navigate = useNavigate();
 
@@ -35,7 +35,7 @@ const SupportTicketDetails = () => {
   const fetchTicketDetails = async () => {
     setLoading(true);
     try {
-      const res = await API.private.getMySupportTicketById(ticketId);
+      const res = await API.private.getSupportTicketById(ticketId);
       if (res.status === 200) {
         setTicket(res.data.ticket);
       }
@@ -71,7 +71,7 @@ const SupportTicketDetails = () => {
 
     setSending(true);
     try {
-      const res = await API.private.addSupportMessage(ticketId, formData);
+      const res = await API.private.addAdminSupportMessage(ticketId, formData);
       if (res.status === 201) {
         Notification.success("Reply sent successfully.");
         reset();
@@ -83,6 +83,18 @@ const SupportTicketDetails = () => {
       Notification.error(msg);
     } finally {
       setSending(false);
+    }
+  };
+
+  const handleCloseTicket = async () => {
+    try {
+      const res = await API.private.closeSupportTicket(ticketId);
+      if (res.status === 200) {
+        Notification.success("Ticket closed successfully.");
+        fetchTicketDetails();
+      }
+    } catch (error) {
+      Notification.error("Failed to close ticket.");
     }
   };
 
@@ -116,16 +128,26 @@ const SupportTicketDetails = () => {
           <div>
             <h2 className="text-xl font-semibold mb-1">{ticket.subject}</h2>
             <div className="flex flex-wrap gap-2 items-center">
-              <Badge text={ticket.category} color="blue" size="sm" />
               <Badge text={ticket.status} color={ticket.status === "closed" ? "red" : "yellow"} size="sm" />
+              <Badge text={ticket.User.full_name} color="blue" size="sm" />
+              <span className="text-gray-500 text-sm">{ticket.User.email}</span>
             </div>
           </div>
+          {ticket.status !== "closed" && (
+            <button
+              onClick={handleCloseTicket}
+              className="text-red-500 hover:text-red-600 flex items-center space-x-1 border border-red-200 px-3 py-1 rounded transition"
+            >
+              <Icon icon="mdi:lock-outline" width="18" />
+              <span>Close Ticket</span>
+            </button>
+          )}
         </div>
 
         {/* Messages */}
         <div className="space-y-4 mb-6 max-h-[500px] overflow-y-auto pr-2 bg-gray-50 p-4 rounded border border-gray-200">
           {ticket.SupportTicketMessages.map((msg) => (
-            <TicketMessageBubble key={msg.id} message={msg} />
+            <AdminTicketMessageBubble key={msg.id} message={msg} />
           ))}
         </div>
 
@@ -143,7 +165,7 @@ const SupportTicketDetails = () => {
             <div className="flex items-center border border-gray-300 rounded overflow-hidden focus-within:border-accent shadow-sm">
               <input
                 {...register("message")}
-                placeholder="Type your message..."
+                placeholder="Type your reply..."
                 className="flex-1 px-3 py-2 outline-none text-sm bg-white"
               />
 
@@ -172,4 +194,4 @@ const SupportTicketDetails = () => {
   );
 };
 
-export default SupportTicketDetails;
+export default AdminSupportTicketDetails;
