@@ -44,18 +44,15 @@ const UploadKycDocumentModal = ({ onSuccess, onClose }) => {
 
       const res = await API.private.uploadKycDocument(formData);
 
-      if (res.status === 200) {
-        Notification.success(res.data.message || "KYC document updated successfully.");
-      } else if (res.status === 201) {
-        Notification.success(res.data.message || "KYC document uploaded successfully.");
+      if ((res.status === 200 || res.status === 201) && res.data.code === "OK") {
+        Notification.success(res.data.data.message || "KYC document uploaded successfully.");
+        reset();
+        setFile(null);
+        onSuccess();
+        onClose();
       } else {
         Notification.info("Unexpected response. Please check your document.");
       }
-
-      reset();
-      setFile(null);
-      onSuccess();
-      onClose();
     } catch (error) {
       let msg = "Something went wrong. Please try again.";
       if (error.response?.data?.message) {

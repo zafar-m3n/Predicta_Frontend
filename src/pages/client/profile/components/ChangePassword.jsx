@@ -37,20 +37,15 @@ const ChangePasswordForm = () => {
         new_password: data.new_password,
       });
 
-      if (res.status === 200) {
-        Notification.success(res.data.message || "Password changed successfully!");
+      if (res.data.code === "OK") {
+        Notification.success(res.data.data.message || "Password changed successfully!");
         reset();
+      } else {
+        const msg = res.data.error || "Failed to change password.";
+        Notification.error(msg);
       }
     } catch (error) {
-      const status = error.response?.status;
-      let msg = "Something went wrong. Please try again.";
-
-      if (status === 400 || status === 404) {
-        msg = error.response?.data?.message || "Invalid data provided.";
-      } else if (status === 500) {
-        msg = "Server error. Please try again later.";
-      }
-
+      const msg = error.response?.data?.error || "Something went wrong. Please try again.";
       Notification.error(msg);
     } finally {
       setIsSubmitting(false);
@@ -92,10 +87,7 @@ const ChangePasswordForm = () => {
               errors.new_password ? "border-red-500" : "border-gray-300"
             }`}
           />
-          <span
-            onClick={() => setShowNew(!showNew)}
-            className="absolute right-3 top-1/2 cursor-pointer text-gray-500"
-          >
+          <span onClick={() => setShowNew(!showNew)} className="absolute right-3 top-1/2 cursor-pointer text-gray-500">
             <Icon icon={showNew ? "mdi:eye-off" : "mdi:eye"} width="20" />
           </span>
           <p className="text-red-500 text-sm">{errors.new_password?.message}</p>

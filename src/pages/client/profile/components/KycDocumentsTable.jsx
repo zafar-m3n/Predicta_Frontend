@@ -5,6 +5,7 @@ import Modal from "@/components/ui/Modal";
 import UploadKycDocumentModal from "./UploadKycDocumentModal";
 import Badge from "@/components/ui/Badge";
 import Icon from "@/components/ui/Icon";
+import { formatDate } from "@/utils/formatDate";
 
 const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
@@ -17,8 +18,8 @@ const KycDocumentsTable = () => {
   const fetchDocuments = async () => {
     try {
       const res = await API.private.getKycDocuments();
-      if (res.status === 200) {
-        setDocuments(res.data.documents);
+      if (res.status === 200 && res.data.code === "OK") {
+        setDocuments(res.data.data.documents);
       }
     } catch (error) {
       Notification.error("Failed to fetch KYC documents.");
@@ -30,15 +31,6 @@ const KycDocumentsTable = () => {
   useEffect(() => {
     fetchDocuments();
   }, []);
-
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "-";
-    const date = new Date(dateStr);
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(
-      2,
-      "0"
-    )} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
-  };
 
   const getDocumentLabel = (type) => {
     switch (type) {

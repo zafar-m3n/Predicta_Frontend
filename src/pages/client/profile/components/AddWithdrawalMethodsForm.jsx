@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 
@@ -51,16 +51,16 @@ const AddWithdrawalMethodForm = ({ type, onSuccess, onClose }) => {
     setIsSubmitting(true);
     try {
       const res = await API.private.addWithdrawalMethod(payload);
-      if (res.status === 201) {
-        Notification.success(res.data.message || "Withdrawal method added successfully!");
+      if (res.data.code === "OK") {
+        Notification.success(res.data.data.message || "Withdrawal method added successfully!");
         onSuccess();
         onClose();
+      } else {
+        const msg = res.data.error || "Failed to add withdrawal method.";
+        Notification.error(msg);
       }
     } catch (error) {
-      let msg = "Something went wrong. Please try again.";
-      if (error.response?.data?.message) {
-        msg = error.response.data.message;
-      }
+      const msg = error.response?.data?.error || "Something went wrong. Please try again.";
       Notification.error(msg);
     } finally {
       setIsSubmitting(false);

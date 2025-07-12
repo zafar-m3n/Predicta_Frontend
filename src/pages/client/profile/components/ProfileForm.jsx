@@ -46,12 +46,13 @@ const ProfileForm = () => {
     const fetchProfile = async () => {
       try {
         const res = await API.private.getProfile();
-        if (res.status === 200) {
-          setUser(res.data.user);
+        if (res.status === 200 && res.data.code === "OK") {
+          const userData = res.data.data.user;
+          setUser(userData);
           reset({
-            full_name: res.data.user.full_name,
-            phone_number: res.data.user.phone_number,
-            country_code: res.data.user.country_code,
+            full_name: userData.full_name,
+            phone_number: userData.phone_number,
+            country_code: userData.country_code,
           });
         }
       } catch (error) {
@@ -84,9 +85,8 @@ const ProfileForm = () => {
     setIsSubmitting(true);
     try {
       const res = await API.private.updateProfile(data);
-      if (res.status === 200) {
-        Notification.success(res.data.message || "Profile updated successfully!");
-        // Retain the email from current user
+      if (res.status === 200 && res.data.code === "OK") {
+        Notification.success(res.data.data.message || "Profile updated successfully!");
         setUser({
           ...data,
           email: user.email,

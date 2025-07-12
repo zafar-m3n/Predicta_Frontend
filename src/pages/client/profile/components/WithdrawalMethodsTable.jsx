@@ -13,8 +13,8 @@ const WithdrawalMethodsTable = () => {
   const fetchMethods = async () => {
     try {
       const res = await API.private.getWithdrawalMethods();
-      if (res.status === 200) {
-        setMethods(res.data.methods);
+      if (res.status === 200 && res.data.code === "OK") {
+        setMethods(res.data.data.methods);
       }
     } catch (error) {
       Notification.error("Failed to fetch withdrawal methods.");
