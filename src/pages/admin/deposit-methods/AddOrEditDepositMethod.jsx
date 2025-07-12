@@ -22,19 +22,24 @@ const AddOrEditDepositMethod = () => {
   const fetchMethod = async () => {
     try {
       const res = await API.private.getDepositMethodById(id);
-      const method = res.data.method;
-      const details = res.data.details;
+      if (res.status === 200 && res.data.code === "OK") {
+        const { method, details } = res.data.data;
 
-      const combinedData = {
-        ...method,
-        ...(details || {}),
-        qr_code: null,
-        logo: null,
-      };
+        const combinedData = {
+          ...method,
+          ...(details || {}),
+          qr_code: null,
+          logo: null,
+        };
 
-      setInitialData(combinedData);
+        setInitialData(combinedData);
+      } else {
+        Notification.error(res.data.error || "Failed to fetch deposit method.");
+        navigate("/admin/deposit-methods");
+      }
     } catch (error) {
-      Notification.error("Failed to fetch deposit method.");
+      const msg = error.response?.data?.error || "Failed to fetch deposit method.";
+      Notification.error(msg);
       navigate("/admin/deposit-methods");
     }
   };
@@ -76,12 +81,17 @@ const AddOrEditDepositMethod = () => {
         res = await API.private.createDepositMethod(formData);
       }
 
-      if (res.status === 200 || res.status === 201) {
-        Notification.success(res.data.message || "Deposit method saved successfully.");
+      if (
+        (id && res.status === 200 && res.data.code === "OK") ||
+        (!id && res.status === 201 && res.data.code === "OK")
+      ) {
+        Notification.success(res.data.data.message || "Deposit method saved successfully.");
         navigate("/admin/deposit-methods");
+      } else {
+        Notification.error(res.data.error || "Failed to save deposit method.");
       }
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to save deposit method.";
+      const msg = error.response?.data?.error || "Failed to save deposit method.";
       Notification.error(msg);
     } finally {
       setIsSubmitting(false);

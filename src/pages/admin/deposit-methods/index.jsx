@@ -26,13 +26,16 @@ const DepositMethods = () => {
     setLoading(true);
     try {
       const res = await API.private.getAllDepositMethods({ page });
-      if (res.status === 200) {
-        setMethods(res.data.methods || []);
-        setCurrentPage(res.data.page || 1);
-        setTotalPages(res.data.totalPages || 1);
+      if (res.status === 200 && res.data.code === "OK") {
+        const data = res.data.data;
+        setMethods(data.methods || []);
+        setCurrentPage(data.page || 1);
+        setTotalPages(data.totalPages || 1);
+      } else {
+        Notification.error(res.data.error || "Failed to fetch deposit methods.");
       }
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to fetch deposit methods.";
+      const msg = error.response?.data?.error || "Failed to fetch deposit methods.";
       Notification.error(msg);
     } finally {
       setLoading(false);
@@ -55,13 +58,15 @@ const DepositMethods = () => {
   const handleView = async (method) => {
     try {
       const res = await API.private.getDepositMethodById(method.id);
-      if (res.status === 200) {
-        setSelectedMethod(res.data.method);
-        setSelectedDetails(res.data.details);
+      if (res.status === 200 && res.data.code === "OK") {
+        setSelectedMethod(res.data.data.method);
+        setSelectedDetails(res.data.data.details);
         setIsModalOpen(true);
+      } else {
+        Notification.error(res.data.error || "Failed to fetch method details.");
       }
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to fetch method details.";
+      const msg = error.response?.data?.error || "Failed to fetch method details.";
       Notification.error(msg);
     }
   };
@@ -71,12 +76,14 @@ const DepositMethods = () => {
       const newStatus = method.status === "active" ? "inactive" : "active";
       const res = await API.private.toggleDepositMethodStatus(method.id, newStatus);
 
-      if (res.status === 200) {
-        Notification.success(res.data.message || `Status updated to ${newStatus}.`);
+      if (res.status === 200 && res.data.code === "OK") {
+        Notification.success(res.data.data.message || `Status updated to ${newStatus}.`);
         fetchMethods(currentPage);
+      } else {
+        Notification.error(res.data.error || "Failed to update status.");
       }
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to update status.";
+      const msg = error.response?.data?.error || "Failed to update status.";
       Notification.error(msg);
     }
   };
