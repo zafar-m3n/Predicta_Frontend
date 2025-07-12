@@ -35,26 +35,27 @@ const LoginPage = () => {
         password: data.password,
       });
 
-      if (res.status === 200) {
-        Notification.success(res.data.message || "Login successful!");
+      if (res.data.code === "OK") {
+        Notification.success(res.data.data?.message || "Login successful!");
 
-        token.setAuthToken(res.data.token);
-        token.setUserData(res.data.user);
-        const userData = res.data.user;
+        token.setAuthToken(res.data.data.token);
+        token.setUserData(res.data.data.user);
+
+        const userData = res.data.data.user;
         if (userData.role === "admin") {
           navigate("/admin/dashboard");
         } else {
           navigate("/dashboard");
         }
       } else {
-        Notification.error("Unexpected response from server.");
+        Notification.error(res.data.error || "Unexpected response from server.");
       }
     } catch (error) {
       const status = error.response?.status;
       let msg = "Login failed. Please try again.";
 
       if (status === 400) {
-        msg = error.response?.data?.message || "Invalid email or password.";
+        msg = error.response?.data?.error || "Invalid email or password.";
       } else if (status === 500) {
         msg = "Server error. Please try again later.";
       }

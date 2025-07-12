@@ -44,7 +44,6 @@ const RegisterPage = () => {
 
   const onSubmit = async (data) => {
     const isValidForm = await trigger();
-
     if (!isValidForm) {
       setPhoneError("");
       return;
@@ -75,20 +74,20 @@ const RegisterPage = () => {
 
       const res = await API.private.registerUser(payload);
 
-      if (res.status === 201) {
+      if (res.data.code === "OK") {
         Notification.success(
-          res.data.message || "Registration successful! Please check your email to verify your account."
+          res.data.data?.message || "Registration successful! Please check your email to verify your account."
         );
         reset();
       } else {
-        Notification.error("Unexpected response from server. Please try again.");
+        Notification.error(res.data.error || "Unexpected response from server.");
       }
     } catch (error) {
       const status = error.response?.status;
       let msg = "Something went wrong during registration.";
 
       if (status === 400) {
-        msg = error.response?.data?.message || "Email already in use.";
+        msg = error.response?.data?.error || "Email already in use.";
       } else if (status === 500) {
         msg = "Server error. Please try again later.";
       }

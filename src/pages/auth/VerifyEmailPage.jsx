@@ -21,24 +21,25 @@ const VerifyEmailPage = () => {
 
     setStatus("loading");
 
-    // Simulate delay of 2 seconds before calling API
     setTimeout(async () => {
       try {
         const res = await API.private.verifyEmail(token);
 
-        if (res.status === 200) {
+        if (res.data.code === "OK") {
           setStatus("success");
-          setMessage(res.data.message || "Your email has been verified successfully!");
+          setMessage(res.data.data?.message || "Your email has been verified successfully!");
         } else {
           setStatus("error");
-          setMessage("Verification failed. Please try again.");
+          const errMsg = res.data.error || "Verification failed. Please try again.";
+          setMessage(errMsg);
+          Notification.error(errMsg);
         }
       } catch (error) {
         const status = error.response?.status;
         let msg = "Verification failed. Please try again.";
 
         if (status === 400) {
-          msg = error.response?.data?.message || "Invalid or expired verification token.";
+          msg = error.response?.data?.error || "Invalid or expired verification token.";
         } else if (status === 500) {
           msg = "Server error. Please try again later.";
         }

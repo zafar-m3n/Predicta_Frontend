@@ -42,16 +42,18 @@ const ResetPasswordPage = () => {
     try {
       const res = await API.private.resetPassword(token, { password: data.password });
 
-      if (res.status === 200) {
-        Notification.success(res.data.message || "Password reset successfully! You can now log in.");
+      if (res.data.code === "OK") {
+        Notification.success(res.data.data?.message || "Password reset successfully! You can now log in.");
         navigate("/login");
+      } else {
+        Notification.error(res.data.error || "Unexpected error occurred.");
       }
     } catch (error) {
       const status = error.response?.status;
       let msg = "Something went wrong. Please try again.";
 
       if (status === 400) {
-        msg = error.response?.data?.message || "Invalid or expired reset token.";
+        msg = error.response?.data?.error || "Invalid or expired reset token.";
       } else if (status === 500) {
         msg = "Server error. Please try again later.";
       }
