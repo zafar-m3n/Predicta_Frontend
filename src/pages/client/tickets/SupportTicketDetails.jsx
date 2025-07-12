@@ -26,7 +26,6 @@ const SupportTicketDetails = () => {
   const {
     register,
     handleSubmit,
-    setValue,
     reset,
     formState: { errors },
   } = useForm({

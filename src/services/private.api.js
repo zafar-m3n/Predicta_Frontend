@@ -312,7 +312,7 @@ const rejectWithdrawalRequest = async (id, admin_note) => {
 
 const createSupportTicket = async (data) => {
   return await instance.apiClient.post("/api/v1/client/support-tickets", data, {
-    headers: instance.defaultHeaders(),
+    headers: instance.defaultHeaders("multipart/form-data"),
   });
 };
 
@@ -331,7 +331,7 @@ const getMySupportTicketById = async (id) => {
 
 const addSupportMessage = async (ticketId, data) => {
   return await instance.apiClient.post(`/api/v1/client/support-tickets/${ticketId}/messages`, data, {
-    headers: instance.defaultHeaders(),
+    headers: instance.defaultHeaders("multipart/form-data"),
   });
 };
 
@@ -350,7 +350,7 @@ const getSupportTicketById = async (id) => {
 
 const addAdminSupportMessage = async (ticketId, data) => {
   return await instance.apiClient.post(`/api/v1/admin/support-tickets/${ticketId}/messages`, data, {
-    headers: instance.defaultHeaders(),
+    headers: instance.defaultHeaders("multipart/form-data"),
   });
 };
 
