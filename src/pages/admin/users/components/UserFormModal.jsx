@@ -64,13 +64,19 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
   const submitHandler = async (data) => {
     setIsSubmitting(true);
     try {
-      await onSubmit(data);
-      Notification.success(`User ${isEdit ? "updated" : "created"} successfully.`);
-      onClose();
+      const res = await onSubmit(data);
+
+      if (res?.status === 200 && res.data?.code === "OK") {
+        Notification.success(`User ${isEdit ? "updated" : "created"} successfully.`);
+        onClose();
+      } else {
+        const msg = res?.data?.error || "Unexpected error occurred.";
+        Notification.error(msg);
+      }
     } catch (error) {
       let msg = "Something went wrong. Please try again.";
-      if (error.response?.data?.message) {
-        msg = error.response.data.message;
+      if (error.response?.data?.error) {
+        msg = error.response.data.error;
       }
       Notification.error(msg);
     } finally {

@@ -30,15 +30,6 @@ const UserTable = ({ users, onEdit, onDelete, onView, currentPage, totalPages, o
     return name || code;
   };
 
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "-";
-    const date = new Date(dateStr);
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(
-      2,
-      "0"
-    )}`;
-  };
-
   const confirmDelete = (user) => {
     setUserToDelete(user);
     setDeleteModalOpen(true);
@@ -136,12 +127,7 @@ const UserTable = ({ users, onEdit, onDelete, onView, currentPage, totalPages, o
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} className="mt-4" />
 
       {/* Delete confirmation modal */}
-      <Modal
-        isOpen={deleteModalOpen}
-        onClose={() => setDeleteModalOpen(false)}
-        title="Confirm Delete"
-        size="md"
-      >
+      <Modal isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} title="Confirm Delete" size="md">
         <div className="bg-red-100 text-red-700 px-4 py-2 rounded mb-4 font-medium">This action cannot be undone.</div>
         <p className="text-gray-700 mb-6">
           Are you sure you want to delete user <strong>{userToDelete?.full_name}</strong>?

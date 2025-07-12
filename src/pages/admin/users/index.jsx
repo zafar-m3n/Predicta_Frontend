@@ -28,14 +28,14 @@ const ManageUsers = () => {
     setLoading(true);
     try {
       const res = await API.private.getAllUsers({ page });
-      if (res.status === 200) {
-        setUsers(res.data.users || []);
-        setTotalPages(res.data.totalPages);
+      if (res.status === 200 && res.data.code === "OK") {
+        setUsers(res.data.data.users || []);
+        setTotalPages(res.data.data.totalPages);
       }
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to fetch users.";
+      const msg = error.response?.data?.error || "Failed to fetch users.";
       Notification.error(msg);
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -60,26 +60,38 @@ const ManageUsers = () => {
   const handleDelete = async (user) => {
     try {
       const res = await API.private.deleteUser(user.id);
-      if (res.status === 200) {
-        Notification.success(res.data.message || "User deleted successfully.");
+      if (res.status === 200 && res.data.code === "OK") {
+        Notification.success(res.data.data.message || "User deleted successfully.");
         fetchUsers(currentPage);
       }
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to delete user.";
+      const msg = error.response?.data?.error || "Failed to delete user.";
       Notification.error(msg);
     }
   };
 
   const handleSubmit = async (data) => {
-    if (isEdit && selectedUser) {
-      // Update
-      await API.private.updateUser(selectedUser.id, data);
-      fetchUsers(currentPage);
-    } else {
-      // Create
-      await API.private.createUser(data);
-      fetchUsers(1);
-      setCurrentPage(1);
+    try {
+      if (isEdit && selectedUser) {
+        // Update
+        const res = await API.private.updateUser(selectedUser.id, data);
+        if (res.status === 200 && res.data.code === "OK") {
+          Notification.success(res.data.data.message || "User updated successfully.");
+          fetchUsers(currentPage);
+        }
+      } else {
+        // Create
+        const res = await API.private.createUser(data);
+        if (res.status === 201 && res.data.code === "OK") {
+          Notification.success(res.data.data.message || "User created successfully.");
+          fetchUsers(1);
+          setCurrentPage(1);
+        }
+      }
+      setIsFormOpen(false);
+    } catch (error) {
+      const msg = error.response?.data?.error || "Failed to save user.";
+      Notification.error(msg);
     }
   };
 

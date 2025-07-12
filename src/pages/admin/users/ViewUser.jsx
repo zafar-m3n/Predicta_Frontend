@@ -9,6 +9,7 @@ import Modal from "@/components/ui/Modal";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
+import { formatDate } from "@/utils/formatDate";
 
 countries.registerLocale(enLocale);
 
@@ -24,8 +25,8 @@ const ViewUser = () => {
     const fetchUser = async () => {
       try {
         const res = await API.private.getUserById(id);
-        if (res.status === 200) {
-          setUser(res.data.user);
+        if (res.status === 200 && res.data.code === "OK") {
+          setUser(res.data.data.user);
         }
       } catch (error) {
         Notification.error("Failed to fetch user data.");
@@ -51,15 +52,6 @@ const ViewUser = () => {
     if (!code) return "-";
     const name = countries.getName(code, "en", { select: "official" });
     return name || code;
-  };
-
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "-";
-    const date = new Date(dateStr);
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(
-      2,
-      "0"
-    )} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
   };
 
   const getDocumentLabel = (type) => {
