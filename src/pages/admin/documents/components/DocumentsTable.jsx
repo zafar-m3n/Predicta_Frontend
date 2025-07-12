@@ -3,6 +3,7 @@ import Badge from "@/components/ui/Badge";
 import Icon from "@/components/ui/Icon";
 import Modal from "@/components/ui/Modal";
 import Pagination from "@/components/ui/Pagination";
+import { formatDate } from "@/utils/formatDate";
 
 const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
@@ -10,15 +11,6 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
   const [confirmModal, setConfirmModal] = useState({ open: false, action: null, document: null });
   const [rejectionNote, setRejectionNote] = useState("");
   const [previewModal, setPreviewModal] = useState({ open: false, documentPath: "" });
-
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "-";
-    const date = new Date(dateStr);
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(
-      2,
-      "0"
-    )} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
-  };
 
   const getDocumentLabel = (type) => {
     switch (type) {

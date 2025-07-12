@@ -18,10 +18,10 @@ const Documents = () => {
     setLoading(true);
     try {
       const res = await API.private.getAllKycDocuments({ page });
-      if (res.status === 200) {
-        setDocuments(res.data.documents || []);
-        setCurrentPage(res.data.page || 1);
-        setTotalPages(res.data.totalPages || 1);
+      if (res.status === 200 && res.data.code === "OK") {
+        setDocuments(res.data.data.documents || []);
+        setCurrentPage(res.data.data.page || 1);
+        setTotalPages(res.data.data.totalPages || 1);
       }
     } catch (error) {
       const msg = error.response?.data?.message || "Failed to fetch KYC documents.";
@@ -34,8 +34,8 @@ const Documents = () => {
   const handleApprove = async (document) => {
     try {
       const res = await API.private.approveKycDocument(document.id);
-      if (res.status === 200) {
-        Notification.success(res.data.message || "Document approved.");
+      if (res.status === 200 && res.data.code === "OK") {
+        Notification.success(res.data.data.message || "Document approved.");
         fetchDocuments(currentPage);
       }
     } catch (error) {
@@ -47,8 +47,8 @@ const Documents = () => {
   const handleReject = async (document, note) => {
     try {
       const res = await API.private.rejectKycDocument(document.id, note);
-      if (res.status === 200) {
-        Notification.success(res.data.message || "Document rejected.");
+      if (res.status === 200 && res.data.code === "OK") {
+        Notification.success(res.data.data.message || "Document rejected.");
         fetchDocuments(currentPage);
       }
     } catch (error) {
