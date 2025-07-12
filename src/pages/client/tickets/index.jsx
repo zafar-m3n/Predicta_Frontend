@@ -17,13 +17,16 @@ const SupportTickets = () => {
     setLoading(true);
     try {
       const res = await API.private.getMySupportTickets({ page });
-      if (res.status === 200) {
-        setTickets(res.data.tickets || []);
-        setCurrentPage(res.data.page || 1);
-        setTotalPages(res.data.totalPages || 1);
+      if (res.data.code === "OK") {
+        const data = res.data.data;
+        setTickets(data.tickets || []);
+        setCurrentPage(data.page || 1);
+        setTotalPages(data.totalPages || 1);
+      } else {
+        Notification.error(res.data.error || "Failed to load support tickets.");
       }
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to load support tickets.";
+      const msg = error.response?.data?.error || "Failed to load support tickets.";
       Notification.error(msg);
       console.log(error);
     } finally {

@@ -36,11 +36,14 @@ const SupportTicketDetails = () => {
     setLoading(true);
     try {
       const res = await API.private.getMySupportTicketById(ticketId);
-      if (res.status === 200) {
-        setTicket(res.data.ticket);
+      if (res.status === 200 && res.data.code === "OK") {
+        setTicket(res.data.data.ticket);
+      } else {
+        Notification.error(res.data.error || "Failed to load ticket details.");
       }
     } catch (error) {
-      Notification.error("Failed to load ticket details.");
+      const msg = error.response?.data?.error || "Failed to load ticket details.";
+      Notification.error(msg);
     } finally {
       setLoading(false);
     }
@@ -72,14 +75,16 @@ const SupportTicketDetails = () => {
     setSending(true);
     try {
       const res = await API.private.addSupportMessage(ticketId, formData);
-      if (res.status === 201) {
-        Notification.success("Reply sent successfully.");
+      if (res.status === 201 && res.data.code === "OK") {
+        Notification.success(res.data.data.message || "Reply sent successfully.");
         reset();
         setAttachmentFile(null);
         fetchTicketDetails();
+      } else {
+        Notification.error(res.data.error || "Failed to send reply.");
       }
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to send reply.";
+      const msg = error.response?.data?.error || "Failed to send reply.";
       Notification.error(msg);
     } finally {
       setSending(false);

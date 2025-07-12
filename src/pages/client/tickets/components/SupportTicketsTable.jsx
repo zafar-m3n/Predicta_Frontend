@@ -3,18 +3,10 @@ import { useNavigate } from "react-router-dom";
 import Badge from "@/components/ui/Badge";
 import Icon from "@/components/ui/Icon";
 import Pagination from "@/components/ui/Pagination";
+import { formatDate } from "@/utils/formatDate";
 
 const SupportTicketsTable = ({ tickets, currentPage, totalPages, onPageChange }) => {
   const navigate = useNavigate();
-
-  const formatDate = (dateStr) => {
-    if (!dateStr) return "-";
-    const date = new Date(dateStr);
-    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(
-      2,
-      "0"
-    )} ${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
-  };
 
   const handleViewDetails = (ticketId) => {
     navigate(`/tickets/${ticketId}`);

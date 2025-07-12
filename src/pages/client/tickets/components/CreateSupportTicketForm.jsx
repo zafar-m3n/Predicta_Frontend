@@ -46,7 +46,7 @@ const CreateSupportTicketForm = ({ isOpen, onClose, onSuccess }) => {
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setAttachmentFile(e.target.files[0]);
-      setAttachmentPath(""); // Reset preview path if we add new
+      setAttachmentPath(""); // Reset preview path
     }
   };
 
@@ -67,15 +67,19 @@ const CreateSupportTicketForm = ({ isOpen, onClose, onSuccess }) => {
     setLoading(true);
     try {
       const res = await API.private.createSupportTicket(formData);
-      if (res.status === 201) {
-        Notification.success("Support ticket created successfully.");
+
+      if (res.status === 201 && res.data.code === "OK") {
+        Notification.success(res.data.data.message || "Support ticket created successfully.");
         reset();
         setAttachmentFile(null);
         setAttachmentPath("");
         if (onSuccess) onSuccess();
+        onClose();
+      } else {
+        Notification.error("Unexpected response from server.");
       }
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to create support ticket.";
+      const msg = error.response?.data?.error || "Failed to create support ticket.";
       Notification.error(msg);
       console.log(error);
     } finally {
