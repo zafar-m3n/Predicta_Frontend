@@ -33,7 +33,6 @@ const adminMenu = [
   { label: "Withdrawal Requests", icon: "mdi:bank-transfer-out", path: "/admin/withdrawal-requests" },
   { label: "Customer Support", icon: "mdi:headset", path: "/admin/support" },
   { label: "Manage Users", icon: "mdi:account-group-outline", path: "/admin/users" },
-
   { label: "Logout", icon: "mdi:logout", action: "logout" },
 ];
 
@@ -61,11 +60,14 @@ const DefaultLayout = ({ children }) => {
     const fetchBalance = async () => {
       try {
         const res = await API.private.getWalletBalance();
-        if (res.status === 200) {
-          setWalletBalance(res.data.balance);
+        if (res.data.code === "OK") {
+          setWalletBalance(res.data.data.balance);
+        } else {
+          const msg = res.data.error || "Failed to load wallet balance.";
+          Notification.error(msg);
         }
       } catch (error) {
-        const msg = error.response?.data?.message || "Failed to load wallet balance.";
+        const msg = error.response?.data?.error || "Failed to load wallet balance.";
         Notification.error(msg);
 
         if (error.response?.status === 401) {

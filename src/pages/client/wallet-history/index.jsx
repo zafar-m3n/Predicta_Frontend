@@ -25,13 +25,16 @@ const WalletHistory = () => {
     setLoading(true);
     try {
       const res = await API.private.getDepositHistory(page);
-      if (res.status === 200) {
-        setDeposits(res.data.deposits || []);
-        setCurrentPage(res.data.page || 1);
-        setTotalPages(res.data.totalPages || 1);
+      if (res.data.code === "OK") {
+        setDeposits(res.data.data.deposits || []);
+        setCurrentPage(res.data.data.page || 1);
+        setTotalPages(res.data.data.totalPages || 1);
+      } else {
+        const msg = res.data.error || "Failed to load deposit history.";
+        Notification.error(msg);
       }
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to load deposit history.";
+      const msg = error.response?.data?.error || "Failed to load deposit history.";
       Notification.error(msg);
     } finally {
       setLoading(false);
@@ -42,13 +45,16 @@ const WalletHistory = () => {
     setLoading(true);
     try {
       const res = await API.private.getWithdrawalHistory(page);
-      if (res.status === 200) {
-        setWithdrawals(res.data.withdrawals || []);
-        setCurrentPage(res.data.page || 1);
-        setTotalPages(res.data.totalPages || 1);
+      if (res.data.code === "OK") {
+        setWithdrawals(res.data.data.withdrawals || []);
+        setCurrentPage(res.data.data.page || 1);
+        setTotalPages(res.data.data.totalPages || 1);
+      } else {
+        const msg = res.data.error || "Failed to load withdrawal history.";
+        Notification.error(msg);
       }
     } catch (error) {
-      const msg = error.response?.data?.message || "Failed to load withdrawal history.";
+      const msg = error.response?.data?.error || "Failed to load withdrawal history.";
       Notification.error(msg);
     } finally {
       setLoading(false);
