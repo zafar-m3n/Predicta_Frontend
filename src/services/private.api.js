@@ -307,6 +307,64 @@ const rejectWithdrawalRequest = async (id, admin_note) => {
 };
 
 /* ========================== */
+/* Support Tickets            */
+/* ========================== */
+
+const createSupportTicket = async (data) => {
+  return await instance.apiClient.post("/api/v1/client/support-tickets", data, {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const getMySupportTickets = async (params = {}) => {
+  return await instance.apiClient.get("/api/v1/client/support-tickets", {
+    headers: instance.defaultHeaders(),
+    params,
+  });
+};
+
+const getMySupportTicketById = async (id) => {
+  return await instance.apiClient.get(`/api/v1/client/support-tickets/${id}`, {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const addSupportMessage = async (ticketId, data) => {
+  return await instance.apiClient.post(`/api/v1/client/support-tickets/${ticketId}/messages`, data, {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const getAllSupportTickets = async (params = {}) => {
+  return await instance.apiClient.get("/api/v1/admin/support-tickets", {
+    headers: instance.defaultHeaders(),
+    params,
+  });
+};
+
+const getSupportTicketById = async (id) => {
+  return await instance.apiClient.get(`/api/v1/admin/support-tickets/${id}`, {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const addAdminSupportMessage = async (ticketId, data) => {
+  return await instance.apiClient.post(`/api/v1/admin/support-tickets/${ticketId}/messages`, data, {
+    headers: instance.defaultHeaders(),
+  });
+};
+
+const closeSupportTicket = async (id) => {
+  return await instance.apiClient.patch(
+    `/api/v1/admin/support-tickets/${id}/close`,
+    {},
+    {
+      headers: instance.defaultHeaders(),
+    }
+  );
+};
+
+/* ========================== */
 /* Export API                 */
 /* ========================== */
 
@@ -368,6 +426,16 @@ const privateAPI = {
   getAllWithdrawalRequests,
   approveWithdrawalRequest,
   rejectWithdrawalRequest,
+
+  // Support Tickets
+  createSupportTicket,
+  getMySupportTickets,
+  getMySupportTicketById,
+  addSupportMessage,
+  getAllSupportTickets,
+  getSupportTicketById,
+  addAdminSupportMessage,
+  closeSupportTicket,
 };
 
 export default privateAPI;
