@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import Select from "react-select";
 
 const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => {
-  const [selectedMethodId, setSelectedMethodId] = useState(methods[0]?.id || null);
   const [selectedAmount, setSelectedAmount] = useState(null);
 
   const predefinedAmounts = [100, 200, 500, 1000];
 
   const schema = Yup.object().shape({
+    method_id: Yup.number().required("Withdrawal method is required"),
     amount: Yup.number()
       .typeError("Amount must be a number")
       .required("Amount is required")
@@ -19,6 +20,7 @@ const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => 
   });
 
   const {
+    control,
     register,
     handleSubmit,
     setValue,
@@ -27,6 +29,7 @@ const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => 
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
+      method_id: methods[0]?.id || null,
       amount: "",
       note: "",
     },
@@ -42,13 +45,17 @@ const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => 
   };
 
   const internalSubmit = (data) => {
-    const finalData = {
-      method_id: selectedMethodId,
+    onSubmit({
+      method_id: data.method_id,
       amount: data.amount,
       note: data.note || null,
-    };
-    onSubmit(finalData);
+    });
   };
+
+  const methodOptions = methods.map((method) => ({
+    value: method.id,
+    label: method.type === "bank" ? `${method.bank_name} (${method.account_number})` : `${method.network} Wallet`,
+  }));
 
   return (
     <form onSubmit={handleSubmit(internalSubmit)} className="space-y-6 bg-white shadow-lg rounded-2xl p-8">
@@ -56,18 +63,28 @@ const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => 
 
       {/* Select Withdrawal Method */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Select Withdrawal Method</label>
-        <select
-          value={selectedMethodId}
-          onChange={(e) => setSelectedMethodId(Number(e.target.value))}
-          className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent"
-        >
-          {methods.map((method) => (
-            <option key={method.id} value={method.id}>
-              {method.type === "bank" ? `${method.bank_name} (${method.account_number})` : `${method.network} Wallet`}
-            </option>
-          ))}
-        </select>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Select Withdrawal Method</label>
+        <Controller
+          name="method_id"
+          control={control}
+          render={({ field }) => (
+            <Select
+              {...field}
+              options={methodOptions}
+              placeholder="Choose a method..."
+              classNamePrefix="react-select"
+              onChange={(option) => field.onChange(option.value)}
+              value={methodOptions.find((opt) => opt.value === field.value) || null}
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  borderColor: errors.method_id ? "#f87171" : base.borderColor,
+                }),
+              }}
+            />
+          )}
+        />
+        <p className="text-red-500 text-sm">{errors.method_id?.message}</p>
       </div>
 
       {/* Select or Enter Amount */}
@@ -124,7 +141,9 @@ const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => 
           {...register("note")}
           placeholder="Any note you want to add"
           rows={3}
-          className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent"
+          className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
+            errors.note ? "border-red-500" : "border-gray-300"
+          }`}
         />
         <p className="text-red-500 text-sm">{errors.note?.message}</p>
       </div>
