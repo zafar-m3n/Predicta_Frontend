@@ -18,7 +18,7 @@ const clientMenu = [
     ],
   },
   { label: "Wallet History", icon: "mdi:wallet-outline", path: "/wallet-history" },
-  { label: "Tickets", icon: "mdi:headset", path: "/tickets" },
+  // { label: "Tickets", icon: "mdi:headset", path: "/tickets" },
   { label: "Market Events", icon: "mdi:calendar-month-outline", path: "/market-events" },
   { label: "Profile", icon: "mdi:account-outline", path: "/profile" },
   { label: "Logout", icon: "mdi:logout", action: "logout" },
@@ -31,7 +31,7 @@ const adminMenu = [
   { label: "Deposit Methods", icon: "mdi:bank-transfer", path: "/admin/deposit-methods" },
   { label: "Deposit Requests", icon: "mdi:bank-transfer-in", path: "/admin/deposit-requests" },
   { label: "Withdrawal Requests", icon: "mdi:bank-transfer-out", path: "/admin/withdrawal-requests" },
-  { label: "Customer Support", icon: "mdi:headset", path: "/admin/tickets" },
+  // { label: "Customer Support", icon: "mdi:headset", path: "/admin/tickets" },
   { label: "Manage Users", icon: "mdi:account-group-outline", path: "/admin/users" },
 
   { label: "Logout", icon: "mdi:logout", action: "logout" },
