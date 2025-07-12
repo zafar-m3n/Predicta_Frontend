@@ -17,11 +17,17 @@ const AdminDashboard = () => {
     setLoading(true);
     try {
       const res = await API.private.getAdminDashboardStats();
-      if (res.status === 200) {
-        setStats(res.data);
+      if (res.status === 200 && res.data.code === "OK") {
+        setStats(res.data.data);
+      } else {
+        Notification.error(res.data.error || "Failed to load dashboard stats.");
       }
     } catch (error) {
-      Notification.error("Failed to load dashboard stats.");
+      let msg = "Failed to load dashboard stats.";
+      if (error.response?.data?.error) {
+        msg = error.response.data.error;
+      }
+      Notification.error(msg);
     } finally {
       setLoading(false);
     }
