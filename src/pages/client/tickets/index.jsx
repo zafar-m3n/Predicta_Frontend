@@ -1,12 +1,12 @@
 import React from "react";
 import DefaultLayout from "@/layouts/DefaultLayout";
 
-const Tickets = () => {
+const SupportTickets = () => {
   return (
     <DefaultLayout>
-      <div>Tickets</div>
+      <div>Support Tickets</div>
     </DefaultLayout>
   );
 };
 
-export default Tickets;
+export default SupportTickets;
