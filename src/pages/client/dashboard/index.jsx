@@ -1,9 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import token from "@/lib/utilities";
 import Icon from "@/components/ui/Icon";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
   // Get user data from token utility
   const user = token.getUserData();
   const userName = user?.full_name || "User";
@@ -14,31 +17,37 @@ const Dashboard = () => {
       icon: "mdi:wallet-outline",
       title: "Wallet",
       description: "Check your balance and view wallet details.",
+      route: "/wallet-history",
     },
     {
       icon: "mdi:bank-transfer",
       title: "Deposit",
       description: "Add funds easily using various deposit methods.",
+      route: "/deposits",
     },
     {
       icon: "mdi:bank-transfer-out",
       title: "Withdraw",
       description: "Withdraw your available funds securely.",
+      route: "/withdrawals",
     },
     {
       icon: "mdi:calendar-month-outline",
       title: "Market Events",
       description: "Stay updated with important market news.",
+      route: "/market-events",
     },
     {
       icon: "mdi:headset",
       title: "Support",
       description: "Contact support or view your existing tickets.",
+      route: "/tickets",
     },
     {
       icon: "mdi:account-outline",
       title: "Profile",
       description: "Manage your personal information and settings.",
+      route: "/profile",
     },
   ];
 
@@ -55,7 +64,8 @@ const Dashboard = () => {
           {cards.map((card, index) => (
             <div
               key={index}
-              className="bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md transition-all p-6 flex flex-col items-center text-center"
+              onClick={() => navigate(card.route)}
+              className="cursor-pointer bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all p-6 flex flex-col items-center text-center"
             >
               <Icon icon={card.icon} width={40} className="text-accent mb-4" />
               <h3 className="text-lg font-semibold text-gray-800 mb-2">{card.title}</h3>
