@@ -18,10 +18,12 @@ const DepositRequests = () => {
     setLoading(true);
     try {
       const res = await API.private.getAllDepositRequests(page);
-      if (res.status === 200) {
+      if (res.status === 200 && res.data.code === "OK") {
         setRequests(res.data.requests || []);
         setCurrentPage(res.data.page || 1);
         setTotalPages(res.data.totalPages || 1);
+      } else {
+        Notification.error(res.data.message || "Failed to fetch deposit requests.");
       }
     } catch (error) {
       const msg = error.response?.data?.message || "Failed to fetch deposit requests.";
@@ -34,9 +36,11 @@ const DepositRequests = () => {
   const handleApprove = async (request) => {
     try {
       const res = await API.private.approveDepositRequest(request.id);
-      if (res.status === 200) {
+      if (res.status === 200 && res.data.code === "OK") {
         Notification.success(res.data.message || "Deposit request approved.");
         fetchRequests(currentPage);
+      } else {
+        Notification.error(res.data.message || "Failed to approve request.");
       }
     } catch (error) {
       const msg = error.response?.data?.message || "Failed to approve request.";
@@ -47,9 +51,11 @@ const DepositRequests = () => {
   const handleReject = async (request, note) => {
     try {
       const res = await API.private.rejectDepositRequest(request.id, note);
-      if (res.status === 200) {
+      if (res.status === 200 && res.data.code === "OK") {
         Notification.success(res.data.message || "Deposit request rejected.");
         fetchRequests(currentPage);
+      } else {
+        Notification.error(res.data.message || "Failed to reject request.");
       }
     } catch (error) {
       const msg = error.response?.data?.message || "Failed to reject request.";
