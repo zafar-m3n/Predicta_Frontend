@@ -4,6 +4,7 @@ import SupportTicketsTable from "./components/SupportTicketsTable";
 import CreateSupportTicketForm from "./components/CreateSupportTicketForm";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
+import Spinner from "@/components/ui/Spinner";
 
 const SupportTickets = () => {
   const [tickets, setTickets] = useState([]);
@@ -69,7 +70,10 @@ const SupportTickets = () => {
       </div>
 
       {loading ? (
-        <div className="text-center text-gray-500">Loading tickets...</div>
+        <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+          <Spinner />
+          <p className="mt-4">Loading tickets...</p>
+        </div>
       ) : (
         <SupportTicketsTable
           tickets={tickets}

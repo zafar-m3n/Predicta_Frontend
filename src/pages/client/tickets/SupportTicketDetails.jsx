@@ -9,6 +9,7 @@ import Badge from "@/components/ui/Badge";
 import TicketMessageBubble from "./components/TicketMessageBubble";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import Icon from "@/components/ui/Icon";
+import Spinner from "@/components/ui/Spinner";
 
 const schema = yup.object().shape({
   message: yup.string().required("Message is required"),
@@ -94,7 +95,10 @@ const SupportTicketDetails = () => {
   if (loading) {
     return (
       <DefaultLayout>
-        <div className="text-center text-gray-500 py-12">Loading ticket details...</div>
+        <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+          <Spinner />
+          <p className="mt-4">Loading ticket details...</p>
+        </div>
       </DefaultLayout>
     );
   }
@@ -165,7 +169,7 @@ const SupportTicketDetails = () => {
                 disabled={sending}
                 className={`px-4 py-2 bg-accent text-white flex items-center justify-center font-medium hover:bg-accent/90 transition disabled:opacity-50`}
               >
-                <Icon icon="mdi:send" width="20" />
+                {sending ? <Spinner color="white" /> : <Icon icon="mdi:send" width="20" />}
               </button>
             </div>
 

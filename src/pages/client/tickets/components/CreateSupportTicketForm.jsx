@@ -7,6 +7,7 @@ import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Modal from "@/components/ui/Modal";
 import StyledFileInput from "@/components/ui/StyledFileInput";
+import Spinner from "@/components/ui/Spinner";
 
 const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
@@ -166,11 +167,11 @@ const CreateSupportTicketForm = ({ isOpen, onClose, onSuccess }) => {
         <button
           type="submit"
           disabled={loading}
-          className={`w-full bg-accent text-white py-2 rounded font-semibold transition ${
+          className={`w-full bg-accent text-white py-2 rounded font-semibold flex items-center justify-center transition ${
             loading ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
           }`}
         >
-          {loading ? "Submitting..." : "Submit Ticket"}
+          {loading ? <Spinner color="white" /> : "Submit Ticket"}
         </button>
       </form>
     </Modal>

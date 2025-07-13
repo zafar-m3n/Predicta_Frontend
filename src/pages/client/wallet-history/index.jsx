@@ -4,6 +4,7 @@ import DepositHistoryTable from "./components/DepositHistoryTable";
 import WithdrawalHistoryTable from "./components/WithdrawalHistoryTable";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
+import Spinner from "@/components/ui/Spinner";
 
 const WalletHistory = () => {
   const [deposits, setDeposits] = useState([]);
@@ -98,8 +99,11 @@ const WalletHistory = () => {
       </div>
 
       {loading ? (
-        <div className="text-center text-gray-500">
-          {activeTab === "deposits" ? "Loading deposit history..." : "Loading withdrawal history..."}
+        <div className="flex flex-col items-center justify-center py-10 text-gray-500">
+          <Spinner />
+          <p className="mt-4">
+            {activeTab === "deposits" ? "Loading deposit history..." : "Loading withdrawal history..."}
+          </p>
         </div>
       ) : activeTab === "deposits" ? (
         <DepositHistoryTable
