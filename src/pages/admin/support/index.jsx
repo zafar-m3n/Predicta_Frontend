@@ -3,6 +3,7 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import AdminSupportTicketsTable from "./components/AdminSupportTicketsTable";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
+import Spinner from "@/components/ui/Spinner";
 
 const CustomerSupport = () => {
   const [tickets, setTickets] = useState([]);
@@ -46,7 +47,12 @@ const CustomerSupport = () => {
       </div>
 
       {loading ? (
-        <div className="text-center text-gray-500">Loading tickets...</div>
+        <>
+          <div className="flex justify-center items-center h-40">
+            <Spinner />
+          </div>
+          <p className="text-center text-gray-500 mt-4">Loading tickets...</p>
+        </>
       ) : (
         <AdminSupportTicketsTable
           tickets={tickets}

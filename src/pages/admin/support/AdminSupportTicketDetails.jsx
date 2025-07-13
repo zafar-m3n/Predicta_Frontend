@@ -9,6 +9,7 @@ import Badge from "@/components/ui/Badge";
 import AdminTicketMessageBubble from "./components/AdminTicketMessageBubble";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import Icon from "@/components/ui/Icon";
+import Spinner from "@/components/ui/Spinner";
 
 const schema = yup.object().shape({
   message: yup.string().required("Message is required"),
@@ -109,7 +110,12 @@ const AdminSupportTicketDetails = () => {
   if (loading) {
     return (
       <DefaultLayout>
-        <div className="text-center text-gray-500 py-12">Loading ticket details...</div>
+        <>
+          <div className="flex justify-center items-center h-40">
+            <Spinner />
+          </div>
+          <p className="text-center text-gray-500 mt-4">Loading ticket details...</p>
+        </>
       </DefaultLayout>
     );
   }
