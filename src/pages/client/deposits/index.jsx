@@ -4,6 +4,7 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import DepositMethodsList from "./components/DepositMethodsList";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
+import Spinner from "@/components/ui/Spinner";
 
 const ClientDeposits = () => {
   const navigate = useNavigate();
@@ -20,6 +21,8 @@ const ClientDeposits = () => {
       const res = await API.private.getActiveDepositMethods();
       if (res.status === 200 && res.data.code === "OK") {
         setMethods(res.data.data.methods || []);
+      } else {
+        Notification.error(res.data.error || "Failed to load deposit methods.");
       }
     } catch (error) {
       const msg = error.response?.data?.message || "Failed to load deposit methods.";
@@ -33,6 +36,29 @@ const ClientDeposits = () => {
     navigate(`/deposits/new/${method.id}`);
   };
 
+  if (loading) {
+    return (
+      <DefaultLayout>
+        <div className="flex justify-center items-center h-40">
+          <Spinner />
+        </div>
+        <p className="text-center text-gray-500 mt-4">Loading deposit methods...</p>
+      </DefaultLayout>
+    );
+  }
+
+  if (methods.length === 0) {
+    return (
+      <DefaultLayout>
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+          <p className="text-yellow-700 font-medium">
+            No deposit methods available at this time. Please check back later or contact support for assistance.
+          </p>
+        </div>
+      </DefaultLayout>
+    );
+  }
+
   return (
     <DefaultLayout>
       <div className="mb-6">
@@ -40,11 +66,7 @@ const ClientDeposits = () => {
         <p className="text-gray-600">Choose a deposit method to continue.</p>
       </div>
 
-      {loading ? (
-        <p className="text-gray-500">Loading deposit methods...</p>
-      ) : (
-        <DepositMethodsList methods={methods} onSelect={handleSelectMethod} />
-      )}
+      <DepositMethodsList methods={methods} onSelect={handleSelectMethod} />
     </DefaultLayout>
   );
 };
