@@ -4,10 +4,12 @@ import Icon from "@/components/ui/Icon";
 import Modal from "@/components/ui/Modal";
 import Pagination from "@/components/ui/Pagination";
 import { formatDate } from "@/utils/formatDate";
+import ViewWithdrawalRequestModal from "./ViewWithdrawalRequestModal";
 
 const WithdrawalRequestsTable = ({ requests, onApprove, onReject, currentPage, totalPages, onPageChange }) => {
   const [confirmModal, setConfirmModal] = useState({ open: false, action: null, request: null });
   const [rejectionNote, setRejectionNote] = useState("");
+  const [viewModal, setViewModal] = useState({ open: false, request: null });
 
   const handleActionClick = (action, request) => {
     setRejectionNote("");
@@ -21,6 +23,10 @@ const WithdrawalRequestsTable = ({ requests, onApprove, onReject, currentPage, t
       onReject(confirmModal.request, rejectionNote);
     }
     setConfirmModal({ open: false, action: null, request: null });
+  };
+
+  const handleViewClick = (request) => {
+    setViewModal({ open: true, request });
   };
 
   return (
@@ -87,6 +93,12 @@ const WithdrawalRequestsTable = ({ requests, onApprove, onReject, currentPage, t
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">{formatDate(request.createdAt)}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm space-x-2">
+                    <button
+                      onClick={() => handleViewClick(request)}
+                      className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100 transition"
+                    >
+                      <Icon icon="mdi:eye" width="18" />
+                    </button>
                     {request.status === "pending" && (
                       <>
                         <button
@@ -111,7 +123,6 @@ const WithdrawalRequestsTable = ({ requests, onApprove, onReject, currentPage, t
         </table>
       </div>
 
-      {/* Pagination */}
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} className="mt-4" />
 
       {/* Confirm modal */}
@@ -149,6 +160,13 @@ const WithdrawalRequestsTable = ({ requests, onApprove, onReject, currentPage, t
           </div>
         </div>
       </Modal>
+
+      {/* View modal */}
+      <ViewWithdrawalRequestModal
+        isOpen={viewModal.open}
+        onClose={() => setViewModal({ open: false, request: null })}
+        request={viewModal.request}
+      />
     </>
   );
 };

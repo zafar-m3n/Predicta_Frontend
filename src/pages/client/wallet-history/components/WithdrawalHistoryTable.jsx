@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Badge from "@/components/ui/Badge";
 import Icon from "@/components/ui/Icon";
-import Modal from "@/components/ui/Modal";
 import Pagination from "@/components/ui/Pagination";
 import { formatDate } from "@/utils/formatDate";
+import ViewWithdrawalDetailsModal from "./ViewWithdrawalDetailsModal";
 
 const WithdrawalHistoryTable = ({ withdrawals, currentPage, totalPages, onPageChange }) => {
   const [methodModal, setMethodModal] = useState({ open: false, method: null });
@@ -98,76 +98,13 @@ const WithdrawalHistoryTable = ({ withdrawals, currentPage, totalPages, onPageCh
         </table>
       </div>
 
-      {/* Pagination */}
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} className="mt-4" />
 
-      {/* Method Details Modal */}
-      <Modal
+      <ViewWithdrawalDetailsModal
         isOpen={methodModal.open}
         onClose={() => setMethodModal({ open: false, method: null })}
-        title="Withdrawal Method Details"
-        size="lg"
-        centered
-      >
-        {methodModal.method ? (
-          <div className="space-y-4">
-            <div className="flex justify-between py-1">
-              <span className="text-gray-500">Type:</span>
-              <Badge text={methodModal.method.type} color={typeColor(methodModal.method.type)} size="sm" />
-            </div>
-
-            {methodModal.method.type === "bank" && (
-              <>
-                <div className="border-t border-gray-200 pt-2 space-y-1">
-                  <div className="flex justify-between py-1">
-                    <span className="text-gray-500">Bank Name:</span>
-                    <span className="text-gray-700 font-medium">{methodModal.method.bank_name || "N/A"}</span>
-                  </div>
-                  <div className="flex justify-between py-1">
-                    <span className="text-gray-500">Branch:</span>
-                    <span className="text-gray-700 font-medium">{methodModal.method.branch || "N/A"}</span>
-                  </div>
-                  <div className="flex justify-between py-1">
-                    <span className="text-gray-500">Account Name:</span>
-                    <span className="text-gray-700 font-medium">{methodModal.method.account_name || "N/A"}</span>
-                  </div>
-                  <div className="flex justify-between py-1">
-                    <span className="text-gray-500">Account Number:</span>
-                    <span className="text-gray-700 font-medium">{methodModal.method.account_number || "N/A"}</span>
-                  </div>
-                  <div className="flex justify-between py-1">
-                    <span className="text-gray-500">SWIFT Code:</span>
-                    <span className="text-gray-700 font-medium">{methodModal.method.swift_code || "N/A"}</span>
-                  </div>
-                  <div className="flex justify-between py-1">
-                    <span className="text-gray-500">IBAN:</span>
-                    <span className="text-gray-700 font-medium">{methodModal.method.iban || "N/A"}</span>
-                  </div>
-                </div>
-              </>
-            )}
-
-            {methodModal.method.type === "crypto" && (
-              <>
-                <div className="border-t border-gray-200 pt-2 space-y-1">
-                  <div className="flex justify-between py-1">
-                    <span className="text-gray-500">Network:</span>
-                    <span className="text-gray-700 font-medium">{methodModal.method.network || "N/A"}</span>
-                  </div>
-                  <div className="flex justify-between py-1">
-                    <span className="text-gray-500">Wallet Address:</span>
-                    <span className="text-gray-700 font-medium break-words max-w-[60%]">
-                      {methodModal.method.wallet_address || "N/A"}
-                    </span>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-        ) : (
-          <p className="text-gray-500">No method details available.</p>
-        )}
-      </Modal>
+        method={methodModal.method}
+      />
     </>
   );
 };
