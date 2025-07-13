@@ -3,7 +3,7 @@ import Badge from "@/components/ui/Badge";
 import Icon from "@/components/ui/Icon";
 import Modal from "@/components/ui/Modal";
 import Pagination from "@/components/ui/Pagination";
-import formatDate from "@/utils/formatDate";
+import { formatDate } from "@/utils/formatDate";
 
 const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
