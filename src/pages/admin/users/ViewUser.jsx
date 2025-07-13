@@ -10,6 +10,7 @@ import { parsePhoneNumberFromString } from "libphonenumber-js";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import { formatDate } from "@/utils/formatDate";
+import Spinner from "@/components/ui/Spinner";
 
 countries.registerLocale(enLocale);
 
@@ -67,8 +68,24 @@ const ViewUser = () => {
     }
   };
 
-  if (loading) return <div className="text-gray-500">Loading user...</div>;
-  if (!user) return <div className="text-gray-500">No user data found.</div>;
+  if (loading) {
+    return (
+      <DefaultLayout>
+        <div className="flex justify-center items-center h-40">
+          <Spinner />
+        </div>
+        <p className="text-center text-gray-500 mt-4">Loading user...</p>
+      </DefaultLayout>
+    );
+  }
+
+  if (!user) {
+    return (
+      <DefaultLayout>
+        <div className="text-gray-500 text-center py-10">No user data found.</div>
+      </DefaultLayout>
+    );
+  }
 
   return (
     <DefaultLayout>

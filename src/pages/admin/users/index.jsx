@@ -6,6 +6,7 @@ import UserFormModal from "./components/UserFormModal";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Modal from "@/components/ui/Modal";
+import Spinner from "@/components/ui/Spinner";
 
 const ManageUsers = () => {
   const navigate = useNavigate();
@@ -73,14 +74,12 @@ const ManageUsers = () => {
   const handleSubmit = async (data) => {
     try {
       if (isEdit && selectedUser) {
-        // Update
         const res = await API.private.updateUser(selectedUser.id, data);
         if (res.status === 200 && res.data.code === "OK") {
           Notification.success(res.data.data.message || "User updated successfully.");
           fetchUsers(currentPage);
         }
       } else {
-        // Create
         const res = await API.private.createUser(data);
         if (res.status === 201 && res.data.code === "OK") {
           Notification.success(res.data.data.message || "User created successfully.");
@@ -108,7 +107,12 @@ const ManageUsers = () => {
       </div>
 
       {loading ? (
-        <p className="text-gray-500">Loading users...</p>
+        <>
+          <div className="flex justify-center items-center h-40">
+            <Spinner />
+          </div>
+          <p className="text-center text-gray-500 mt-4">Loading users...</p>
+        </>
       ) : (
         <UserTable
           users={users}

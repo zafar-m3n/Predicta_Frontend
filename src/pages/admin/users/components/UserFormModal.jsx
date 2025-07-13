@@ -7,6 +7,7 @@ import countryList from "react-select-country-list";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import Notification from "@/components/ui/Notification";
+import Spinner from "@/components/ui/Spinner"; // ✅ Add Spinner
 
 const roleOptions = [
   { value: "client", label: "Client" },
@@ -218,7 +219,7 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
           isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
         }`}
       >
-        {isSubmitting ? (isEdit ? "Updating..." : "Creating...") : isEdit ? "Update User" : "Create User"}
+        {isSubmitting ? <Spinner color="white" /> : isEdit ? "Update User" : "Create User"}
       </button>
     </form>
   );
