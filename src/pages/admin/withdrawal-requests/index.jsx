@@ -3,6 +3,7 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import WithdrawalRequestsTable from "./components/WithdrawalRequestsTable";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
+import Spinner from "@/components/ui/Spinner";
 
 const WithdrawalRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -76,7 +77,12 @@ const WithdrawalRequests = () => {
       </div>
 
       {loading ? (
-        <div className="text-center text-gray-600 py-10">Loading...</div>
+        <>
+          <div className="flex justify-center items-center h-40">
+            <Spinner />
+          </div>
+          <p className="text-center text-gray-500 mt-4">Loading withdrawal requests...</p>
+        </>
       ) : (
         <WithdrawalRequestsTable
           requests={requests}
