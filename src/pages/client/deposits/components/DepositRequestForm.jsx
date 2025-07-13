@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import StyledFileInput from "@/components/ui/StyledFileInput";
+import Spinner from "@/components/ui/Spinner";
 
 const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
   const [proofFile, setProofFile] = useState(null);
@@ -114,7 +115,6 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
         onRemove={removeFile}
       />
 
-      {/* Transaction Reference */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Transaction Reference</label>
         <input
@@ -135,7 +135,7 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
           isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
         }`}
       >
-        {isSubmitting ? "Submitting..." : "Submit Request"}
+        {isSubmitting ? <Spinner color="white" /> : "Submit Request"}
       </button>
     </form>
   );

@@ -5,6 +5,7 @@ import DepositRequestForm from "./components/DepositRequestForm";
 import DepositMethodDetails from "./components/DepositMethodDetails";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
+import Spinner from "@/components/ui/Spinner";
 
 const DepositRequest = () => {
   const { methodId } = useParams();
@@ -68,27 +69,32 @@ const DepositRequest = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <DefaultLayout>
+        <div className="flex justify-center items-center h-40">
+          <Spinner />
+        </div>
+        <p className="text-center text-gray-500 mt-4">Loading deposit details...</p>
+      </DefaultLayout>
+    );
+  }
+
   return (
     <DefaultLayout>
-      {loading ? (
-        <p className="text-gray-500">Loading deposit method...</p>
-      ) : (
-        <>
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold">{method.name} Deposit</h1>
-            <p className="text-gray-600">Fill out the form and upload your payment proof.</p>
-          </div>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold">{method.name} Deposit</h1>
+        <p className="text-gray-600">Fill out the form and upload your payment proof.</p>
+      </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div>
-              <DepositRequestForm onSubmit={handleFormSubmit} isSubmitting={false} method={method} />
-            </div>
-            <div>
-              <DepositMethodDetails method={method} />
-            </div>
-          </div>
-        </>
-      )}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div>
+          <DepositRequestForm onSubmit={handleFormSubmit} isSubmitting={false} method={method} />
+        </div>
+        <div>
+          <DepositMethodDetails method={method} />
+        </div>
+      </div>
     </DefaultLayout>
   );
 };
