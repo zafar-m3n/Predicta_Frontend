@@ -4,6 +4,7 @@ import Icon from "@/components/ui/Icon";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Badge from "@/components/ui/Badge";
+import Spinner from "@/components/ui/Spinner";
 import token from "@/lib/utilities";
 
 const AdminDashboard = () => {
@@ -40,7 +41,10 @@ const AdminDashboard = () => {
   if (loading || !stats) {
     return (
       <DefaultLayout>
-        <div className="text-center text-gray-500 py-10">Loading dashboard stats...</div>
+        <div className="flex justify-center items-center h-40">
+          <Spinner />
+        </div>
+        <p className="text-center text-gray-500 mt-4">Loading dashboard stats...</p>
       </DefaultLayout>
     );
   }

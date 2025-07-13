@@ -41,7 +41,6 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
           </div>
         </div>
 
-        {/* Type Specific Details */}
         {method.type === "bank" && details && (
           <div>
             <div className="flex items-center mb-2">
@@ -67,7 +66,6 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
             <div className="border-t border-gray-200 mt-1 pt-2 space-y-1">
               {renderField("Network", details.network)}
               {renderField("Address", details.address)}
-
               {(details.qr_code_path || details.logo_path) && (
                 <div className="flex flex-wrap gap-6 mt-3">
                   {details.qr_code_path && (

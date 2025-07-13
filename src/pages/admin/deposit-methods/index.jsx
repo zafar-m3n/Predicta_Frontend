@@ -5,6 +5,7 @@ import DepositMethodsTable from "./components/DepositMethodsTable";
 import ViewDepositMethodModal from "./components/ViewDepositMethodModal";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
+import Spinner from "@/components/ui/Spinner";
 
 const DepositMethods = () => {
   const navigate = useNavigate();
@@ -101,7 +102,12 @@ const DepositMethods = () => {
       </div>
 
       {loading ? (
-        <p className="text-gray-500">Loading deposit methods...</p>
+        <>
+          <div className="flex justify-center items-center h-40">
+            <Spinner />
+          </div>
+          <p className="text-center text-gray-500 mt-4">Loading deposit methods...</p>
+        </>
       ) : (
         <DepositMethodsTable
           methods={methods}

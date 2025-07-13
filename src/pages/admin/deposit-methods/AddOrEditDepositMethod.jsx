@@ -46,7 +46,6 @@ const AddOrEditDepositMethod = () => {
 
   const handleSubmit = async (data) => {
     setIsSubmitting(true);
-
     try {
       const formData = new FormData();
       formData.append("name", data.name);

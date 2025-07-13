@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import Switch from "@/components/ui/Switch";
 import StyledFileInput from "@/components/ui/StyledFileInput";
 import Select from "react-select";
+import Spinner from "@/components/ui/Spinner"; // ✅ import Spinner
 
 const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
@@ -265,7 +266,7 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
           isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
         }`}
       >
-        {isSubmitting ? "Saving..." : "Save Method"}
+        {isSubmitting ? <Spinner color="white" /> : "Save Method"}
       </button>
     </form>
   );
