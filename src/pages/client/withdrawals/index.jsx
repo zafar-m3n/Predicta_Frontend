@@ -4,6 +4,7 @@ import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import WithdrawalRequestForm from "./components/WithdrawalRequestForm";
 import { useNavigate } from "react-router-dom";
+import Spinner from "@/components/ui/Spinner";
 
 const ClientWithdrawals = () => {
   const [methods, setMethods] = useState([]);
@@ -73,7 +74,10 @@ const ClientWithdrawals = () => {
   if (loading) {
     return (
       <DefaultLayout>
-        <p className="text-gray-500">Checking eligibility...</p>
+        <div className="flex justify-center items-center h-40">
+          <Spinner />
+        </div>
+        <p className="text-center text-gray-500 mt-4">Checking eligibility...</p>
       </DefaultLayout>
     );
   }
@@ -83,7 +87,8 @@ const ClientWithdrawals = () => {
       <DefaultLayout>
         <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
           <p className="text-yellow-700 font-medium">
-            You do not have any active withdrawal details. Please add one before requesting a withdrawal.
+            You do not have any active withdrawal details. Please add one from your profile page before requesting a
+            withdrawal.
           </p>
         </div>
       </DefaultLayout>

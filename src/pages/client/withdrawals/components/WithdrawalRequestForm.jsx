@@ -3,6 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import Select from "react-select";
+import Spinner from "@/components/ui/Spinner";
 
 const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => {
   const [selectedAmount, setSelectedAmount] = useState(null);
@@ -153,9 +154,9 @@ const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => 
         disabled={isSubmitting}
         className={`w-full bg-accent text-white py-2 rounded-md font-semibold shadow transition-all ${
           isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
-        }`}
+        } flex justify-center items-center gap-2`}
       >
-        {isSubmitting ? "Submitting..." : "Submit Request"}
+        {isSubmitting ? <Spinner color="white" /> : "Submit Request"}
       </button>
     </form>
   );
