@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import AuthLayout from "@/layouts/AuthLayout";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
+import Spinner from "@/components/ui/Spinner";
 
 const VerifyEmailPage = () => {
   const [searchParams] = useSearchParams();
@@ -35,12 +36,12 @@ const VerifyEmailPage = () => {
           Notification.error(errMsg);
         }
       } catch (error) {
-        const status = error.response?.status;
+        const statusCode = error.response?.status;
         let msg = "Verification failed. Please try again.";
 
-        if (status === 400) {
+        if (statusCode === 400) {
           msg = error.response?.data?.error || "Invalid or expired verification token.";
-        } else if (status === 500) {
+        } else if (statusCode === 500) {
           msg = "Server error. Please try again later.";
         }
 
@@ -74,19 +75,7 @@ const VerifyEmailPage = () => {
         {status === "loading" && (
           <>
             <div className="flex justify-center items-center h-24">
-              <svg
-                className="animate-spin h-8 w-8 text-accent"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 100 16v-4l-3 3 3 3v-4a8 8 0 01-8-8z"
-                ></path>
-              </svg>
+              <Spinner />
             </div>
             <p className="mt-4 text-gray-600">Verifying your email...</p>
           </>

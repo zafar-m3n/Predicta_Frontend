@@ -11,6 +11,7 @@ import libphonenumber from "google-libphonenumber";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Icon from "@/components/ui/Icon";
+import Spinner from "@/components/ui/Spinner";
 
 const schema = Yup.object().shape({
   full_name: Yup.string().required("Full name is required"),
@@ -225,9 +226,9 @@ const RegisterPage = () => {
             disabled={isSubmitting}
             className={`w-full bg-accent text-white py-2 rounded font-semibold transition ${
               isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
-            }`}
+            } flex justify-center items-center gap-2`}
           >
-            {isSubmitting ? "Registering..." : "Register with EquityFX"}
+            {isSubmitting ? <Spinner color="white" /> : "Register with EquityFX"}
           </button>
 
           <p className="text-center text-sm">

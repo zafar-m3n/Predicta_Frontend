@@ -8,6 +8,7 @@ import Notification from "@/components/ui/Notification";
 import token from "@/lib/utilities";
 import Icon from "@/components/ui/Icon";
 import { useNavigate } from "react-router-dom";
+import Spinner from "@/components/ui/Spinner";
 
 const schema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -115,9 +116,9 @@ const LoginPage = () => {
             disabled={isSubmitting}
             className={`w-full bg-accent text-white py-2 rounded font-semibold transition ${
               isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
-            }`}
+            } flex justify-center items-center gap-2`}
           >
-            {isSubmitting ? "Logging in..." : "Login"}
+            {isSubmitting ? <Spinner color="white" /> : "Login"}
           </button>
 
           <p className="text-center text-sm">

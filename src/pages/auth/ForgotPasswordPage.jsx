@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
+import Spinner from "@/components/ui/Spinner";
 
 const schema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -73,9 +74,9 @@ const ForgotPasswordPage = () => {
             disabled={isSubmitting}
             className={`w-full bg-accent text-white py-2 rounded font-semibold transition ${
               isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
-            }`}
+            } flex justify-center items-center gap-2`}
           >
-            {isSubmitting ? "Sending..." : "Send Reset Link"}
+            {isSubmitting ? <Spinner color="white" /> : "Send Reset Link"}
           </button>
 
           <p className="text-center text-sm">
