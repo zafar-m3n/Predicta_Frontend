@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
+import Spinner from "@/components/ui/Spinner";
 
 const AddWithdrawalMethodForm = ({ type, onSuccess, onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -174,7 +175,7 @@ const AddWithdrawalMethodForm = ({ type, onSuccess, onClose }) => {
           isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
         }`}
       >
-        {isSubmitting ? "Adding..." : "Add Method"}
+        {isSubmitting ? <Spinner color="white" /> : "Add Method"}
       </button>
     </form>
   );

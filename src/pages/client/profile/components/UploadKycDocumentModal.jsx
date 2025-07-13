@@ -6,6 +6,7 @@ import Select from "react-select";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import StyledFileInput from "@/components/ui/StyledFileInput";
+import Spinner from "@/components/ui/Spinner";
 
 const schema = Yup.object().shape({
   document_type: Yup.string().required("Document type is required"),
@@ -112,11 +113,11 @@ const UploadKycDocumentModal = ({ onSuccess, onClose }) => {
       <button
         type="submit"
         disabled={isSubmitting}
-        className={`w-full bg-accent text-white py-2 rounded-md font-semibold shadow transition-all ${
+        className={`w-full bg-accent text-white py-2 rounded-md font-semibold flex items-center justify-center shadow transition-all ${
           isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
         }`}
       >
-        {isSubmitting ? "Uploading..." : "Upload Document"}
+        {isSubmitting ? <Spinner color="white" /> : "Upload Document"}
       </button>
     </form>
   );

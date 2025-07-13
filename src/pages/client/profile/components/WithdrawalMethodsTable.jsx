@@ -3,6 +3,7 @@ import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Modal from "@/components/ui/Modal";
 import AddWithdrawalMethodForm from "./AddWithdrawalMethodsForm";
+import Spinner from "@/components/ui/Spinner";
 
 const WithdrawalMethodsTable = () => {
   const [methods, setMethods] = useState([]);
@@ -30,7 +31,14 @@ const WithdrawalMethodsTable = () => {
   const bankMethods = methods.filter((m) => m.type === "bank" && m.status === "active");
   const cryptoMethods = methods.filter((m) => m.type === "crypto" && m.status === "active");
 
-  if (loading) return <div>Loading withdrawal details...</div>;
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+        <Spinner />
+        <p className="mt-4">Loading withdrawal details...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">

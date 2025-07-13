@@ -12,6 +12,7 @@ import IconComponent from "@/components/ui/Icon";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
+import Spinner from "@/components/ui/Spinner";
 
 countries.registerLocale(enLocale);
 
@@ -206,11 +207,11 @@ const ProfileForm = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full bg-accent text-white py-2 rounded font-semibold transition ${
+            className={`w-full bg-accent text-white py-2 rounded font-semibold flex items-center justify-center transition ${
               isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
             }`}
           >
-            {isSubmitting ? "Saving..." : "Save Changes"}
+            {isSubmitting ? <Spinner color="white" /> : "Save Changes"}
           </button>
         </form>
       )}

@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Icon from "@/components/ui/Icon";
+import Spinner from "@/components/ui/Spinner"; // ✅ import Spinner
 
 const schema = Yup.object().shape({
   current_password: Yup.string().required("Current password is required"),
@@ -120,7 +121,7 @@ const ChangePasswordForm = () => {
             isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
           }`}
         >
-          {isSubmitting ? "Changing..." : "Change Password"}
+          {isSubmitting ? <Spinner color="white" /> : "Change Password"}
         </button>
       </form>
     </div>
