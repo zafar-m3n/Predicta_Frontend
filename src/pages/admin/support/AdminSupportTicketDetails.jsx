@@ -111,9 +111,7 @@ const AdminSupportTicketDetails = () => {
     return (
       <DefaultLayout>
         <>
-          <div className="flex justify-center items-center h-40">
-            <Spinner />
-          </div>
+          <Spinner />
           <p className="text-center text-gray-500 mt-4">Loading ticket details...</p>
         </>
       </DefaultLayout>
@@ -131,11 +129,9 @@ const AdminSupportTicketDetails = () => {
   return (
     <DefaultLayout>
       <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-2xl p-6 border border-gray-100">
-        <button
-          onClick={() => navigate(-1)}
-          className="mb-4 text-accent hover:underline flex items-center space-x-1 text-sm"
-        >
-          ← <span>Back to tickets</span>
+        <button onClick={() => navigate(-1)} className="mb-4 flex items-center space-x-1">
+          <Icon icon="mdi:arrow-left" width={36} className="cursor-pointer p-2 rounded bg-accent text-white" />
+          <span className="text-accent hover:underline text-sm">Back to tickets</span>
         </button>
 
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">

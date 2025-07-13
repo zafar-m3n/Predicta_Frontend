@@ -70,10 +70,10 @@ const SupportTickets = () => {
       </div>
 
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+        <>
           <Spinner />
-          <p className="mt-4">Loading tickets...</p>
-        </div>
+          <p className="text-center text-gray-500 mt-4">Loading tickets...</p>
+        </>
       ) : (
         <SupportTicketsTable
           tickets={tickets}

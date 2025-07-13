@@ -5,6 +5,7 @@ import Modal from "@/components/ui/Modal";
 import UploadKycDocumentModal from "./UploadKycDocumentModal";
 import Badge from "@/components/ui/Badge";
 import Icon from "@/components/ui/Icon";
+import Spinner from "@/components/ui/Spinner";
 import { formatDate } from "@/utils/formatDate";
 
 const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
@@ -16,6 +17,7 @@ const KycDocumentsTable = () => {
   const [previewModal, setPreviewModal] = useState({ open: false, documentPath: "" });
 
   const fetchDocuments = async () => {
+    setLoading(true);
     try {
       const res = await API.private.getKycDocuments();
       if (res.status === 200 && res.data.code === "OK") {
@@ -45,7 +47,14 @@ const KycDocumentsTable = () => {
     }
   };
 
-  if (loading) return <div>Loading KYC documents...</div>;
+  if (loading) {
+    return (
+      <>
+        <Spinner />
+        <p className="text-gray-500 mt-4">Loading KYC documents...</p>
+      </>
+    );
+  }
 
   return (
     <div className="bg-white shadow rounded-lg p-6 border border-gray-100 w-full">

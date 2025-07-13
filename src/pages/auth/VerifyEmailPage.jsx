@@ -74,9 +74,7 @@ const VerifyEmailPage = () => {
 
         {status === "loading" && (
           <>
-            <div className="flex justify-center items-center h-24">
-              <Spinner />
-            </div>
+            <Spinner />
             <p className="mt-4 text-gray-600">Verifying your email...</p>
           </>
         )}

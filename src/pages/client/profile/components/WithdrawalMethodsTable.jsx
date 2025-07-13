@@ -33,10 +33,10 @@ const WithdrawalMethodsTable = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-gray-500">
+      <>
         <Spinner />
-        <p className="mt-4">Loading withdrawal details...</p>
-      </div>
+        <p className="text-center text-gray-500 mt-4">Loading withdrawal details...</p>
+      </>
     );
   }
 

@@ -74,10 +74,10 @@ const ClientWithdrawals = () => {
   if (loading) {
     return (
       <DefaultLayout>
-        <div className="flex justify-center items-center h-40">
-          <Spinner />
-        </div>
-        <p className="text-center text-gray-500 mt-4">Checking eligibility...</p>
+        <Spinner />
+        <p className="text-center text-gray-500 mt-4">
+          Please wait while we check if you are eligible for a withdrawal.
+        </p>
       </DefaultLayout>
     );
   }

@@ -39,10 +39,8 @@ const ClientDeposits = () => {
   if (loading) {
     return (
       <DefaultLayout>
-        <div className="flex justify-center items-center h-40">
-          <Spinner />
-        </div>
-        <p className="text-center text-gray-500 mt-4">Loading deposit methods...</p>
+        <Spinner />
+        <p className="text-center text-gray-500 mt-4">Loading deposit options...</p>
       </DefaultLayout>
     );
   }

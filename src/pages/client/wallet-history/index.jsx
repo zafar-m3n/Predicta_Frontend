@@ -99,12 +99,12 @@ const WalletHistory = () => {
       </div>
 
       {loading ? (
-        <div className="flex flex-col items-center justify-center py-10 text-gray-500">
+        <>
           <Spinner />
-          <p className="mt-4">
+          <p className="text-center text-gray-500 mt-4">
             {activeTab === "deposits" ? "Loading deposit history..." : "Loading withdrawal history..."}
           </p>
-        </div>
+        </>
       ) : activeTab === "deposits" ? (
         <DepositHistoryTable
           deposits={deposits}

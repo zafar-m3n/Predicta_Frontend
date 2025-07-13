@@ -103,9 +103,7 @@ const DepositMethods = () => {
 
       {loading ? (
         <>
-          <div className="flex justify-center items-center h-40">
-            <Spinner />
-          </div>
+          <Spinner />
           <p className="text-center text-gray-500 mt-4">Loading deposit methods...</p>
         </>
       ) : (

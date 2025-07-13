@@ -2,17 +2,16 @@ import React from "react";
 import Modal from "@/components/ui/Modal";
 import Badge from "@/components/ui/Badge";
 import Icon from "@/components/ui/Icon";
-import { formatDate } from "@/utils/formatDate";
 
 const ViewWithdrawalRequestModal = ({ isOpen, onClose, request }) => {
   if (!request) return null;
 
-  const { User, WithdrawalMethod } = request;
+  const { WithdrawalMethod } = request;
 
   const renderField = (label, value) => (
     <div className="flex justify-between py-1">
       <span className="text-gray-500">{label}:</span>
-      <span className="text-gray-700 font-medium text-right max-w-[60%] break-words">{value || "-"}</span>
+      <span className="text-gray-700 font-medium text-right max-w-[60%] break-words">{value || "N/A"}</span>
     </div>
   );
 

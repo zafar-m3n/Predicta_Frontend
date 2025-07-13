@@ -105,7 +105,15 @@ const ProfileForm = () => {
     }
   };
 
-  if (isLoading) return <div>Loading profile...</div>;
+  if (isLoading) {
+    return (
+      <>
+        <Spinner />
+        <p className="text-gray-500 mt-4">Loading profile...</p>
+      </>
+    );
+  }
+
   if (!user) return <div>No user data available.</div>;
 
   return (
