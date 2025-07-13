@@ -19,9 +19,9 @@ const DepositRequests = () => {
     try {
       const res = await API.private.getAllDepositRequests(page);
       if (res.status === 200 && res.data.code === "OK") {
-        setRequests(res.data.requests || []);
-        setCurrentPage(res.data.page || 1);
-        setTotalPages(res.data.totalPages || 1);
+        setRequests(res.data.data.requests || []);
+        setCurrentPage(res.data.data.page || 1);
+        setTotalPages(res.data.data.totalPages || 1);
       } else {
         Notification.error(res.data.message || "Failed to fetch deposit requests.");
       }
@@ -37,7 +37,7 @@ const DepositRequests = () => {
     try {
       const res = await API.private.approveDepositRequest(request.id);
       if (res.status === 200 && res.data.code === "OK") {
-        Notification.success(res.data.message || "Deposit request approved.");
+        Notification.success(res.data.data.message || "Deposit request approved.");
         fetchRequests(currentPage);
       } else {
         Notification.error(res.data.message || "Failed to approve request.");
@@ -52,7 +52,7 @@ const DepositRequests = () => {
     try {
       const res = await API.private.rejectDepositRequest(request.id, note);
       if (res.status === 200 && res.data.code === "OK") {
-        Notification.success(res.data.message || "Deposit request rejected.");
+        Notification.success(res.data.data.message || "Deposit request rejected.");
         fetchRequests(currentPage);
       } else {
         Notification.error(res.data.message || "Failed to reject request.");
