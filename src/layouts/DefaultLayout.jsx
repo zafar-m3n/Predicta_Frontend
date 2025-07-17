@@ -92,10 +92,17 @@ const DefaultLayout = ({ children }) => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50 font-dm-sans overflow-hidden">
-      <div className="hidden md:flex flex-col w-64 bg-white shadow-xl fixed left-0 top-0 bottom-0 z-40">
-        <div className="h-20 flex justify-center items-center shadow-sm">
-          <img src={logo} alt="Logo" className="h-10 w-auto" />
+    <div className="flex h-screen bg-gray-50 font-dm-sans overflow-hidden relative">
+      <div
+        className={`
+          fixed top-0 bottom-0 left-0 w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out
+          ${menuOpen ? "translate-x-0" : "-translate-x-full"}
+          md:translate-x-0 md:relative md:z-40 md:flex
+          flex-col
+        `}
+      >
+        <div className="flex justify-between items-center p-4 shadow-sm">
+          <img src={logo} alt="Logo" className="h-8 w-auto" />
         </div>
 
         {userRole === "client" && (
@@ -178,6 +185,12 @@ const DefaultLayout = ({ children }) => {
         </nav>
       </div>
 
+      <div
+        onClick={() => setMenuOpen(false)}
+        className={`fixed inset-0 bg-black/50 z-40 md:hidden transition-opacity duration-300 ${
+          menuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
+      />
       <div className="flex-1 flex flex-col md:ml-64 h-full">
         <div
           className="hidden md:flex justify-end items-center bg-white shadow px-6 fixed top-0 right-0 left-64 z-30"
@@ -189,11 +202,11 @@ const DefaultLayout = ({ children }) => {
 
         <div className="md:hidden flex items-center justify-between p-4 bg-white shadow fixed top-0 left-0 right-0 z-30">
           <img src={logo} alt="Logo" className="h-8 w-auto" />
-          <button onClick={() => setMenuOpen(!menuOpen)}>
+          <button onClick={() => setMenuOpen(true)}>
             <Icon icon="mdi:menu" width={26} className="text-accent" />
           </button>
         </div>
-        <main className="mt-[80px] p-6 overflow-y-auto flex-1">{children}</main>
+        <main className="mt-10 md:mt-20 p-6 overflow-y-auto flex-1">{children}</main>
       </div>
     </div>
   );
