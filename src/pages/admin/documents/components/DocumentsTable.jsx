@@ -45,7 +45,8 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
 
   return (
     <>
-      <div className="overflow-x-auto rounded shadow">
+      {/* Desktop table */}
+      <div className="overflow-x-auto rounded shadow hidden md:block">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -119,6 +120,61 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
             )}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile card layout */}
+      <div className="md:hidden space-y-4">
+        {documents.length === 0 ? (
+          <div className="p-4 text-center text-gray-500 bg-white rounded shadow">No documents found.</div>
+        ) : (
+          documents.map((doc) => (
+            <div key={doc.id} className="bg-white p-4 rounded shadow space-y-2">
+              <div className="flex justify-between items-center">
+                <div className="text-sm font-semibold text-gray-700">#{doc.id}</div>
+                <Badge
+                  text={doc.status}
+                  color={doc.status === "approved" ? "green" : doc.status === "rejected" ? "red" : "yellow"}
+                  size="sm"
+                />
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>User:</strong> {doc.User?.full_name}
+                <br />
+                <span className="text-gray-500 text-xs">{doc.User?.email}</span>
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Type:</strong> {getDocumentLabel(doc.document_type)}
+              </div>
+              <div className="text-sm text-gray-600">
+                <strong>Submitted:</strong> {formatDate(doc.submitted_at)}
+              </div>
+              <div className="flex flex-wrap gap-2 pt-2">
+                <button
+                  onClick={() => handleViewDocument(doc.document_path)}
+                  className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100 transition text-sm"
+                >
+                  <Icon icon="mdi:eye" width="18" className="mr-1" /> View
+                </button>
+                {doc.status === "pending" && (
+                  <>
+                    <button
+                      onClick={() => handleActionClick("approve", doc)}
+                      className="inline-flex items-center px-2 py-1 border border-green-300 rounded hover:bg-green-50 transition text-sm"
+                    >
+                      <Icon icon="mdi:check" width="18" className="mr-1" /> Approve
+                    </button>
+                    <button
+                      onClick={() => handleActionClick("reject", doc)}
+                      className="inline-flex items-center px-2 py-1 border border-red-300 rounded hover:bg-red-50 transition text-sm"
+                    >
+                      <Icon icon="mdi:close" width="18" className="mr-1" /> Reject
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       {/* Pagination */}

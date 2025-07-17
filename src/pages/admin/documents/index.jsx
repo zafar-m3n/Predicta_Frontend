@@ -65,25 +65,27 @@ const Documents = () => {
 
   return (
     <DefaultLayout>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-semibold text-gray-800">KYC Documents</h1>
-      </div>
+      <div className="py-5">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-semibold text-gray-800">KYC Documents</h1>
+        </div>
 
-      {loading ? (
-        <>
-          <Spinner />
-          <p className="text-center text-gray-500 mt-4">Loading KYC documents...</p>
-        </>
-      ) : (
-        <DocumentsTable
-          documents={documents}
-          onApprove={handleApprove}
-          onReject={handleReject}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
-      )}
+        {loading ? (
+          <>
+            <Spinner />
+            <p className="text-center text-gray-500 mt-4">Loading KYC documents...</p>
+          </>
+        ) : (
+          <DocumentsTable
+            documents={documents}
+            onApprove={handleApprove}
+            onReject={handleReject}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
+      </div>
     </DefaultLayout>
   );
 };
