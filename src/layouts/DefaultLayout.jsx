@@ -191,11 +191,8 @@ const DefaultLayout = ({ children }) => {
           menuOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
       />
-      <div className="flex-1 flex flex-col md:ml-64 h-full">
-        <div
-          className="hidden md:flex justify-end items-center bg-white shadow px-6 fixed top-0 right-0 left-64 z-30"
-          style={{ height: "80px" }}
-        >
+      <div className="flex-1 flex flex-col h-full">
+        <div className="hidden md:flex justify-end items-center bg-white shadow px-6 fixed top-0 right-0 left-64 z-30 h-16">
           <Icon icon="mdi:account-circle" width={34} className="cursor-pointer text-gray-600" />
           <div className="bg-accent text-white text-xs font-semibold px-3 py-1 rounded-full ml-4 shadow">ENG</div>
         </div>
@@ -206,7 +203,7 @@ const DefaultLayout = ({ children }) => {
             <Icon icon="mdi:menu" width={26} className="text-accent" />
           </button>
         </div>
-        <main className="mt-10 md:mt-20 p-6 overflow-y-auto flex-1">{children}</main>
+        <main className="mt-10 p-4 md:p-6 overflow-y-auto flex-1">{children}</main>
       </div>
     </div>
   );

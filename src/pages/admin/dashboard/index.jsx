@@ -48,7 +48,7 @@ const AdminDashboard = () => {
   }
 
   const Card = ({ icon, title, value, badges = [] }) => (
-    <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-5 hover:shadow-md transition-all flex flex-col justify-between">
+    <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-4 hover:shadow-md transition-all flex flex-col justify-between">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-lg font-semibold text-gray-800">{title}</h3>
         <Icon icon={icon} width={28} className="text-accent" />
@@ -64,7 +64,7 @@ const AdminDashboard = () => {
 
   return (
     <DefaultLayout>
-      <div className="py-10">
+      <div className="py-5">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">Welcome, {userName}</h1>
         <p className="text-gray-600 mb-10">
           Here is an overview of the system analytics. Monitor user activity, transactions, and other key stats at a
