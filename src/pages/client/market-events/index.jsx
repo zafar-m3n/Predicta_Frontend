@@ -5,7 +5,7 @@ import TradingViewWidget from "@/components/TradingViewWidget";
 const MarketEvents = () => {
   return (
     <DefaultLayout>
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto py-5">
         <h1 className="text-2xl font-bold">Market Events & Live Charts</h1>
         <p className="text-gray-600 mb-6">
           Stay up-to-date with real-time market data, major events, and trends to make informed trading decisions.
