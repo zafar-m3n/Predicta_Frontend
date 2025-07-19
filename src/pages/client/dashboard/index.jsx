@@ -53,7 +53,7 @@ const Dashboard = () => {
 
   return (
     <DefaultLayout>
-      <div className="flex flex-col items-center justify-center text-center py-10">
+      <div className="flex flex-col items-center justify-center text-center py-5">
         <h1 className="text-3xl font-bold text-gray-800 mb-4">Welcome, {userName}</h1>
         <p className="text-gray-600 max-w-xl mb-10">
           This is your dashboard. From here, you can manage your wallet, transfer funds, view events, and much more. Use
