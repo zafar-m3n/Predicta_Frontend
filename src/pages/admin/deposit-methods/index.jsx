@@ -6,9 +6,12 @@ import ViewDepositMethodModal from "./components/ViewDepositMethodModal";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Spinner from "@/components/ui/Spinner";
+import useWidth from "@/hooks/useWidth";
 
 const DepositMethods = () => {
   const navigate = useNavigate();
+  const { width, breakpoints } = useWidth();
+  const isMobile = width < breakpoints.md;
 
   const [methods, setMethods] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -91,39 +94,41 @@ const DepositMethods = () => {
 
   return (
     <DefaultLayout>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Deposit Methods</h1>
-        <button
-          onClick={handleCreate}
-          className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
-        >
-          Add New Method
-        </button>
-      </div>
+      <div className="py-5">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-xl md:text-2xl font-bold">Deposit Methods</h1>
+          <button
+            onClick={handleCreate}
+            className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
+          >
+            {isMobile ? "+" : "Add New Method"}
+          </button>
+        </div>
 
-      {loading ? (
-        <>
-          <Spinner />
-          <p className="text-center text-gray-500 mt-4">Loading deposit methods...</p>
-        </>
-      ) : (
-        <DepositMethodsTable
-          methods={methods}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-          onEdit={handleEdit}
-          onView={handleView}
-          onToggleStatus={handleToggleStatus}
+        {loading ? (
+          <>
+            <Spinner />
+            <p className="text-center text-gray-500 mt-4">Loading deposit methods...</p>
+          </>
+        ) : (
+          <DepositMethodsTable
+            methods={methods}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+            onEdit={handleEdit}
+            onView={handleView}
+            onToggleStatus={handleToggleStatus}
+          />
+        )}
+
+        <ViewDepositMethodModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          method={selectedMethod}
+          details={selectedDetails}
         />
-      )}
-
-      <ViewDepositMethodModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        method={selectedMethod}
-        details={selectedDetails}
-      />
+      </div>
     </DefaultLayout>
   );
 };

@@ -21,7 +21,8 @@ const DepositMethodsTable = ({ methods, currentPage, totalPages, onPageChange, o
 
   return (
     <>
-      <div className="overflow-x-auto rounded shadow">
+      {/* Desktop table */}
+      <div className="overflow-x-auto rounded shadow hidden md:block">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -90,6 +91,62 @@ const DepositMethodsTable = ({ methods, currentPage, totalPages, onPageChange, o
         </table>
       </div>
 
+      {/* Mobile card layout */}
+      <div className="md:hidden space-y-4">
+        {methods.length === 0 ? (
+          <div className="p-4 text-center text-gray-500 bg-white rounded shadow">No deposit methods found.</div>
+        ) : (
+          methods.map((method) => (
+            <div key={method.id} className="bg-white p-4 rounded shadow space-y-2">
+              <div className="flex justify-between items-center">
+                <div className="text-sm font-semibold text-gray-700">#{method.id}</div>
+                <Badge text={method.status} color={method.status === "active" ? "green" : "red"} size="sm" />
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Name:</strong> {method.name}
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Type:</strong>{" "}
+                <Badge
+                  text={method.type}
+                  color={method.type === "bank" ? "blue" : method.type === "crypto" ? "yellow" : "gray"}
+                  size="sm"
+                />
+              </div>
+              <div className="text-sm text-gray-600">
+                <strong>Created:</strong> {formatDate(method.createdAt)}
+              </div>
+              <div className="flex flex-wrap gap-2 pt-2">
+                <button
+                  onClick={() => onView(method)}
+                  className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100 transition text-sm"
+                >
+                  <Icon icon="mdi:eye" width="18" className="mr-1" /> View
+                </button>
+                <button
+                  onClick={() => onEdit(method)}
+                  className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100 transition text-sm"
+                >
+                  <Icon icon="mdi:pencil" width="18" className="mr-1" /> Edit
+                </button>
+                <button
+                  onClick={() => handleToggleClick(method)}
+                  className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100 transition text-sm"
+                >
+                  <Icon
+                    icon={method.status === "active" ? "mdi:toggle-switch" : "mdi:toggle-switch-off-outline"}
+                    width="20"
+                    className="mr-1"
+                  />
+                  {method.status === "active" ? "Deactivate" : "Activate"}
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Pagination */}
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} className="mt-4" />
 
       {/* Confirmation Modal */}

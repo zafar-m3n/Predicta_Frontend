@@ -99,21 +99,23 @@ const AddOrEditDepositMethod = () => {
 
   return (
     <DefaultLayout>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">{pageTitle}</h1>
-        <button
-          onClick={() => navigate("/admin/deposit-methods")}
-          className={`bg-gray-200 text-gray-700 px-4 py-2 rounded font-medium transition ${
-            isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-300"
-          }`}
-          disabled={isSubmitting}
-        >
-          Back
-        </button>
-      </div>
+      <div className="py-5">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">{pageTitle}</h1>
+          <button
+            onClick={() => navigate("/admin/deposit-methods")}
+            className={`bg-gray-200 text-gray-700 px-4 py-2 rounded font-medium transition ${
+              isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-300"
+            }`}
+            disabled={isSubmitting}
+          >
+            Back
+          </button>
+        </div>
 
-      <div className="bg-white shadow rounded p-6">
-        <DepositMethodForm initialData={initialData} onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+        <div className="bg-white shadow rounded p-6">
+          <DepositMethodForm initialData={initialData} onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+        </div>
       </div>
     </DefaultLayout>
   );
