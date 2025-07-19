@@ -45,7 +45,8 @@ const UserTable = ({ users, onEdit, onDelete, onView, currentPage, totalPages, o
 
   return (
     <>
-      <div className="overflow-x-auto rounded shadow">
+      {/* Desktop table view */}
+      <div className="overflow-x-auto rounded shadow hidden md:block">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -124,6 +125,66 @@ const UserTable = ({ users, onEdit, onDelete, onView, currentPage, totalPages, o
         </table>
       </div>
 
+      {/* Mobile card layout */}
+      <div className="md:hidden space-y-4">
+        {users.length === 0 ? (
+          <div className="p-4 text-center text-gray-500 bg-white rounded shadow">No users found.</div>
+        ) : (
+          users.map((user) => (
+            <div key={user.id} className="bg-white p-4 rounded shadow space-y-2">
+              <div className="flex justify-between items-center">
+                <div className="text-sm font-semibold text-gray-700">#{user.id}</div>
+                <Badge
+                  text={user.email_verified ? "Verified" : "Not Verified"}
+                  color={user.email_verified ? "green" : "red"}
+                  size="sm"
+                />
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Name:</strong> {user.full_name}
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Email:</strong> {user.email}
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Phone:</strong> {formatPhoneNumber(user.phone_number)}
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Country:</strong> {getCountryName(user.country_code)}
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Role:</strong>{" "}
+                <Badge text={user.role} color={user.role === "admin" ? "blue" : "gray"} size="sm" />
+              </div>
+              <div className="flex flex-wrap gap-2 pt-2">
+                <button
+                  onClick={() => onView(user)}
+                  className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100 transition text-sm"
+                  title="View"
+                >
+                  <Icon icon="mdi:eye" width="18" className="mr-1" /> View
+                </button>
+                <button
+                  onClick={() => onEdit(user)}
+                  className="inline-flex items-center px-2 py-1 border border-green-300 rounded hover:bg-green-50 transition text-sm"
+                  title="Edit"
+                >
+                  <Icon icon="mdi:pencil" width="18" className="mr-1" /> Edit
+                </button>
+                <button
+                  onClick={() => confirmDelete(user)}
+                  className="inline-flex items-center px-2 py-1 border border-red-300 rounded hover:bg-red-50 transition text-sm"
+                  title="Delete"
+                >
+                  <Icon icon="mdi:trash-can" width="18" className="mr-1" /> Delete
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Pagination */}
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} className="mt-4" />
 
       {/* Delete confirmation modal */}

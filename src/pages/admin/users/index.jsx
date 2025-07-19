@@ -7,9 +7,12 @@ import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Modal from "@/components/ui/Modal";
 import Spinner from "@/components/ui/Spinner";
+import useWidth from "@/hooks/useWidth";
 
 const ManageUsers = () => {
   const navigate = useNavigate();
+  const { width, breakpoints } = useWidth();
+  const isMobile = width < breakpoints.md;
 
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -96,46 +99,48 @@ const ManageUsers = () => {
 
   return (
     <DefaultLayout>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Manage Users</h1>
-        <button
-          onClick={handleAdd}
-          className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
-        >
-          Add New User
-        </button>
-      </div>
+      <div className="py-5">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">Manage Users</h1>
+          <button
+            onClick={handleAdd}
+            className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
+          >
+            {isMobile ? "+" : "Add New User"}
+          </button>
+        </div>
 
-      {loading ? (
-        <>
-          <Spinner />
-          <p className="text-center text-gray-500 mt-4">Loading users...</p>
-        </>
-      ) : (
-        <UserTable
-          users={users}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          onView={handleView}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
-      )}
+        {loading ? (
+          <>
+            <Spinner />
+            <p className="text-center text-gray-500 mt-4">Loading users...</p>
+          </>
+        ) : (
+          <UserTable
+            users={users}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+            onView={handleView}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        )}
 
-      <Modal
-        isOpen={isFormOpen}
-        onClose={() => setIsFormOpen(false)}
-        title={isEdit ? "Edit User" : "Add New User"}
-        size="md"
-      >
-        <UserFormModal
-          onSubmit={handleSubmit}
+        <Modal
+          isOpen={isFormOpen}
           onClose={() => setIsFormOpen(false)}
-          initialData={selectedUser}
-          isEdit={isEdit}
-        />
-      </Modal>
+          title={isEdit ? "Edit User" : "Add New User"}
+          size="md"
+        >
+          <UserFormModal
+            onSubmit={handleSubmit}
+            onClose={() => setIsFormOpen(false)}
+            initialData={selectedUser}
+            isEdit={isEdit}
+          />
+        </Modal>
+      </div>
     </DefaultLayout>
   );
 };
