@@ -31,7 +31,8 @@ const WithdrawalRequestsTable = ({ requests, onApprove, onReject, currentPage, t
 
   return (
     <>
-      <div className="overflow-x-auto rounded shadow">
+      {/* Desktop table */}
+      <div className="overflow-x-auto rounded shadow hidden md:block">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -70,7 +71,7 @@ const WithdrawalRequestsTable = ({ requests, onApprove, onReject, currentPage, t
                     <br />
                     <span className="text-gray-500 text-xs">{request.User?.email}</span>
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                  <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <Badge
                       text={request.WithdrawalMethod?.type}
                       color={request.WithdrawalMethod?.type === "bank" ? "blue" : "yellow"}
@@ -78,12 +79,8 @@ const WithdrawalRequestsTable = ({ requests, onApprove, onReject, currentPage, t
                     />
                   </td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">${request.amount}</td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
-                    {request.note ? request.note : "N/A"}
-                  </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
-                    {request.admin_note ? request.admin_note : "N/A"}
-                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{request.note || "N/A"}</td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{request.admin_note || "N/A"}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <Badge
                       text={request.status}
@@ -123,6 +120,76 @@ const WithdrawalRequestsTable = ({ requests, onApprove, onReject, currentPage, t
         </table>
       </div>
 
+      {/* Mobile card layout */}
+      <div className="md:hidden space-y-4">
+        {requests.length === 0 ? (
+          <div className="p-4 text-center text-gray-500 bg-white rounded shadow">No withdrawal requests found.</div>
+        ) : (
+          requests.map((request) => (
+            <div key={request.id} className="bg-white p-4 rounded shadow space-y-2">
+              <div className="flex justify-between items-center">
+                <div className="text-sm font-semibold text-gray-700">#{request.id}</div>
+                <Badge
+                  text={request.status}
+                  color={request.status === "approved" ? "green" : request.status === "rejected" ? "red" : "yellow"}
+                  size="sm"
+                />
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>User:</strong> {request.User?.full_name}
+                <br />
+                <span className="text-gray-500 text-xs">{request.User?.email}</span>
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Method:</strong>{" "}
+                <Badge
+                  text={request.WithdrawalMethod?.type}
+                  color={request.WithdrawalMethod?.type === "bank" ? "blue" : "yellow"}
+                  size="sm"
+                />
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Amount:</strong> ${request.amount}
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>User Note:</strong> {request.note || "N/A"}
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Admin Note:</strong> {request.admin_note || "N/A"}
+              </div>
+              <div className="text-sm text-gray-600">
+                <strong>Created:</strong> {formatDate(request.createdAt)}
+              </div>
+              <div className="flex flex-wrap gap-2 pt-2">
+                <button
+                  onClick={() => handleViewClick(request)}
+                  className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100 transition text-sm"
+                >
+                  <Icon icon="mdi:eye" width="18" className="mr-1" /> View
+                </button>
+                {request.status === "pending" && (
+                  <>
+                    <button
+                      onClick={() => handleActionClick("approve", request)}
+                      className="inline-flex items-center px-2 py-1 border border-green-300 rounded hover:bg-green-50 transition text-sm"
+                    >
+                      <Icon icon="mdi:check" width="18" className="mr-1" /> Approve
+                    </button>
+                    <button
+                      onClick={() => handleActionClick("reject", request)}
+                      className="inline-flex items-center px-2 py-1 border border-red-300 rounded hover:bg-red-50 transition text-sm"
+                    >
+                      <Icon icon="mdi:close" width="18" className="mr-1" /> Reject
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Pagination */}
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} className="mt-4" />
 
       {/* Confirm modal */}
