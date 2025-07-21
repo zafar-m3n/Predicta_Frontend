@@ -76,9 +76,9 @@ const UploadKycDocumentModal = ({ onSuccess, onClose }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-white rounded-2xl">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-white dark:bg-gray-900 rounded-2xl">
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Select Document Type</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Select Document Type</label>
         <Controller
           name="document_type"
           control={control}
@@ -91,9 +91,29 @@ const UploadKycDocumentModal = ({ onSuccess, onClose }) => {
               onChange={(option) => field.onChange(option.value)}
               value={options.find((opt) => opt.value === field.value) || null}
               styles={{
-                control: (base) => ({
+                control: (base, state) => ({
                   ...base,
+                  backgroundColor: "hsl(222, 47%, 11%)", // dark bg
                   borderColor: errors.document_type ? "#f87171" : base.borderColor,
+                  color: "white",
+                }),
+                singleValue: (base) => ({
+                  ...base,
+                  color: "white",
+                }),
+                menu: (base) => ({
+                  ...base,
+                  backgroundColor: "#1f2937", // dark menu
+                  color: "white",
+                }),
+                option: (base, state) => ({
+                  ...base,
+                  backgroundColor: state.isFocused ? "#374151" : "#1f2937",
+                  color: "white",
+                }),
+                placeholder: (base) => ({
+                  ...base,
+                  color: "#9ca3af", // gray-400
                 }),
               }}
             />

@@ -109,17 +109,17 @@ const ProfileForm = () => {
     return (
       <>
         <Spinner />
-        <p className="text-gray-500 mt-4">Loading profile...</p>
+        <p className="text-gray-500 dark:text-gray-400 mt-4">Loading profile...</p>
       </>
     );
   }
 
-  if (!user) return <div>No user data available.</div>;
+  if (!user) return <div className="text-gray-700 dark:text-gray-300">No user data available.</div>;
 
   return (
-    <div className="bg-white shadow-xl rounded-2xl p-6 border border-gray-100 w-full max-w-lg mx-auto text-center">
+    <div className="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 border border-gray-100 dark:border-gray-700 w-full max-w-lg mx-auto text-center">
       <div className="flex justify-center mb-4">
-        <IconComponent icon="mdi:account-circle" width="80" className="text-gray-300" />
+        <IconComponent icon="mdi:account-circle" width="80" className="text-gray-300 dark:text-gray-600" />
       </div>
 
       <h2 className="text-2xl font-bold mb-6 text-accent">Profile Information</h2>
@@ -128,28 +128,32 @@ const ProfileForm = () => {
         <>
           <div className="space-y-6 text-left">
             <div>
-              <p className="text-gray-500 text-sm uppercase">Full Name</p>
-              <p className="text-gray-900 font-semibold text-lg">{user.full_name || "-"}</p>
-              <div className="border-b border-gray-200 mt-2" />
+              <p className="text-gray-500 dark:text-gray-400 text-sm uppercase">Full Name</p>
+              <p className="text-gray-900 dark:text-gray-100 font-semibold text-lg">{user.full_name || "-"}</p>
+              <div className="border-b border-gray-200 dark:border-gray-700 mt-2" />
             </div>
             <div>
-              <p className="text-gray-500 text-sm uppercase">Email</p>
-              <p className="text-gray-900 font-semibold text-lg">{user.email || "-"}</p>
-              <div className="border-b border-gray-200 mt-2" />
+              <p className="text-gray-500 dark:text-gray-400 text-sm uppercase">Email</p>
+              <p className="text-gray-900 dark:text-gray-100 font-semibold text-lg">{user.email || "-"}</p>
+              <div className="border-b border-gray-200 dark:border-gray-700 mt-2" />
             </div>
             <div>
-              <p className="text-gray-500 text-sm uppercase">Phone Number</p>
-              <p className="text-gray-900 font-semibold text-lg">{formatPhoneNumber(user.phone_number)}</p>
-              <div className="border-b border-gray-200 mt-2" />
+              <p className="text-gray-500 dark:text-gray-400 text-sm uppercase">Phone Number</p>
+              <p className="text-gray-900 dark:text-gray-100 font-semibold text-lg">
+                {formatPhoneNumber(user.phone_number)}
+              </p>
+              <div className="border-b border-gray-200 dark:border-gray-700 mt-2" />
             </div>
             <div>
-              <p className="text-gray-500 text-sm uppercase">Country</p>
-              <p className="text-gray-900 font-semibold text-lg">{getCountryName(user.country_code)}</p>
-              <div className="border-b border-gray-200 mt-2" />
+              <p className="text-gray-500 dark:text-gray-400 text-sm uppercase">Country</p>
+              <p className="text-gray-900 dark:text-gray-100 font-semibold text-lg">
+                {getCountryName(user.country_code)}
+              </p>
+              <div className="border-b border-gray-200 dark:border-gray-700 mt-2" />
             </div>
             <div>
-              <p className="text-gray-500 text-sm uppercase">Promo Code</p>
-              <p className="text-gray-900 font-semibold text-lg">{user.promo_code}</p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm uppercase">Promo Code</p>
+              <p className="text-gray-900 dark:text-gray-100 font-semibold text-lg">{user.promo_code || "N/A"}</p>
             </div>
           </div>
 
@@ -163,19 +167,19 @@ const ProfileForm = () => {
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 text-left mt-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
             <input
               type="text"
               {...register("full_name")}
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-                errors.full_name ? "border-red-500" : "border-gray-300"
+              className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${
+                errors.full_name ? "border-red-500" : "border-gray-300 dark:border-gray-600"
               }`}
             />
             <p className="text-red-500 text-sm">{errors.full_name?.message}</p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Country</label>
             <Controller
               name="country_code"
               control={control}
@@ -190,6 +194,16 @@ const ProfileForm = () => {
                   }}
                   className="react-select-container"
                   classNamePrefix="react-select"
+                  theme={(theme) => ({
+                    ...theme,
+                    colors: {
+                      ...theme.colors,
+                      neutral0: "hsl(222, 47%, 11%)", // bg
+                      neutral80: "white", // text
+                      primary25: "#1e293b", // hover
+                      primary: "#4f46e5", // border
+                    },
+                  })}
                 />
               )}
             />
@@ -197,7 +211,7 @@ const ProfileForm = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone Number</label>
             <Controller
               name="phone_number"
               control={control}
@@ -209,8 +223,10 @@ const ProfileForm = () => {
                     field.onChange(value);
                     setValue("phone_number", value, { shouldValidate: true });
                   }}
-                  className={`w-full ${errors.phone_number ? "border-red-500" : "border-gray-300"}`}
-                  inputClassName="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent"
+                  className={`w-full ${
+                    errors.phone_number ? "border-red-500" : "border-gray-300 dark:border-gray-600"
+                  }`}
+                  inputClassName="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                 />
               )}
             />
@@ -236,7 +252,7 @@ const ProfileForm = () => {
                 country_code: user.country_code,
               });
             }}
-            className={`w-full bg-gray-200 text-gray-700 py-2 rounded font-semibold flex items-center justify-center transition`}
+            className="w-full bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 py-2 rounded font-semibold flex items-center justify-center transition"
           >
             Cancel
           </button>

@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Icon from "@/components/ui/Icon";
-import Spinner from "@/components/ui/Spinner"; // ✅ import Spinner
+import Spinner from "@/components/ui/Spinner";
 
 const schema = Yup.object().shape({
   current_password: Yup.string().required("Current password is required"),
@@ -53,24 +53,27 @@ const ChangePasswordForm = () => {
     }
   };
 
+  const inputClass = (hasError) =>
+    `w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
+      hasError ? "border-red-500" : "border-gray-300 dark:border-gray-600"
+    } dark:bg-gray-800 dark:text-gray-100`;
+
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 border border-gray-100 w-full">
-      <h2 className="text-xl font-semibold mb-4">Change Password</h2>
+    <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg p-6 border border-gray-100 dark:border-gray-700 w-full">
+      <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">Change Password</h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Current Password */}
         <div className="relative">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Current Password</label>
           <input
             type={showCurrent ? "text" : "password"}
             placeholder="Enter current password"
             {...register("current_password")}
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-              errors.current_password ? "border-red-500" : "border-gray-300"
-            }`}
+            className={inputClass(errors.current_password)}
           />
           <span
             onClick={() => setShowCurrent(!showCurrent)}
-            className="absolute right-3 top-1/2 cursor-pointer text-gray-500"
+            className="absolute right-3 top-1/2 cursor-pointer text-gray-500 dark:text-gray-400"
           >
             <Icon icon={showCurrent ? "mdi:eye-off" : "mdi:eye"} width="20" />
           </span>
@@ -79,16 +82,17 @@ const ChangePasswordForm = () => {
 
         {/* New Password */}
         <div className="relative">
-          <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">New Password</label>
           <input
             type={showNew ? "text" : "password"}
             placeholder="Enter new password"
             {...register("new_password")}
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-              errors.new_password ? "border-red-500" : "border-gray-300"
-            }`}
+            className={inputClass(errors.new_password)}
           />
-          <span onClick={() => setShowNew(!showNew)} className="absolute right-3 top-1/2 cursor-pointer text-gray-500">
+          <span
+            onClick={() => setShowNew(!showNew)}
+            className="absolute right-3 top-1/2 cursor-pointer text-gray-500 dark:text-gray-400"
+          >
             <Icon icon={showNew ? "mdi:eye-off" : "mdi:eye"} width="20" />
           </span>
           <p className="text-red-500 text-sm">{errors.new_password?.message}</p>
@@ -96,18 +100,18 @@ const ChangePasswordForm = () => {
 
         {/* Confirm New Password */}
         <div className="relative">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Confirm New Password
+          </label>
           <input
             type={showConfirm ? "text" : "password"}
             placeholder="Re-enter new password"
             {...register("confirm_password")}
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-              errors.confirm_password ? "border-red-500" : "border-gray-300"
-            }`}
+            className={inputClass(errors.confirm_password)}
           />
           <span
             onClick={() => setShowConfirm(!showConfirm)}
-            className="absolute right-3 top-1/2 cursor-pointer text-gray-500"
+            className="absolute right-3 top-1/2 cursor-pointer text-gray-500 dark:text-gray-400"
           >
             <Icon icon={showConfirm ? "mdi:eye-off" : "mdi:eye"} width="20" />
           </span>
