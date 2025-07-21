@@ -19,6 +19,7 @@ const schema = Yup.object().shape({
   phone_number: Yup.string().required("Phone number is required"),
   country_code: Yup.string().required("Country is required"),
   password: Yup.string().min(6, "Minimum 6 characters").required("Password is required"),
+  promo_code: Yup.string(), // Optional
 });
 
 const RegisterPage = () => {
@@ -71,6 +72,7 @@ const RegisterPage = () => {
         password: data.password,
         phone_number: data.phone_number,
         country_code: data.country_code,
+        promo_code: data.promo_code || null,
       };
 
       const res = await API.private.registerUser(payload);
@@ -214,6 +216,15 @@ const RegisterPage = () => {
               <Icon icon={showPassword ? "mdi:eye-off" : "mdi:eye"} width="20" />
             </span>
             <p className="text-red-500 text-sm">{errors.password?.message}</p>
+          </div>
+
+          <div>
+            <input
+              type="text"
+              placeholder="Promo Code (Optional)"
+              {...register("promo_code")}
+              className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300`}
+            />
           </div>
 
           <p className="text-center text-xs text-gray-500">

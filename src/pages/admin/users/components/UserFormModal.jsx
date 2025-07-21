@@ -7,7 +7,7 @@ import countryList from "react-select-country-list";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import Notification from "@/components/ui/Notification";
-import Spinner from "@/components/ui/Spinner"; // ✅ Add Spinner
+import Spinner from "@/components/ui/Spinner";
 
 const roleOptions = [
   { value: "client", label: "Client" },
@@ -21,6 +21,7 @@ const schema = Yup.object().shape({
   country_code: Yup.string().required("Country is required"),
   role: Yup.string().oneOf(["client", "admin"], "Invalid role").required("Role is required"),
   password: Yup.string(),
+  promo_code: Yup.string().nullable(),
 });
 
 const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
@@ -49,6 +50,7 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
         country_code: initialData.country_code || "",
         role: initialData.role || "client",
         password: "",
+        promo_code: initialData.promo_code || "",
       });
     } else {
       reset({
@@ -58,6 +60,7 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
         country_code: "",
         role: "client",
         password: "",
+        promo_code: "",
       });
     }
   }, [initialData, reset]);
@@ -128,7 +131,7 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
       </div>
 
       {/* Country and Phone Row */}
-      <div className="flex gap-4">
+      <div className="flex flex-col md:flex-row gap-4">
         <div className="flex-1">
           <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
           <Controller
@@ -210,6 +213,22 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
           )}
         />
         <p className="text-red-500 text-sm">{errors.password?.message}</p>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Promo Code (optional)</label>
+        <Controller
+          name="promo_code"
+          control={control}
+          render={({ field }) => (
+            <input
+              {...field}
+              type="text"
+              placeholder="Enter promo code"
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+            />
+          )}
+        />
       </div>
 
       <button

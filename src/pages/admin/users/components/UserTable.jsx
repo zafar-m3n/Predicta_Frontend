@@ -59,6 +59,9 @@ const UserTable = ({ users, onEdit, onDelete, onView, currentPage, totalPages, o
               </th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Promo Code
+              </th>
+              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Verified
               </th>
               <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -88,6 +91,7 @@ const UserTable = ({ users, onEdit, onDelete, onView, currentPage, totalPages, o
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <Badge text={user.role} color={user.role === "admin" ? "blue" : "gray"} size="sm" />
                   </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{user.promo_code || "N/A"}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm">
                     <Badge
                       text={user.email_verified ? "Verified" : "Not Verified"}
@@ -155,6 +159,9 @@ const UserTable = ({ users, onEdit, onDelete, onView, currentPage, totalPages, o
               <div className="text-sm text-gray-700">
                 <strong>Role:</strong>{" "}
                 <Badge text={user.role} color={user.role === "admin" ? "blue" : "gray"} size="sm" />
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Promo Code:</strong> {user.promo_code || "N/A"}
               </div>
               <div className="flex flex-wrap gap-2 pt-2">
                 <button

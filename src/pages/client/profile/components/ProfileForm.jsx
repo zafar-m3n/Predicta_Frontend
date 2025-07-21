@@ -145,6 +145,11 @@ const ProfileForm = () => {
             <div>
               <p className="text-gray-500 text-sm uppercase">Country</p>
               <p className="text-gray-900 font-semibold text-lg">{getCountryName(user.country_code)}</p>
+              <div className="border-b border-gray-200 mt-2" />
+            </div>
+            <div>
+              <p className="text-gray-500 text-sm uppercase">Promo Code</p>
+              <p className="text-gray-900 font-semibold text-lg">{user.promo_code}</p>
             </div>
           </div>
 
