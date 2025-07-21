@@ -58,11 +58,13 @@ const VerifyEmailPage = () => {
 
   return (
     <AuthLayout>
-      <div className="bg-white shadow-2xl rounded-lg p-6 w-full max-w-md mx-auto border border-gray-100 text-center">
+      <div className="bg-white dark:bg-gray-900 shadow-2xl rounded-lg p-6 w-full max-w-md mx-auto border border-gray-100 dark:border-gray-700 text-center transition">
         {status === "idle" && (
           <>
-            <h2 className="text-2xl font-bold mb-4">Verify Your Email</h2>
-            <p className="mb-4 text-gray-600">Click the button below to verify your email address.</p>
+            <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Verify Your Email</h2>
+            <p className="mb-4 text-gray-600 dark:text-gray-400">
+              Click the button below to verify your email address.
+            </p>
             <button
               onClick={handleVerify}
               className="bg-accent text-white py-2 px-4 rounded font-semibold hover:bg-accent/90 transition"
@@ -75,14 +77,14 @@ const VerifyEmailPage = () => {
         {status === "loading" && (
           <>
             <Spinner />
-            <p className="mt-4 text-gray-600">Verifying your email...</p>
+            <p className="mt-4 text-gray-600 dark:text-gray-400">Verifying your email...</p>
           </>
         )}
 
         {status === "success" && (
           <>
-            <h2 className="text-2xl font-bold text-green-600 mb-2">Email Verified!</h2>
-            <p className="mb-4 text-gray-600">{message}</p>
+            <h2 className="text-2xl font-bold text-green-600 dark:text-green-400 mb-2">Email Verified!</h2>
+            <p className="mb-4 text-gray-600 dark:text-gray-400">{message}</p>
             <button
               onClick={handleGoToLogin}
               className="bg-accent text-white py-2 px-4 rounded font-semibold hover:bg-accent/90 transition"
@@ -94,8 +96,8 @@ const VerifyEmailPage = () => {
 
         {status === "error" && (
           <>
-            <h2 className="text-2xl font-bold text-red-600 mb-2">Verification Failed</h2>
-            <p className="mb-4 text-gray-600">{message}</p>
+            <h2 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">Verification Failed</h2>
+            <p className="mb-4 text-gray-600 dark:text-gray-400">{message}</p>
             <button
               onClick={handleGoToLogin}
               className="bg-accent text-white py-2 px-4 rounded font-semibold hover:bg-accent/90 transition"

@@ -67,11 +67,11 @@ const ResetPasswordPage = () => {
 
   return (
     <AuthLayout>
-      <div className="bg-white shadow-2xl rounded-lg p-6 w-full max-w-md mx-auto border border-gray-100">
-        <h1 className="text-2xl font-bold text-center mb-1">
+      <div className="bg-white dark:bg-gray-900 shadow-2xl rounded-lg p-6 w-full max-w-md mx-auto border border-gray-100 dark:border-gray-700 transition">
+        <h1 className="text-2xl font-bold text-center mb-1 text-gray-800 dark:text-white">
           Reset <span className="text-accent">Your Password</span>
         </h1>
-        <p className="text-center text-sm text-gray-500 mb-4">Enter your new password below.</p>
+        <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-4">Enter your new password below.</p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
           <div className="relative">
@@ -79,13 +79,13 @@ const ResetPasswordPage = () => {
               type={showPassword ? "text" : "password"}
               placeholder="New Password"
               {...register("password")}
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-                errors.password ? "border-red-500" : "border-gray-300"
+              className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-800 text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${
+                errors.password ? "border-red-500" : "border-gray-300 dark:border-gray-600"
               }`}
             />
             <span
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500 dark:text-gray-400"
             >
               <Icon icon={showPassword ? "mdi:eye-off" : "mdi:eye"} width="20" />
             </span>
@@ -97,13 +97,13 @@ const ResetPasswordPage = () => {
               type={showConfirmPassword ? "text" : "password"}
               placeholder="Confirm New Password"
               {...register("confirm_password")}
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-                errors.confirm_password ? "border-red-500" : "border-gray-300"
+              className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-800 text-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 ${
+                errors.confirm_password ? "border-red-500" : "border-gray-300 dark:border-gray-600"
               }`}
             />
             <span
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500 dark:text-gray-400"
             >
               <Icon icon={showConfirmPassword ? "mdi:eye-off" : "mdi:eye"} width="20" />
             </span>
@@ -120,7 +120,7 @@ const ResetPasswordPage = () => {
             {isSubmitting ? <Spinner color="white" /> : "Reset Password"}
           </button>
 
-          <p className="text-center text-sm">
+          <p className="text-center text-sm text-gray-700 dark:text-gray-300">
             Remembered your password?{" "}
             <a href="/login" className="text-accent font-medium">
               Login

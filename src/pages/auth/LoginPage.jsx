@@ -69,8 +69,8 @@ const LoginPage = () => {
 
   return (
     <AuthLayout>
-      <div className="bg-white shadow-2xl rounded-lg p-6 w-full max-w-md mx-auto border border-gray-100">
-        <h1 className="text-2xl font-bold text-center mb-1">
+      <div className="bg-white dark:bg-gray-800 shadow-2xl rounded-lg p-6 w-full max-w-md mx-auto border border-gray-100 dark:border-gray-700 transition-all duration-300">
+        <h1 className="text-2xl font-bold text-center mb-1 text-gray-800 dark:text-white">
           Welcome Back to <span className="text-accent">EQUITYFX</span>
         </h1>
 
@@ -80,11 +80,11 @@ const LoginPage = () => {
               type="email"
               placeholder="Enter Your Email"
               {...register("email")}
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-                errors.email ? "border-red-500" : "border-gray-300"
+              className={`w-full bg-white dark:bg-gray-900 border rounded px-3 py-2 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-accent transition ${
+                errors.email ? "border-red-500" : "border-gray-300 dark:border-gray-700"
               }`}
             />
-            <p className="text-red-500 text-sm">{errors.email?.message}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.email?.message}</p>
           </div>
 
           <div className="relative">
@@ -92,17 +92,17 @@ const LoginPage = () => {
               type={showPassword ? "text" : "password"}
               placeholder="Enter Your Password"
               {...register("password")}
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-                errors.password ? "border-red-500" : "border-gray-300"
+              className={`w-full bg-white dark:bg-gray-900 border rounded px-3 py-2 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-accent transition ${
+                errors.password ? "border-red-500" : "border-gray-300 dark:border-gray-700"
               }`}
             />
             <span
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500 dark:text-gray-300"
             >
               <Icon icon={showPassword ? "mdi:eye-off" : "mdi:eye"} width="20" />
             </span>
-            <p className="text-red-500 text-sm">{errors.password?.message}</p>
+            <p className="text-red-500 text-sm mt-1">{errors.password?.message}</p>
           </div>
 
           <div className="flex justify-end text-sm">
@@ -121,7 +121,7 @@ const LoginPage = () => {
             {isSubmitting ? <Spinner color="white" /> : "Login"}
           </button>
 
-          <p className="text-center text-sm">
+          <p className="text-center text-sm text-gray-600 dark:text-gray-400">
             Don't have an account?{" "}
             <a href="/register" className="text-accent font-medium">
               Register
