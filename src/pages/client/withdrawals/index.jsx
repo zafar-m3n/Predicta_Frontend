@@ -74,10 +74,12 @@ const ClientWithdrawals = () => {
   if (loading) {
     return (
       <DefaultLayout>
-        <Spinner />
-        <p className="text-center text-gray-500 mt-4">
-          Please wait while we check if you are eligible for a withdrawal.
-        </p>
+        <div className="py-5">
+          <Spinner />
+          <p className="text-center text-gray-500 mt-4">
+            Please wait while we check if you are eligible for a withdrawal.
+          </p>
+        </div>
       </DefaultLayout>
     );
   }
@@ -85,7 +87,7 @@ const ClientWithdrawals = () => {
   if (methods.length === 0) {
     return (
       <DefaultLayout>
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 px-4 py-5 rounded">
           <p className="text-yellow-700 font-medium">
             You do not have any active withdrawal details. Please add one from your profile page before requesting a
             withdrawal.
@@ -97,18 +99,20 @@ const ClientWithdrawals = () => {
 
   return (
     <DefaultLayout>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">Request Withdrawal</h1>
-        <p className="text-gray-600">Fill out the form to request a withdrawal from your wallet balance.</p>
-      </div>
+      <div className="py-5">
+        <div className="mb-4">
+          <h1 className="text-2xl font-bold">Request Withdrawal</h1>
+          <p className="text-gray-600">Fill out the form to request a withdrawal from your wallet balance.</p>
+        </div>
 
-      <div className="max-w-xl mx-auto">
-        <WithdrawalRequestForm
-          methods={methods}
-          onSubmit={handleFormSubmit}
-          isSubmitting={isSubmitting}
-          balance={balance}
-        />
+        <div className="max-w-xl mx-auto">
+          <WithdrawalRequestForm
+            methods={methods}
+            onSubmit={handleFormSubmit}
+            isSubmitting={isSubmitting}
+            balance={balance}
+          />
+        </div>
       </div>
     </DefaultLayout>
   );
