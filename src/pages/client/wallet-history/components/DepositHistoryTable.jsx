@@ -40,7 +40,7 @@ const DepositHistoryTable = ({ deposits, currentPage, totalPages, onPageChange }
 
   return (
     <>
-      <div className="overflow-x-auto rounded shadow">
+      <div className="overflow-x-auto rounded shadow hidden md:block">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -114,10 +114,58 @@ const DepositHistoryTable = ({ deposits, currentPage, totalPages, onPageChange }
         </table>
       </div>
 
-      {/* Pagination */}
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} className="mt-4" />
+      {/* Mobile Card Layout */}
+      <div className="md:hidden space-y-4">
+        {deposits.length === 0 ? (
+          <div className="p-4 text-center text-gray-500 bg-white rounded shadow">No deposit history found.</div>
+        ) : (
+          deposits.map((deposit) => (
+            <div key={deposit.id} className="bg-white p-4 rounded shadow space-y-2">
+              <div className="flex justify-between items-center">
+                <div className="text-sm font-semibold text-gray-700">#{deposit.id}</div>
+                <Badge text={deposit.status} color={statusColor(deposit.status)} size="sm" />
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Date:</strong> {formatDate(deposit.createdAt)}
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Amount:</strong> ${parseFloat(deposit.amount).toFixed(2)}
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Reference:</strong> {deposit.transaction_reference || "-"}
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Method:</strong> {deposit.DepositMethod?.name || "-"}
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Type:</strong>{" "}
+                {deposit.DepositMethod?.type ? (
+                  <Badge text={deposit.DepositMethod.type} color={typeColor(deposit.DepositMethod.type)} size="sm" />
+                ) : (
+                  "-"
+                )}
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Admin Note:</strong> {deposit.admin_note || "N/A"}
+              </div>
+              <div className="pt-2">
+                {deposit.proof_path ? (
+                  <button
+                    onClick={() => handleViewProof(deposit.proof_path)}
+                    className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100 transition text-sm"
+                  >
+                    <Icon icon="mdi:eye" width="18" className="mr-1" /> View Proof
+                  </button>
+                ) : (
+                  <span className="text-sm text-gray-500">No Proof</span>
+                )}
+              </div>
+            </div>
+          ))
+        )}
+      </div>
 
-      {/* Proof modal */}
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} className="mt-4" />
       <Modal
         isOpen={proofModal.open}
         onClose={() => setProofModal({ open: false, proofPath: "" })}

@@ -38,7 +38,7 @@ const WithdrawalHistoryTable = ({ withdrawals, currentPage, totalPages, onPageCh
 
   return (
     <>
-      <div className="overflow-x-auto rounded shadow">
+      <div className="overflow-x-auto rounded shadow hidden md:block">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
@@ -96,6 +96,46 @@ const WithdrawalHistoryTable = ({ withdrawals, currentPage, totalPages, onPageCh
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="md:hidden space-y-4">
+        {withdrawals.length === 0 ? (
+          <div className="p-4 text-center text-gray-500 bg-white rounded shadow">No withdrawal history found.</div>
+        ) : (
+          withdrawals.map((w) => (
+            <div key={w.id} className="bg-white p-4 rounded shadow space-y-2">
+              <div className="flex justify-between items-center">
+                <div className="text-sm font-semibold text-gray-700">#{w.id}</div>
+                <Badge text={w.status} color={statusColor(w.status)} size="sm" />
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Date:</strong> {formatDate(w.createdAt)}
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Amount:</strong> ${parseFloat(w.amount).toFixed(2)}
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Note:</strong> {w.note || "N/A"}
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Admin Note:</strong> {w.admin_note || "N/A"}
+              </div>
+              <div className="text-sm text-gray-700">
+                <strong>Type:</strong>{" "}
+                <Badge text={w.WithdrawalMethod?.type || "-"} color={typeColor(w.WithdrawalMethod?.type)} size="sm" />
+              </div>
+              <div className="pt-2">
+                <button
+                  onClick={() => handleViewMethod(w.WithdrawalMethod)}
+                  className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100 transition text-sm"
+                >
+                  <Icon icon="mdi:eye" width="18" className="mr-1" />
+                  View Details
+                </button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} className="mt-4" />
