@@ -141,11 +141,13 @@ const DefaultLayout = ({ children }) => {
                   }`}
                 >
                   <Icon icon={item.icon} width={20} className={`mr-3 ${activeParent ? "text-white" : "text-accent"}`} />
-                  <span>{item.label}</span>
+                  <span className="text-gray-700 dark:text-gray-200 hover:bg-accent/10">{item.label}</span>
                   <Icon
                     icon="mdi:chevron-down"
                     width={18}
-                    className={`ml-auto transition-transform ${transferOpen || activeParent ? "rotate-180" : ""}`}
+                    className={`ml-auto transition-transform text-gray-700 dark:text-gray-200 hover:bg-accent/10 ${
+                      transferOpen || activeParent ? "rotate-180" : ""
+                    }`}
                   />
                 </button>
                 {(transferOpen || activeParent) && (
