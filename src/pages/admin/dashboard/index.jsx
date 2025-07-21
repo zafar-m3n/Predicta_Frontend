@@ -50,7 +50,7 @@ const AdminDashboard = () => {
   }
 
   const Card = ({ icon, title, value, badges = [] }) => (
-    <div className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm p-4 hover:shadow-md transition-all flex flex-col justify-between">
+    <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm p-4 hover:shadow-md transition-all flex flex-col justify-between">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{title}</h3>
         <Icon icon={icon} width={28} className="text-accent" />

@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import Switch from "@/components/ui/Switch";
 import StyledFileInput from "@/components/ui/StyledFileInput";
 import Select from "react-select";
-import Spinner from "@/components/ui/Spinner"; 
+import Spinner from "@/components/ui/Spinner";
 
 const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
@@ -109,13 +109,13 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
     <form onSubmit={handleSubmit(internalSubmit)} className="space-y-4">
       {/* Name */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Method Name</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Method Name</label>
         <input
           type="text"
           placeholder="Enter method name"
           {...register("name")}
-          className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-            errors.name ? "border-red-500" : "border-gray-300"
+          className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-900 text-gray-800 dark:text-white ${
+            errors.name ? "border-red-500" : "border-gray-300 dark:border-gray-600"
           }`}
         />
         <p className="text-red-500 text-sm">{errors.name?.message}</p>
@@ -123,7 +123,7 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
 
       {/* Type */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Type</label>
         <Controller
           name="type"
           control={control}
@@ -139,19 +139,33 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
               styles={{
                 control: (base, state) => ({
                   ...base,
+                  backgroundColor: "var(--tw-bg-white, white)",
                   borderColor: errors.type ? "red" : state.isFocused ? "#86efac" : "#d1d5db",
                   borderRadius: "0.375rem",
                   minHeight: "2.5rem",
                   boxShadow: "none",
-                  "&:hover": {
-                    borderColor: "#86efac",
-                  },
                 }),
-                valueContainer: (base) => ({
+                menu: (base) => ({
                   ...base,
-                  paddingLeft: "0.75rem",
+                  backgroundColor: "white",
+                  color: "black",
+                }),
+                singleValue: (base) => ({
+                  ...base,
+                  color: "black",
                 }),
               }}
+              theme={(theme) => ({
+                ...theme,
+                borderRadius: 6,
+                colors: {
+                  ...theme.colors,
+                  primary25: "#f3f4f6", // hover
+                  primary: "#22c55e", // accent
+                  neutral0: "white", // input background
+                  neutral80: "black", // text color
+                },
+              })}
             />
           )}
         />
@@ -163,7 +177,7 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
         <Switch isOn={status} onToggle={setStatus} label="Active Status" />
       </div>
 
-      {/* Dynamic fields */}
+      {/* Bank Fields */}
       {selectedType === "bank" && (
         <>
           {[
@@ -174,37 +188,38 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
             { name: "ifsc_code", label: "IFSC Code / Swift Code / Agency", placeholder: "Enter code" },
           ].map((field) => (
             <div key={field.name}>
-              <label className="block text-sm font-medium text-gray-700 mb-1">{field.label}</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">{field.label}</label>
               <input
                 type="text"
                 placeholder={field.placeholder}
                 {...register(field.name)}
-                className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+                className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-white"
               />
             </div>
           ))}
         </>
       )}
 
+      {/* Crypto Fields */}
       {selectedType === "crypto" && (
         <>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Network</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Network</label>
             <input
               type="text"
               placeholder="Enter network"
               {...register("network")}
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-white"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Address</label>
             <input
               type="text"
               placeholder="Enter crypto address"
               {...register("address")}
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-white"
             />
           </div>
 
@@ -228,6 +243,7 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
         </>
       )}
 
+      {/* Other Fields */}
       {selectedType === "other" && (
         <>
           <StyledFileInput
@@ -249,11 +265,11 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
           />
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Notes</label>
             <textarea
               placeholder="Enter any additional notes"
               {...register("notes")}
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-white"
             ></textarea>
           </div>
         </>

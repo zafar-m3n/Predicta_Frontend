@@ -10,8 +10,10 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
 
   const renderField = (label, value) => (
     <div className="flex justify-between py-1">
-      <span className="text-gray-500">{label}:</span>
-      <span className="text-gray-700 font-medium text-right max-w-[60%] break-words">{value || "-"}</span>
+      <span className="text-gray-500 dark:text-gray-400">{label}:</span>
+      <span className="text-gray-700 dark:text-gray-200 font-medium text-right max-w-[60%] break-words">
+        {value || "-"}
+      </span>
     </div>
   );
 
@@ -22,12 +24,12 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
         <div>
           <div className="flex items-center mb-2">
             <Icon icon="mdi:information-outline" width="18" className="text-accent mr-1" />
-            <h3 className="text-gray-700 font-semibold">General Info</h3>
+            <h3 className="text-gray-700 dark:text-gray-200 font-semibold">General Info</h3>
           </div>
-          <div className="border-t border-gray-200 mt-1 pt-2 space-y-1">
+          <div className="border-t border-gray-200 dark:border-gray-700 mt-1 pt-2 space-y-1">
             {renderField("Name", method.name)}
             <div className="flex justify-between py-1">
-              <span className="text-gray-500">Type:</span>
+              <span className="text-gray-500 dark:text-gray-400">Type:</span>
               <Badge
                 text={method.type}
                 color={method.type === "bank" ? "blue" : method.type === "crypto" ? "yellow" : "gray"}
@@ -35,7 +37,7 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
               />
             </div>
             <div className="flex justify-between py-1">
-              <span className="text-gray-500">Status:</span>
+              <span className="text-gray-500 dark:text-gray-400">Status:</span>
               <Badge text={method.status} color={method.status === "active" ? "green" : "red"} size="sm" />
             </div>
           </div>
@@ -45,9 +47,9 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
           <div>
             <div className="flex items-center mb-2">
               <Icon icon="mdi:bank-outline" width="18" className="text-accent mr-1" />
-              <h3 className="text-gray-700 font-semibold">Bank Details</h3>
+              <h3 className="text-gray-700 dark:text-gray-200 font-semibold">Bank Details</h3>
             </div>
-            <div className="border-t border-gray-200 mt-1 pt-2 space-y-1">
+            <div className="border-t border-gray-200 dark:border-gray-700 mt-1 pt-2 space-y-1">
               {renderField("Beneficiary Name", details.beneficiary_name)}
               {renderField("Bank Name", details.bank_name)}
               {renderField("Branch", details.branch)}
@@ -61,9 +63,9 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
           <div>
             <div className="flex items-center mb-2">
               <Icon icon="mdi:currency-btc" width="18" className="text-accent mr-1" />
-              <h3 className="text-gray-700 font-semibold">Crypto Details</h3>
+              <h3 className="text-gray-700 dark:text-gray-200 font-semibold">Crypto Details</h3>
             </div>
-            <div className="border-t border-gray-200 mt-1 pt-2 space-y-1">
+            <div className="border-t border-gray-200 dark:border-gray-700 mt-1 pt-2 space-y-1">
               {renderField("Network", details.network)}
               {renderField("Address", details.address)}
               {(details.qr_code_path || details.logo_path) && (
@@ -75,7 +77,7 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
                         alt="QR Code"
                         className="w-28 h-28 object-contain rounded shadow-md"
                       />
-                      <p className="text-gray-500 text-xs mt-1">QR Code</p>
+                      <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">QR Code</p>
                     </div>
                   )}
                   {details.logo_path && (
@@ -85,7 +87,7 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
                         alt="Logo"
                         className="w-28 h-28 object-contain rounded shadow-md"
                       />
-                      <p className="text-gray-500 text-xs mt-1">Logo</p>
+                      <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">Logo</p>
                     </div>
                   )}
                 </div>
@@ -98,9 +100,9 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
           <div>
             <div className="flex items-center mb-2">
               <Icon icon="mdi:qrcode-scan" width="18" className="text-accent mr-1" />
-              <h3 className="text-gray-700 font-semibold">Other Details</h3>
+              <h3 className="text-gray-700 dark:text-gray-200 font-semibold">Other Details</h3>
             </div>
-            <div className="border-t border-gray-200 mt-1 pt-2 space-y-1">
+            <div className="border-t border-gray-200 dark:border-gray-700 mt-1 pt-2 space-y-1">
               {(details.qr_code_path || details.logo_path) && (
                 <div className="flex flex-wrap gap-6 mt-3">
                   {details.qr_code_path && (
@@ -110,7 +112,7 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
                         alt="QR Code"
                         className="w-28 h-28 object-contain rounded shadow-md"
                       />
-                      <p className="text-gray-500 text-xs mt-1">QR Code</p>
+                      <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">QR Code</p>
                     </div>
                   )}
                   {details.logo_path && (
@@ -120,7 +122,7 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
                         alt="Logo"
                         className="w-28 h-28 object-contain rounded shadow-md"
                       />
-                      <p className="text-gray-500 text-xs mt-1">Logo</p>
+                      <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">Logo</p>
                     </div>
                   )}
                 </div>

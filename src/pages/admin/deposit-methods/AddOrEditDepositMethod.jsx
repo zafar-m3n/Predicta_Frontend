@@ -24,14 +24,12 @@ const AddOrEditDepositMethod = () => {
       const res = await API.private.getDepositMethodById(id);
       if (res.status === 200 && res.data.code === "OK") {
         const { method, details } = res.data.data;
-
         const combinedData = {
           ...method,
           ...(details || {}),
           qr_code: null,
           logo: null,
         };
-
         setInitialData(combinedData);
       } else {
         Notification.error(res.data.error || "Failed to fetch deposit method.");
@@ -101,11 +99,11 @@ const AddOrEditDepositMethod = () => {
     <DefaultLayout>
       <div className="py-5">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">{pageTitle}</h1>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">{pageTitle}</h1>
           <button
             onClick={() => navigate("/admin/deposit-methods")}
-            className={`bg-gray-200 text-gray-700 px-4 py-2 rounded font-medium transition ${
-              isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-300"
+            className={`bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-4 py-2 rounded font-medium transition ${
+              isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-300 dark:hover:bg-gray-600"
             }`}
             disabled={isSubmitting}
           >
@@ -113,7 +111,7 @@ const AddOrEditDepositMethod = () => {
           </button>
         </div>
 
-        <div className="bg-white shadow rounded p-6">
+        <div className="bg-white dark:bg-gray-800 shadow rounded p-6">
           <DepositMethodForm initialData={initialData} onSubmit={handleSubmit} isSubmitting={isSubmitting} />
         </div>
       </div>
