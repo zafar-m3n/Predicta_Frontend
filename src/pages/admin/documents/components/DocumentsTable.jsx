@@ -45,70 +45,65 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
 
   return (
     <>
-      {/* Desktop table */}
       <div className="overflow-x-auto rounded shadow hidden md:block">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead className="bg-gray-50 dark:bg-gray-700">
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Document Type
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Submitted At
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
+              {["ID", "User", "Document Type", "Status", "Submitted At", "Actions"].map((heading) => (
+                <th
+                  key={heading}
+                  className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                >
+                  {heading}
+                </th>
+              ))}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
             {documents.length === 0 ? (
               <tr>
-                <td colSpan="6" className="px-4 py-6 text-center text-gray-500">
+                <td colSpan="6" className="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
                   No documents found.
                 </td>
               </tr>
             ) : (
               documents.map((doc) => (
-                <tr key={doc.id} className="odd:bg-gray-50 even:bg-white">
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{doc.id}</td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                <tr key={doc.id} className="odd:bg-gray-50 even:bg-white dark:odd:bg-gray-800 dark:even:bg-gray-700">
+                  <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-200">{doc.id}</td>
+                  <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-200">
                     {doc.User?.full_name}
                     <br />
-                    <span className="text-gray-500 text-xs">{doc.User?.email}</span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">{doc.User?.email}</span>
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">
+                  <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-200">
                     {getDocumentLabel(doc.document_type)}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                  <td className="px-4 py-3 text-sm">
                     <Badge
                       text={doc.status}
                       color={doc.status === "approved" ? "green" : doc.status === "rejected" ? "red" : "yellow"}
                       size="sm"
                     />
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600">{formatDate(doc.submitted_at)}</td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm space-x-2">
+                  <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">{formatDate(doc.submitted_at)}</td>
+                  <td className="px-4 py-3 text-sm space-x-2">
                     <button
                       onClick={() => handleViewDocument(doc.document_path)}
-                      className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100 transition"
+                      className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                     >
-                      <Icon icon="mdi:eye" width="18" />
+                      <Icon icon="mdi:eye" width="18" className="text-black dark:text-white"/>
                     </button>
                     {doc.status === "pending" && (
                       <>
                         <button
                           onClick={() => handleActionClick("approve", doc)}
-                          className="inline-flex items-center px-2 py-1 border border-green-300 rounded hover:bg-green-50 transition"
+                          className="inline-flex items-center px-2 py-1 border border-green-300 dark:border-green-600 rounded hover:bg-green-50 dark:hover:bg-green-900 transition"
                         >
                           <Icon icon="mdi:check" width="18" />
                         </button>
                         <button
                           onClick={() => handleActionClick("reject", doc)}
-                          className="inline-flex items-center px-2 py-1 border border-red-300 rounded hover:bg-red-50 transition"
+                          className="inline-flex items-center px-2 py-1 border border-red-300 dark:border-red-600 rounded hover:bg-red-50 dark:hover:bg-red-900 transition"
                         >
                           <Icon icon="mdi:close" width="18" />
                         </button>
@@ -122,36 +117,38 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
         </table>
       </div>
 
-      {/* Mobile card layout */}
+      {/* Mobile Cards */}
       <div className="md:hidden space-y-4">
         {documents.length === 0 ? (
-          <div className="p-4 text-center text-gray-500 bg-white rounded shadow">No documents found.</div>
+          <div className="p-4 text-center text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900 rounded shadow">
+            No documents found.
+          </div>
         ) : (
           documents.map((doc) => (
-            <div key={doc.id} className="bg-white p-4 rounded shadow space-y-2">
+            <div key={doc.id} className="bg-white dark:bg-gray-900 p-4 rounded shadow space-y-2">
               <div className="flex justify-between items-center">
-                <div className="text-sm font-semibold text-gray-700">#{doc.id}</div>
+                <div className="text-sm font-semibold text-gray-700 dark:text-gray-200">#{doc.id}</div>
                 <Badge
                   text={doc.status}
                   color={doc.status === "approved" ? "green" : doc.status === "rejected" ? "red" : "yellow"}
                   size="sm"
                 />
               </div>
-              <div className="text-sm text-gray-700">
+              <div className="text-sm text-gray-700 dark:text-gray-200">
                 <strong>User:</strong> {doc.User?.full_name}
                 <br />
-                <span className="text-gray-500 text-xs">{doc.User?.email}</span>
+                <span className="text-xs text-gray-500 dark:text-gray-400">{doc.User?.email}</span>
               </div>
-              <div className="text-sm text-gray-700">
+              <div className="text-sm text-gray-700 dark:text-gray-200">
                 <strong>Type:</strong> {getDocumentLabel(doc.document_type)}
               </div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-600 dark:text-gray-400">
                 <strong>Submitted:</strong> {formatDate(doc.submitted_at)}
               </div>
               <div className="flex flex-wrap gap-2 pt-2">
                 <button
                   onClick={() => handleViewDocument(doc.document_path)}
-                  className="inline-flex items-center px-2 py-1 border border-gray-300 rounded hover:bg-gray-100 transition text-sm"
+                  className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition text-sm"
                 >
                   <Icon icon="mdi:eye" width="18" className="mr-1" /> View
                 </button>
@@ -159,13 +156,13 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
                   <>
                     <button
                       onClick={() => handleActionClick("approve", doc)}
-                      className="inline-flex items-center px-2 py-1 border border-green-300 rounded hover:bg-green-50 transition text-sm"
+                      className="inline-flex items-center px-2 py-1 border border-green-300 dark:border-green-600 rounded hover:bg-green-50 dark:hover:bg-green-900 transition text-sm"
                     >
                       <Icon icon="mdi:check" width="18" className="mr-1" /> Approve
                     </button>
                     <button
                       onClick={() => handleActionClick("reject", doc)}
-                      className="inline-flex items-center px-2 py-1 border border-red-300 rounded hover:bg-red-50 transition text-sm"
+                      className="inline-flex items-center px-2 py-1 border border-red-300 dark:border-red-600 rounded hover:bg-red-50 dark:hover:bg-red-900 transition text-sm"
                     >
                       <Icon icon="mdi:close" width="18" className="mr-1" /> Reject
                     </button>
@@ -180,14 +177,14 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
       {/* Pagination */}
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} className="mt-4" />
 
-      {/* Confirm modal */}
+      {/* Confirm Modal */}
       <Modal
         isOpen={confirmModal.open}
         onClose={() => setConfirmModal({ open: false, action: null, document: null })}
         title={confirmModal.action === "approve" ? "Confirm Approval" : "Confirm Rejection"}
       >
         <div className="space-y-4">
-          <p className="text-gray-700">
+          <p className="text-gray-700 dark:text-gray-200">
             Are you sure you want to <strong>{confirmModal.action === "approve" ? "approve" : "reject"}</strong> this
             document?
           </p>
@@ -196,13 +193,13 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
               value={rejectionNote}
               onChange={(e) => setRejectionNote(e.target.value)}
               placeholder="Enter rejection note (optional)"
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent"
+              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-900 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600"
             />
           )}
           <div className="flex justify-end space-x-2">
             <button
               onClick={() => setConfirmModal({ open: false, action: null, document: null })}
-              className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 transition"
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
             >
               Cancel
             </button>
@@ -216,7 +213,7 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
         </div>
       </Modal>
 
-      {/* Preview modal */}
+      {/* Preview Modal */}
       <Modal
         isOpen={previewModal.open}
         onClose={() => setPreviewModal({ open: false, documentPath: "" })}
@@ -232,7 +229,7 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
               className="max-w-full max-h-[500px] rounded shadow"
             />
           ) : (
-            <p className="text-gray-500">No document preview available.</p>
+            <p className="text-gray-500 dark:text-gray-400">No document preview available.</p>
           )}
         </div>
       </Modal>
