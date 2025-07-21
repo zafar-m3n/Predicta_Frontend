@@ -221,6 +221,20 @@ const ProfileForm = () => {
           >
             {isSubmitting ? <Spinner color="white" /> : "Save Changes"}
           </button>
+          <button
+            type="button"
+            onClick={() => {
+              setIsEditing(false);
+              reset({
+                full_name: user.full_name,
+                phone_number: user.phone_number,
+                country_code: user.country_code,
+              });
+            }}
+            className={`w-full bg-gray-200 text-gray-700 py-2 rounded font-semibold flex items-center justify-center transition`}
+          >
+            Cancel
+          </button>
         </form>
       )}
     </div>

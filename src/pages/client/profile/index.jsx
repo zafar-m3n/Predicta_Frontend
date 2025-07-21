@@ -8,16 +8,16 @@ import ChangePasswordForm from "./components/ChangePassword";
 const Profile = () => {
   return (
     <DefaultLayout>
-      <div className="flex flex-col lg:flex-row gap-6 w-full">
-        {/* Left column: Profile form */}
-        <div className="w-full lg:w-1/3">
-          <ProfileForm />
-        </div>
-
-        <div className="w-full lg:w-2/3 flex flex-col gap-6">
-          <KycDocumentsTable />
-          <WithdrawalMethodsTable />
-          <ChangePasswordForm />
+      <div className="py-5">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
+          <div className="col-span-1">
+            <ProfileForm />
+          </div>
+          <div className="col-span-1 lg:col-span-2 space-y-6">
+            <KycDocumentsTable />
+            <WithdrawalMethodsTable />
+            <ChangePasswordForm />
+          </div>
         </div>
       </div>
     </DefaultLayout>

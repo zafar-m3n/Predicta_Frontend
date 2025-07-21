@@ -4,12 +4,15 @@ import Notification from "@/components/ui/Notification";
 import Modal from "@/components/ui/Modal";
 import AddWithdrawalMethodForm from "./AddWithdrawalMethodsForm";
 import Spinner from "@/components/ui/Spinner";
+import useWidth from "@/hooks/useWidth";
 
 const WithdrawalMethodsTable = () => {
   const [methods, setMethods] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isBankModalOpen, setIsBankModalOpen] = useState(false);
   const [isCryptoModalOpen, setIsCryptoModalOpen] = useState(false);
+  const { width, breakpoints } = useWidth();
+  const isMobile = width < breakpoints.md;
 
   const fetchMethods = async () => {
     try {
@@ -42,7 +45,6 @@ const WithdrawalMethodsTable = () => {
 
   return (
     <div className="w-full">
-      {/* Bank methods table */}
       <div className="bg-white shadow rounded-lg p-6 border border-gray-100 mb-6">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Bank Withdrawal Details</h2>
@@ -50,7 +52,7 @@ const WithdrawalMethodsTable = () => {
             onClick={() => setIsBankModalOpen(true)}
             className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
           >
-            Add Bank Details
+            {isMobile ? "+" : "Add Bank Details"}
           </button>
         </div>
 
@@ -92,7 +94,6 @@ const WithdrawalMethodsTable = () => {
         </div>
       </div>
 
-      {/* Crypto methods table */}
       <div className="bg-white shadow rounded-lg p-6 border border-gray-100">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Crypto Withdrawal Details</h2>
@@ -100,7 +101,7 @@ const WithdrawalMethodsTable = () => {
             onClick={() => setIsCryptoModalOpen(true)}
             className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
           >
-            Add Crypto Details
+            {isMobile ? "+" : "Add Crypto Details"}
           </button>
         </div>
 

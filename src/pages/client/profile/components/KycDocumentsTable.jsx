@@ -7,6 +7,7 @@ import Badge from "@/components/ui/Badge";
 import Icon from "@/components/ui/Icon";
 import Spinner from "@/components/ui/Spinner";
 import { formatDate } from "@/utils/formatDate";
+import useWidth from "@/hooks/useWidth";
 
 const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
@@ -15,6 +16,8 @@ const KycDocumentsTable = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [previewModal, setPreviewModal] = useState({ open: false, documentPath: "" });
+  const { width, breakpoints } = useWidth();
+  const isMobile = width < breakpoints.md;
 
   const fetchDocuments = async () => {
     setLoading(true);
@@ -64,7 +67,7 @@ const KycDocumentsTable = () => {
           onClick={() => setIsModalOpen(true)}
           className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
         >
-          Upload New
+          {isMobile ? "+" : "Upload New"}
         </button>
       </div>
 
