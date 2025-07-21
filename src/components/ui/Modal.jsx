@@ -37,7 +37,7 @@ const Modal = ({
             leaveTo="opacity-0"
           >
             <div
-              className={`fixed inset-0 bg-gray-900/60 ${overlayClass}`}
+              className={`fixed inset-0 bg-gray-900/60 dark:bg-black/70 ${overlayClass}`}
               onClick={closeOnOverlayClick ? onClose : null}
             />
           </Transition.Child>
@@ -55,24 +55,28 @@ const Modal = ({
               leaveTo="opacity-0 scale-95"
             >
               <Dialog.Panel
-                className={`relative bg-white rounded-lg shadow-xl overflow-hidden w-full ${sizeClasses[size]} ${modalClass}`}
+                className={`relative bg-white dark:bg-gray-900 rounded-lg shadow-xl overflow-hidden w-full ${sizeClasses[size]} ${modalClass}`}
               >
                 {closeButton && (
                   <button
                     onClick={onClose}
-                    className="absolute top-3 right-3 text-gray-800 hover:text-gray-700 focus:outline-none"
+                    className="absolute top-3 right-3 text-gray-800 dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-400 focus:outline-none"
                   >
                     <span className="sr-only">Close</span>✕
                   </button>
                 )}
 
                 {title && (
-                  <Dialog.Title className="font-dm-sans text-lg font-medium text-gray-900 px-6 py-4 border-b border-gray-300">
+                  <Dialog.Title className="font-dm-sans text-lg font-medium text-gray-900 dark:text-white px-6 py-4 border-b border-gray-300 dark:border-gray-700">
                     {title}
                   </Dialog.Title>
                 )}
-                <div className="px-6 py-4 font-dm-sans">{children}</div>
-                {footer && <div className="px-6 py-4 border-t border-gray-300 font-dm-sans">{footer}</div>}
+                <div className="px-6 py-4 font-dm-sans text-gray-800 dark:text-gray-200">{children}</div>
+                {footer && (
+                  <div className="px-6 py-4 border-t border-gray-300 dark:border-gray-700 font-dm-sans text-gray-800 dark:text-gray-200">
+                    {footer}
+                  </div>
+                )}
               </Dialog.Panel>
             </Transition.Child>
           </div>

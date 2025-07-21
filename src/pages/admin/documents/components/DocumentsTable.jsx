@@ -91,7 +91,7 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
                       onClick={() => handleViewDocument(doc.document_path)}
                       className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                     >
-                      <Icon icon="mdi:eye" width="18" className="text-black dark:text-white"/>
+                      <Icon icon="mdi:eye" width="18" className="text-black dark:text-white" />
                     </button>
                     {doc.status === "pending" && (
                       <>
@@ -120,12 +120,12 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
       {/* Mobile Cards */}
       <div className="md:hidden space-y-4">
         {documents.length === 0 ? (
-          <div className="p-4 text-center text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-900 rounded shadow">
+          <div className="p-4 text-center text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 rounded shadow">
             No documents found.
           </div>
         ) : (
           documents.map((doc) => (
-            <div key={doc.id} className="bg-white dark:bg-gray-900 p-4 rounded shadow space-y-2">
+            <div key={doc.id} className="bg-white dark:bg-gray-800 p-4 rounded shadow space-y-2">
               <div className="flex justify-between items-center">
                 <div className="text-sm font-semibold text-gray-700 dark:text-gray-200">#{doc.id}</div>
                 <Badge
@@ -148,21 +148,21 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
               <div className="flex flex-wrap gap-2 pt-2">
                 <button
                   onClick={() => handleViewDocument(doc.document_path)}
-                  className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition text-sm"
+                  className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition text-sm text-black dark:text-gray-200"
                 >
-                  <Icon icon="mdi:eye" width="18" className="mr-1" /> View
+                  <Icon icon="mdi:eye" width="18" className="me-1" /> View
                 </button>
                 {doc.status === "pending" && (
                   <>
                     <button
                       onClick={() => handleActionClick("approve", doc)}
-                      className="inline-flex items-center px-2 py-1 border border-green-300 dark:border-green-600 rounded hover:bg-green-50 dark:hover:bg-green-900 transition text-sm"
+                      className="inline-flex items-center px-2 py-1 border border-green-300 dark:border-green-600 rounded hover:bg-green-50 dark:hover:bg-green-900 transition text-sm text-green-600 dark:text-green-400"
                     >
                       <Icon icon="mdi:check" width="18" className="mr-1" /> Approve
                     </button>
                     <button
                       onClick={() => handleActionClick("reject", doc)}
-                      className="inline-flex items-center px-2 py-1 border border-red-300 dark:border-red-600 rounded hover:bg-red-50 dark:hover:bg-red-900 transition text-sm"
+                      className="inline-flex items-center px-2 py-1 border border-red-300 dark:border-red-600 rounded hover:bg-red-50 dark:hover:bg-red-900 transition text-sm text-red-600 dark:text-red-400"
                     >
                       <Icon icon="mdi:close" width="18" className="mr-1" /> Reject
                     </button>
@@ -174,10 +174,8 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
         )}
       </div>
 
-      {/* Pagination */}
       <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} className="mt-4" />
 
-      {/* Confirm Modal */}
       <Modal
         isOpen={confirmModal.open}
         onClose={() => setConfirmModal({ open: false, action: null, document: null })}
@@ -213,7 +211,6 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
         </div>
       </Modal>
 
-      {/* Preview Modal */}
       <Modal
         isOpen={previewModal.open}
         onClose={() => setPreviewModal({ open: false, documentPath: "" })}

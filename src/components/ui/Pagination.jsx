@@ -11,7 +11,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange, className = "", tex
       pages.push(i);
     }
 
-    // Keep logic for ellipsis if > 10 pages
     return pages.length > 10 ? [1, 2, 3, "...", totalPages - 2, totalPages - 1, totalPages] : pages;
   };
 
@@ -30,10 +29,10 @@ const Pagination = ({ currentPage, totalPages, onPageChange, className = "", tex
         disabled={currentPage === 1}
         className={`flex items-center justify-center w-10 h-10 border rounded ${
           currentPage === 1
-            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+            ? "bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-gray-800 dark:text-gray-500"
             : text
-            ? "bg-white hover:bg-gray-100"
-            : "bg-black text-white"
+            ? "bg-white hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 dark:text-white"
+            : "bg-black text-white dark:bg-white dark:text-black"
         }`}
       >
         {text ? "Previous" : <Icon icon="heroicons:chevron-left" className="w-4 h-4" />}
@@ -45,7 +44,11 @@ const Pagination = ({ currentPage, totalPages, onPageChange, className = "", tex
           onClick={() => handleClick(page)}
           disabled={page === "..."}
           className={`px-4 py-2 text-sm ${
-            page === "..." ? "cursor-not-allowed" : page === currentPage ? "font-bold text-accent" : "hover:underline"
+            page === "..."
+              ? "cursor-not-allowed text-gray-400 dark:text-gray-500"
+              : page === currentPage
+              ? "font-bold text-accent"
+              : "hover:underline text-gray-800 dark:text-white"
           }`}
         >
           {page}
@@ -57,10 +60,10 @@ const Pagination = ({ currentPage, totalPages, onPageChange, className = "", tex
         disabled={currentPage === totalPages}
         className={`flex items-center justify-center w-10 h-10 border rounded ${
           currentPage === totalPages
-            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+            ? "bg-gray-100 text-gray-400 cursor-not-allowed dark:bg-gray-800 dark:text-gray-500"
             : text
-            ? "bg-white hover:bg-gray-100"
-            : "bg-black text-white"
+            ? "bg-white hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 dark:text-white"
+            : "bg-black text-white dark:bg-white dark:text-black"
         }`}
       >
         {text ? "Next" : <Icon icon="heroicons:chevron-right" className="w-4 h-4" />}
