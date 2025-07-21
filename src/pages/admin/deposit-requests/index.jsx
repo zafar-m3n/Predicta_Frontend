@@ -73,13 +73,13 @@ const DepositRequests = () => {
     <DefaultLayout>
       <div className="py-5">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-semibold text-gray-800">Deposit Requests</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Deposit Requests</h1>
         </div>
 
         {loading ? (
           <>
             <Spinner />
-            <p className="text-center text-gray-500 mt-4">Loading deposit requests...</p>
+            <p className="text-center text-gray-500 dark:text-gray-400 mt-4">Loading deposit requests...</p>
           </>
         ) : (
           <DepositRequestsTable

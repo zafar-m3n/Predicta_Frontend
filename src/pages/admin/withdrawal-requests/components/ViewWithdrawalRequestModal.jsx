@@ -10,8 +10,10 @@ const ViewWithdrawalRequestModal = ({ isOpen, onClose, request }) => {
 
   const renderField = (label, value) => (
     <div className="flex justify-between py-1">
-      <span className="text-gray-500">{label}:</span>
-      <span className="text-gray-700 font-medium text-right max-w-[60%] break-words">{value || "N/A"}</span>
+      <span className="text-gray-500 dark:text-gray-400">{label}:</span>
+      <span className="text-gray-700 dark:text-gray-200 font-medium text-right max-w-[60%] break-words">
+        {value || "N/A"}
+      </span>
     </div>
   );
 
@@ -22,12 +24,12 @@ const ViewWithdrawalRequestModal = ({ isOpen, onClose, request }) => {
         <div>
           <div className="flex items-center mb-2">
             <Icon icon="mdi:information-outline" width="18" className="text-accent mr-1" />
-            <h3 className="text-gray-700 font-semibold">General Info</h3>
+            <h3 className="text-gray-700 dark:text-gray-200 font-semibold">General Info</h3>
           </div>
-          <div className="border-t border-gray-200 mt-1 pt-2 space-y-1">
+          <div className="border-t border-gray-200 dark:border-gray-600 mt-1 pt-2 space-y-1">
             {renderField("Amount", `$${request.amount}`)}
             <div className="flex justify-between py-1">
-              <span className="text-gray-500">Status:</span>
+              <span className="text-gray-500 dark:text-gray-400">Status:</span>
               <Badge
                 text={request.status}
                 color={request.status === "approved" ? "green" : request.status === "rejected" ? "red" : "yellow"}
@@ -42,18 +44,18 @@ const ViewWithdrawalRequestModal = ({ isOpen, onClose, request }) => {
         <div>
           <div className="flex items-center mb-2">
             <Icon icon="mdi:bank-transfer" width="18" className="text-accent mr-1" />
-            <h3 className="text-gray-700 font-semibold">Withdrawal Details</h3>
+            <h3 className="text-gray-700 dark:text-gray-200 font-semibold">Withdrawal Details</h3>
           </div>
-          <div className="border-t border-gray-200 mt-1 pt-2 space-y-1">
+          <div className="border-t border-gray-200 dark:border-gray-600 mt-1 pt-2 space-y-1">
             <div className="flex justify-between py-1">
-              <span className="text-gray-500">Type:</span>
+              <span className="text-gray-500 dark:text-gray-400">Type:</span>
               <Badge
                 text={WithdrawalMethod?.type}
                 color={WithdrawalMethod?.type === "bank" ? "blue" : "yellow"}
                 size="sm"
               />
             </div>
-            {WithdrawalMethod?.type === "bank" && (
+            {WithdrawalMethod?.type === "bank" ? (
               <>
                 {renderField("Bank Name", WithdrawalMethod.bank_name)}
                 {renderField("Branch", WithdrawalMethod.branch)}
@@ -62,8 +64,7 @@ const ViewWithdrawalRequestModal = ({ isOpen, onClose, request }) => {
                 {renderField("SWIFT Code", WithdrawalMethod.swift_code)}
                 {renderField("IBAN", WithdrawalMethod.iban)}
               </>
-            )}
-            {WithdrawalMethod?.type !== "bank" && (
+            ) : (
               <>
                 {renderField("Network", WithdrawalMethod.network)}
                 {renderField("Wallet Address", WithdrawalMethod.wallet_address)}

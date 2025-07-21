@@ -74,13 +74,13 @@ const WithdrawalRequests = () => {
     <DefaultLayout>
       <div className="py-5">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-semibold text-gray-800">Withdrawal Requests</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Withdrawal Requests</h1>
         </div>
 
         {loading ? (
           <>
             <Spinner />
-            <p className="text-center text-gray-500 mt-4">Loading withdrawal requests...</p>
+            <p className="text-center text-gray-500 dark:text-gray-400 mt-4">Loading withdrawal requests...</p>
           </>
         ) : (
           <WithdrawalRequestsTable
