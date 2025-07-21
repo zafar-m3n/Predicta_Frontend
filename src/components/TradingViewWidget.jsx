@@ -1,6 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
+import { ThemeContext } from "@/context/ThemeContext";
 
 const MarketData = () => {
+  const { theme } = useContext(ThemeContext);
+
   useEffect(() => {
     const script = document.createElement("script");
     script.type = "text/javascript";
@@ -49,18 +52,20 @@ const MarketData = () => {
       ],
       showSymbolLogo: true,
       isTransparent: true,
-      colorTheme: "light",
+      colorTheme: theme === "dark" ? "dark" : "light",
       locale: "en",
     });
 
     const container = document.getElementById("tradingview-market-data-widget");
-    container.innerHTML = "";
-    container.appendChild(script);
+    if (container) {
+      container.innerHTML = "";
+      container.appendChild(script);
+    }
 
     return () => {
-      container.innerHTML = "";
+      if (container) container.innerHTML = "";
     };
-  }, []);
+  }, [theme]);
 
   return (
     <div className="tradingview-widget-container w-full max-w-5xl mx-auto my-8 h-full overflow-y-auto">

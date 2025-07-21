@@ -75,25 +75,27 @@ const WalletHistory = () => {
     <DefaultLayout>
       <div className="py-5">
         <div className="mb-4">
-          <h1 className="text-2xl font-bold">Wallet History</h1>
-          <p className="text-gray-600">Track your deposit and withdrawal activities here.</p>
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Wallet History</h1>
+          <p className="text-gray-600 dark:text-gray-400">Track your deposit and withdrawal activities here.</p>
         </div>
 
         <div className="flex space-x-4 mb-4">
           <button
             onClick={() => setActiveTab("deposits")}
-            className={`px-4 py-2 rounded font-medium ${
-              activeTab === "deposits" ? "bg-accent text-white shadow" : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+            className={`px-4 py-2 rounded font-medium transition ${
+              activeTab === "deposits"
+                ? "bg-accent text-white shadow"
+                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
             }`}
           >
             Deposits
           </button>
           <button
             onClick={() => setActiveTab("withdrawals")}
-            className={`px-4 py-2 rounded font-medium ${
+            className={`px-4 py-2 rounded font-medium transition ${
               activeTab === "withdrawals"
                 ? "bg-accent text-white shadow"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
             }`}
           >
             Withdrawals
@@ -103,7 +105,7 @@ const WalletHistory = () => {
         {loading ? (
           <>
             <Spinner />
-            <p className="text-center text-gray-500 mt-4">
+            <p className="text-center text-gray-500 dark:text-gray-400 mt-4">
               {activeTab === "deposits" ? "Loading deposit history..." : "Loading withdrawal history..."}
             </p>
           </>

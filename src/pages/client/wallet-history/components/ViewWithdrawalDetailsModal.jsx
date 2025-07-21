@@ -19,23 +19,25 @@ const ViewWithdrawalDetailsModal = ({ isOpen, onClose, method }) => {
 
   const renderField = (label, value) => (
     <div className="flex justify-between py-1">
-      <span className="text-gray-500">{label}:</span>
-      <span className="text-gray-700 font-medium text-right max-w-[60%] break-words">{value || "N/A"}</span>
+      <span className="text-gray-500 dark:text-gray-400">{label}:</span>
+      <span className="text-gray-700 dark:text-gray-200 font-medium text-right max-w-[60%] break-words">
+        {value || "N/A"}
+      </span>
     </div>
   );
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Withdrawal Details" size="lg" centered>
-      <div className="space-y-6">
+      <div className="space-y-6 text-sm">
         {/* Method Info */}
         <div>
           <div className="flex items-center mb-2">
             <Icon icon="mdi:bank-transfer" width="18" className="text-accent mr-1" />
-            <h3 className="text-gray-700 font-semibold">Withdrawal Details</h3>
+            <h3 className="text-gray-700 dark:text-gray-100 font-semibold">Withdrawal Details</h3>
           </div>
-          <div className="border-t border-gray-200 mt-1 pt-2 space-y-1">
+          <div className="border-t border-gray-200 dark:border-gray-700 mt-1 pt-2 space-y-1">
             <div className="flex justify-between py-1">
-              <span className="text-gray-500">Type:</span>
+              <span className="text-gray-500 dark:text-gray-400">Type:</span>
               <Badge text={method.type} color={typeColor(method.type)} size="sm" />
             </div>
 
@@ -63,11 +65,11 @@ const ViewWithdrawalDetailsModal = ({ isOpen, onClose, method }) => {
         <div>
           <div className="flex items-center mb-2">
             <Icon icon="mdi:information-outline" width="18" className="text-accent mr-1" />
-            <h3 className="text-gray-700 font-semibold">Status Info</h3>
+            <h3 className="text-gray-700 dark:text-gray-100 font-semibold">Status Info</h3>
           </div>
-          <div className="border-t border-gray-200 mt-1 pt-2 space-y-1">
+          <div className="border-t border-gray-200 dark:border-gray-700 mt-1 pt-2 space-y-1">
             <div className="flex justify-between py-1">
-              <span className="text-gray-500">Status:</span>
+              <span className="text-gray-500 dark:text-gray-400">Status:</span>
               <Badge text={method.status} color={method.status === "active" ? "green" : "red"} size="sm" />
             </div>
           </div>

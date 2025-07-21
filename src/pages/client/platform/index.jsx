@@ -27,7 +27,7 @@ const downloads = [
     description: "No installation needed — trade directly in your browser.",
     icon: "mdi:web",
     color: "text-indigo-600",
-    link: "https://terminal.tradepronet.com/", // ✅ Updated
+    link: "https://terminal.tradepronet.com/",
     button: "Open WebTrader",
   },
 ];
@@ -36,8 +36,8 @@ const Platform = () => {
   return (
     <DefaultLayout>
       <div className="py-5">
-        <h1 className="text-2xl font-bold text-secondary mb-2">Download Our Trading Platform</h1>
-        <p className="text-gray-600 mb-6">
+        <h1 className="text-2xl font-bold text-secondary dark:text-white mb-2">Download Our Trading Platform</h1>
+        <p className="text-gray-600 dark:text-gray-400 mb-6">
           Choose the platform that best suits your trading style. Whether you're on desktop, mobile, or browser — we've
           got you covered.
         </p>
@@ -45,11 +45,11 @@ const Platform = () => {
           {downloads.map(({ id, title, description, icon, color, link, button }) => (
             <div
               key={id}
-              className="bg-white shadow-md rounded-lg p-6 flex flex-col items-center text-center hover:shadow-lg transition"
+              className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-md rounded-lg p-6 flex flex-col items-center text-center hover:shadow-lg transition"
             >
               <Icon icon={icon} width="48" className={`${color} mb-4`} />
-              <h2 className="text-lg font-bold text-secondary mb-2">{title}</h2>
-              <p className="text-sm text-gray-600 mb-4">{description}</p>
+              <h2 className="text-lg font-bold text-secondary dark:text-white mb-2">{title}</h2>
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{description}</p>
               <a
                 href={link}
                 target={id === "web" ? "_blank" : "_self"}

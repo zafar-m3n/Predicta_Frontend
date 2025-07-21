@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { ThemeContext } from "@/context/ThemeContext";
 
 import RegisterPage from "@/pages/auth/RegisterPage";
 import LoginPage from "@/pages/auth/LoginPage";
@@ -35,6 +36,7 @@ import token from "@/lib/utilities";
 import Platform from "@/pages/client/platform";
 
 function App() {
+  const { theme } = useContext(ThemeContext);
   const clientRoutes = [
     { path: "/dashboard", element: DashboardPage },
     { path: "/deposits", element: DepositsPage },
@@ -134,6 +136,7 @@ function App() {
         closeOnClick={true}
         draggable={false}
         pauseOnHover={true}
+        theme={theme}
       />
     </>
   );
