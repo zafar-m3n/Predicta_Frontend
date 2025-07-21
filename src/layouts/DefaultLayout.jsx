@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/Icon";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 import logo from "@/assets/logo.png";
 import token from "@/lib/utilities";
 import API from "@/services/index";
@@ -93,14 +94,12 @@ const DefaultLayout = ({ children }) => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-50 font-dm-sans overflow-hidden relative">
+    <div className="flex h-screen bg-gray-50 font-dm-sans overflow-hidden relative dark:bg-gray-900">
       <div
-        className={`
-          fixed top-0 bottom-0 left-0 w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out
-          ${menuOpen ? "translate-x-0" : "-translate-x-full"}
-          md:translate-x-0 md:relative md:z-40 md:flex
-          flex-col
-        `}
+        className={`fixed top-0 bottom-0 left-0 w-64 bg-white dark:bg-gray-800 shadow-xl z-50 transform transition-transform duration-300 ease-in-out
+        ${menuOpen ? "translate-x-0" : "-translate-x-full"}
+        md:translate-x-0 md:relative md:z-40 md:flex
+        flex-col`}
       >
         <div className="flex justify-between items-center p-4 shadow-sm">
           <img src={logo} alt="Logo" className="h-8 w-auto" />
@@ -108,7 +107,7 @@ const DefaultLayout = ({ children }) => {
 
         {userRole === "client" && (
           <div className="p-5 bg-gradient-to-r from-accent/20 to-transparent rounded m-4 shadow">
-            <p className="text-xs text-gray-500 uppercase tracking-widest">My Wallet</p>
+            <p className="text-xs text-gray-500 dark:text-gray-300 uppercase tracking-widest">My Wallet</p>
             <p className="font-semibold text-xl text-accent mt-1">${parseFloat(walletBalance).toFixed(2)}</p>
           </div>
         )}
@@ -120,7 +119,7 @@ const DefaultLayout = ({ children }) => {
                 <button
                   key={idx}
                   onClick={handleLogout}
-                  className="flex items-center w-full p-2 rounded-lg text-gray-700 hover:bg-accent/10 transition"
+                  className="flex items-center w-full p-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-accent/10 transition"
                 >
                   <Icon icon={item.icon} width={20} className="mr-3 text-accent" />
                   <span>{item.label}</span>
@@ -155,7 +154,7 @@ const DefaultLayout = ({ children }) => {
                         className={`block py-2 px-3 rounded-lg transition ${
                           location.pathname === child.path
                             ? "bg-accent text-white font-semibold shadow"
-                            : "text-gray-600 hover:bg-accent/10"
+                            : "text-gray-600 dark:text-gray-300 hover:bg-accent/10"
                         }`}
                       >
                         {child.label}
@@ -171,7 +170,7 @@ const DefaultLayout = ({ children }) => {
                 className={`flex items-center p-2 rounded-lg transition ${
                   location.pathname === item.path
                     ? "bg-accent text-white font-semibold shadow"
-                    : "text-gray-700 hover:bg-accent/10"
+                    : "text-gray-700 dark:text-gray-200 hover:bg-accent/10"
                 }`}
               >
                 <Icon
@@ -193,17 +192,21 @@ const DefaultLayout = ({ children }) => {
         }`}
       />
       <div className="flex-1 flex flex-col h-full">
-        <div className="hidden md:flex justify-end items-center bg-white shadow px-6 fixed top-0 right-0 left-64 z-30 h-16">
-          <Icon icon="mdi:account-circle" width={34} className="cursor-pointer text-gray-600" />
+        <div className="hidden md:flex justify-end items-center bg-white dark:bg-gray-800 shadow px-6 fixed top-0 right-0 left-64 z-30 h-16">
+          <ThemeToggle />
+          <Icon icon="mdi:account-circle" width={34} className="cursor-pointer text-gray-600 dark:text-gray-300 ml-4" />
           <div className="bg-accent text-white text-xs font-semibold px-3 py-1 rounded-full ml-4 shadow">ENG</div>
         </div>
-
-        <div className="md:hidden flex items-center justify-between p-4 bg-white shadow fixed top-0 left-0 right-0 z-30">
+        <div className="md:hidden flex items-center justify-between p-4 bg-white dark:bg-gray-800 shadow fixed top-0 left-0 right-0 z-30">
           <img src={logo} alt="Logo" className="h-8 w-auto" />
-          <button onClick={() => setMenuOpen(true)}>
-            <Icon icon="mdi:menu" width={26} className="text-accent" />
-          </button>
+          <div className="flex items-center gap-4">
+            <ThemeToggle />
+            <button onClick={() => setMenuOpen(true)}>
+              <Icon icon="mdi:menu" width={26} className="text-accent" />
+            </button>
+          </div>
         </div>
+
         <main className="mt-10 p-4 md:p-6 overflow-y-auto flex-1">{children}</main>
       </div>
     </div>

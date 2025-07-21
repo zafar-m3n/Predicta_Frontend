@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-manrope: "Manrope", sans-serif;
   --font-dm-sans: "DM Sans", sans-serif;
