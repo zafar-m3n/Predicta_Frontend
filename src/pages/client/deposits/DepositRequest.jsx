@@ -72,25 +72,29 @@ const DepositRequest = () => {
   if (loading) {
     return (
       <DefaultLayout>
-        <Spinner />
-        <p className="text-center text-gray-500 mt-4">Loading deposit details...</p>
+        <div className="py-5">
+          <Spinner />
+          <p className="text-center text-gray-500 mt-4">Loading deposit details...</p>
+        </div>
       </DefaultLayout>
     );
   }
 
   return (
     <DefaultLayout>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold">{method.name} Deposit</h1>
-        <p className="text-gray-600">Fill out the form and upload your payment proof.</p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div>
-          <DepositRequestForm onSubmit={handleFormSubmit} isSubmitting={false} method={method} />
+      <div className="py-5">
+        <div className="mb-4">
+          <h1 className="text-2xl font-bold">{method.name} Deposit</h1>
+          <p className="text-gray-600">Fill out the form and upload your payment proof.</p>
         </div>
-        <div>
-          <DepositMethodDetails method={method} />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <DepositRequestForm onSubmit={handleFormSubmit} isSubmitting={false} method={method} />
+          </div>
+          <div>
+            <DepositMethodDetails method={method} />
+          </div>
         </div>
       </div>
     </DefaultLayout>

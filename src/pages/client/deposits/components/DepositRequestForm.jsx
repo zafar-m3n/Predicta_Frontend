@@ -58,7 +58,7 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(internalSubmit)} className="space-y-6 bg-white shadow-lg rounded-2xl p-8">
+    <form onSubmit={handleSubmit(internalSubmit)} className="space-y-6 bg-white shadow-lg rounded-2xl p-6">
       <h2 className="text-2xl font-bold text-gray-800">Submit Deposit Request</h2>
 
       <div>

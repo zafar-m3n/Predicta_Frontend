@@ -39,8 +39,10 @@ const ClientDeposits = () => {
   if (loading) {
     return (
       <DefaultLayout>
-        <Spinner />
-        <p className="text-center text-gray-500 mt-4">Loading deposit options...</p>
+        <div className="py-5">
+          <Spinner />
+          <p className="text-center text-gray-500 mt-4">Loading deposit options...</p>
+        </div>
       </DefaultLayout>
     );
   }
@@ -48,7 +50,7 @@ const ClientDeposits = () => {
   if (methods.length === 0) {
     return (
       <DefaultLayout>
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 px-4 py-5 rounded">
           <p className="text-yellow-700 font-medium">
             No deposit methods available at this time. Please check back later or contact support for assistance.
           </p>
@@ -59,7 +61,7 @@ const ClientDeposits = () => {
 
   return (
     <DefaultLayout>
-      <div className="mb-6">
+      <div className="py-5">
         <h1 className="text-2xl font-bold">Deposit Option</h1>
         <p className="text-gray-600">Choose a deposit method to continue.</p>
       </div>
