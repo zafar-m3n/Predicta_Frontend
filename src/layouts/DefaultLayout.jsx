@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { ThemeContext } from "@/context/ThemeContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/Icon";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import logo from "@/assets/logo.png";
+import logoWhite from "@/assets/logo-white.png";
 import token from "@/lib/utilities";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
@@ -39,6 +41,7 @@ const adminMenu = [
 ];
 
 const DefaultLayout = ({ children }) => {
+  const { theme } = useContext(ThemeContext);
   const [menuOpen, setMenuOpen] = useState(false);
   const [transferOpen, setTransferOpen] = useState(false);
   const [walletBalance, setWalletBalance] = useState(0);
@@ -102,7 +105,7 @@ const DefaultLayout = ({ children }) => {
         flex-col`}
       >
         <div className="flex justify-between items-center p-4 shadow-sm">
-          <img src={logo} alt="Logo" className="h-8 w-auto" />
+          <img src={theme === "dark" ? logoWhite : logo} alt="Logo" className="h-8 w-auto" />
         </div>
 
         {userRole === "client" && (
@@ -198,7 +201,8 @@ const DefaultLayout = ({ children }) => {
           <div className="bg-accent text-white text-xs font-semibold px-3 py-1 rounded-full ml-4 shadow">ENG</div>
         </div>
         <div className="md:hidden flex items-center justify-between p-4 bg-white dark:bg-gray-800 shadow fixed top-0 left-0 right-0 z-30">
-          <img src={logo} alt="Logo" className="h-8 w-auto" />
+          <img src={theme === "dark" ? logoWhite : logo} alt="Logo" className="h-8 w-auto" />
+
           <div className="flex items-center gap-4">
             <ThemeToggle />
             <button onClick={() => setMenuOpen(true)}>
