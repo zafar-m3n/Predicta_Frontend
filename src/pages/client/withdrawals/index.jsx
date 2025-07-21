@@ -76,7 +76,7 @@ const ClientWithdrawals = () => {
       <DefaultLayout>
         <div className="py-5">
           <Spinner />
-          <p className="text-center text-gray-500 mt-4">
+          <p className="text-center text-gray-500 dark:text-gray-400 mt-4">
             Please wait while we check if you are eligible for a withdrawal.
           </p>
         </div>
@@ -87,8 +87,8 @@ const ClientWithdrawals = () => {
   if (methods.length === 0) {
     return (
       <DefaultLayout>
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 px-4 py-5 rounded">
-          <p className="text-yellow-700 font-medium">
+        <div className="bg-yellow-50 dark:bg-yellow-900 border-l-4 border-yellow-400 dark:border-yellow-300 px-4 py-5 rounded">
+          <p className="text-yellow-700 dark:text-yellow-200 font-medium">
             You do not have any active withdrawal details. Please add one from your profile page before requesting a
             withdrawal.
           </p>
@@ -101,8 +101,10 @@ const ClientWithdrawals = () => {
     <DefaultLayout>
       <div className="py-5">
         <div className="mb-4">
-          <h1 className="text-2xl font-bold">Request Withdrawal</h1>
-          <p className="text-gray-600">Fill out the form to request a withdrawal from your wallet balance.</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Request Withdrawal</h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Fill out the form to request a withdrawal from your wallet balance.
+          </p>
         </div>
 
         <div className="max-w-xl mx-auto">
