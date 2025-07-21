@@ -69,7 +69,6 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
     setIsSubmitting(true);
     try {
       const res = await onSubmit(data);
-
       if (res?.status === 200 && res.data?.code === "OK") {
         Notification.success(`User ${isEdit ? "updated" : "created"} successfully.`);
         onClose();
@@ -92,7 +91,7 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
     <form onSubmit={handleSubmit(submitHandler)} className="space-y-4 text-left">
       {/* Full Name */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Full Name</label>
         <Controller
           name="full_name"
           control={control}
@@ -101,8 +100,8 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
               {...field}
               type="text"
               placeholder="Enter full name"
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-                errors.full_name ? "border-red-500" : "border-gray-300"
+              className={`w-full border rounded px-3 py-2 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-accent ${
+                errors.full_name ? "border-red-500" : "border-gray-300 dark:border-gray-600"
               }`}
             />
           )}
@@ -112,7 +111,7 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
 
       {/* Email */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Email</label>
         <Controller
           name="email"
           control={control}
@@ -121,8 +120,8 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
               {...field}
               type="email"
               placeholder="Enter email"
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-                errors.email ? "border-red-500" : "border-gray-300"
+              className={`w-full border rounded px-3 py-2 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-accent ${
+                errors.email ? "border-red-500" : "border-gray-300 dark:border-gray-600"
               }`}
             />
           )}
@@ -133,7 +132,7 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
       {/* Country and Phone Row */}
       <div className="flex flex-col md:flex-row gap-4">
         <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Country</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Country</label>
           <Controller
             name="country_code"
             control={control}
@@ -148,13 +147,23 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
                 }}
                 className="react-select-container"
                 classNamePrefix="react-select"
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    backgroundColor: "var(--tw-bg-opacity)" in document.documentElement.style ? "inherit" : "#1f2937",
+                    borderColor: errors.country_code ? "#f87171" : undefined,
+                    color: "inherit",
+                  }),
+                  singleValue: (base) => ({ ...base, color: "inherit" }),
+                  menu: (base) => ({ ...base, backgroundColor: "white", color: "black" }),
+                }}
               />
             )}
           />
           <p className="text-red-500 text-sm">{errors.country_code?.message}</p>
         </div>
         <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Phone Number</label>
           <Controller
             name="phone_number"
             control={control}
@@ -166,8 +175,8 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
                   field.onChange(value);
                   setValue("phone_number", value, { shouldValidate: true });
                 }}
-                className={`w-full ${errors.phone_number ? "border-red-500" : "border-gray-300"}`}
-                inputClassName="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent"
+                className={`w-full ${errors.phone_number ? "border-red-500" : "border-gray-300 dark:border-gray-600"}`}
+                inputClassName="w-full border rounded px-3 py-2 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-accent"
               />
             )}
           />
@@ -177,7 +186,7 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
 
       {/* Role */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Role</label>
         <Controller
           name="role"
           control={control}
@@ -189,6 +198,16 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
               onChange={(option) => field.onChange(option.value)}
               value={roleOptions.find((opt) => opt.value === field.value) || null}
               classNamePrefix="react-select"
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  backgroundColor: "var(--tw-bg-opacity)" in document.documentElement.style ? "inherit" : "#1f2937",
+                  borderColor: errors.role ? "#f87171" : undefined,
+                  color: "inherit",
+                }),
+                singleValue: (base) => ({ ...base, color: "inherit" }),
+                menu: (base) => ({ ...base, backgroundColor: "white", color: "black" }),
+              }}
             />
           )}
         />
@@ -197,7 +216,7 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
 
       {/* Password */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
           {isEdit ? "New Password (optional)" : "Password"}
         </label>
         <Controller
@@ -208,15 +227,16 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
               {...field}
               type="password"
               placeholder={isEdit ? "Leave blank to keep current" : "Enter password"}
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent"
+              className="w-full border rounded px-3 py-2 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-accent border-gray-300 dark:border-gray-600"
             />
           )}
         />
         <p className="text-red-500 text-sm">{errors.password?.message}</p>
       </div>
 
+      {/* Promo Code */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Promo Code (optional)</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Promo Code (optional)</label>
         <Controller
           name="promo_code"
           control={control}
@@ -225,12 +245,13 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
               {...field}
               type="text"
               placeholder="Enter promo code"
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300"
+              className="w-full border rounded px-3 py-2 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-accent border-gray-300 dark:border-gray-600"
             />
           )}
         />
       </div>
 
+      {/* Submit */}
       <button
         type="submit"
         disabled={isSubmitting}
