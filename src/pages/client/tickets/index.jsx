@@ -5,6 +5,7 @@ import CreateSupportTicketForm from "./components/CreateSupportTicketForm";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Spinner from "@/components/ui/Spinner";
+import useWidth from "@/hooks/useWidth";
 
 const SupportTickets = () => {
   const [tickets, setTickets] = useState([]);
@@ -12,6 +13,8 @@ const SupportTickets = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const { width, breakpoints } = useWidth();
+  const isMobile = width < breakpoints.md;
 
   // Fetch tickets
   const fetchTickets = async (page = 1) => {
@@ -59,36 +62,37 @@ const SupportTickets = () => {
 
   return (
     <DefaultLayout>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Support Tickets</h1>
-        <button
-          onClick={handleOpenCreateModal}
-          className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
-        >
-          New Ticket
-        </button>
-      </div>
+      <div className="py-5">
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-2xl font-bold">Support Tickets</h1>
+          <button
+            onClick={handleOpenCreateModal}
+            className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
+          >
+            {isMobile ? "+" : "New Ticket"}
+          </button>
+        </div>
 
-      {loading ? (
-        <>
-          <Spinner />
-          <p className="text-center text-gray-500 mt-4">Loading tickets...</p>
-        </>
-      ) : (
-        <SupportTicketsTable
-          tickets={tickets}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
+        {loading ? (
+          <>
+            <Spinner />
+            <p className="text-center text-gray-500 mt-4">Loading tickets...</p>
+          </>
+        ) : (
+          <SupportTicketsTable
+            tickets={tickets}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
+
+        <CreateSupportTicketForm
+          isOpen={isCreateModalOpen}
+          onClose={handleCloseCreateModal}
+          onSuccess={handleTicketCreated}
         />
-      )}
-
-      {/* Create Ticket Modal */}
-      <CreateSupportTicketForm
-        isOpen={isCreateModalOpen}
-        onClose={handleCloseCreateModal}
-        onSuccess={handleTicketCreated}
-      />
+      </div>
     </DefaultLayout>
   );
 };

@@ -89,7 +89,7 @@ const CreateSupportTicketForm = ({ isOpen, onClose, onSuccess }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Create New Support Ticket" size="md" centered>
+    <Modal isOpen={isOpen} onClose={onClose} title="Create New Support Ticket" size="md">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Subject */}
         <div>
