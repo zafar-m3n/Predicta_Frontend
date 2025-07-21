@@ -44,13 +44,13 @@ const CustomerSupport = () => {
     <DefaultLayout>
       <div className="py-5">
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold">Customer Support Tickets</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Customer Support Tickets</h1>
         </div>
 
         {loading ? (
           <>
             <Spinner />
-            <p className="text-center text-gray-500 mt-4">Loading tickets...</p>
+            <p className="text-center text-gray-500 dark:text-gray-400 mt-4">Loading tickets...</p>
           </>
         ) : (
           <AdminSupportTicketsTable
