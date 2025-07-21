@@ -20,6 +20,7 @@ const clientMenu = [
   { label: "Wallet History", icon: "mdi:wallet-outline", path: "/wallet-history" },
   { label: "Tickets", icon: "mdi:headset", path: "/tickets" },
   { label: "Market Events", icon: "mdi:calendar-month-outline", path: "/market-events" },
+  { label: "Platform", icon: "streamline-cyber:multi-platform-2", path: "/platform" },
   { label: "Profile", icon: "mdi:account-outline", path: "/profile" },
   { label: "Logout", icon: "mdi:logout", action: "logout" },
 ];

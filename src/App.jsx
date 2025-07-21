@@ -32,6 +32,7 @@ import AdminSupportTicketDetails from "@/pages/admin/support/AdminSupportTicketD
 import PrivateRoute from "@/components/PrivateRoute";
 import PublicRoute from "@/components/PublicRoute";
 import token from "@/lib/utilities";
+import Platform from "@/pages/client/platform";
 
 function App() {
   const clientRoutes = [
@@ -44,6 +45,7 @@ function App() {
     { path: "/tickets/:ticketId", element: SupportTicketDetails },
     { path: "/market-events", element: MarketEventsPage },
     { path: "/profile", element: ProfilePage },
+    { path: "/platform", element: Platform },
   ];
 
   const adminRoutes = [
