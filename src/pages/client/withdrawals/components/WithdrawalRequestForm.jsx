@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import Select from "react-select";
 import Spinner from "@/components/ui/Spinner";
+import { ThemeContext } from "@/context/ThemeContext";
 
 const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => {
+  const { theme } = useContext(ThemeContext);
   const [selectedAmount, setSelectedAmount] = useState(null);
   const predefinedAmounts = [100, 200, 500, 1000];
 
@@ -52,6 +54,8 @@ const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => 
     label: method.type === "bank" ? `${method.bank_name} (${method.account_number})` : `${method.network} Wallet`,
   }));
 
+  const isDark = theme === "dark";
+
   return (
     <form
       onSubmit={handleSubmit(internalSubmit)}
@@ -78,30 +82,47 @@ const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => 
               styles={{
                 control: (base, state) => ({
                   ...base,
-                  backgroundColor: "#fff",
-                  borderColor: errors.method_id ? "#f87171" : "#d1d5db",
-                  color: "#111827",
+                  backgroundColor: isDark ? "#1E2939" : "#fff",
+                  borderColor: errors.method_id
+                    ? "#f87171"
+                    : state.isFocused
+                    ? "#309f6d"
+                    : isDark
+                    ? "#4b5563"
+                    : "#d1d5db",
+                  color: isDark ? "#f9fafb" : "#111827",
                   boxShadow: "none",
+                  "&:hover": {
+                    borderColor: "#309f6d",
+                  },
                 }),
                 menu: (base) => ({
                   ...base,
-                  backgroundColor: "#fff",
-                  color: "#111827",
+                  backgroundColor: isDark ? "#1E2939" : "#fff",
+                  color: isDark ? "#f9fafb" : "#111827",
                   zIndex: 50,
                 }),
                 singleValue: (base) => ({
                   ...base,
-                  color: "#111827",
+                  color: isDark ? "#f9fafb" : "#111827",
                 }),
                 option: (base, { isFocused, isSelected }) => ({
                   ...base,
-                  backgroundColor: isSelected ? "#2563eb" : isFocused ? "#f3f4f6" : "#fff",
-                  color: "#111827",
+                  backgroundColor: isSelected
+                    ? "#309f6d"
+                    : isFocused
+                    ? isDark
+                      ? "#4b5563"
+                      : "#f3f4f6"
+                    : isDark
+                    ? "#1E2939"
+                    : "#fff",
+                  color: isSelected ? "#ffffff" : isDark ? "#f9fafb" : "#111827",
                   cursor: "pointer",
                 }),
                 placeholder: (base) => ({
                   ...base,
-                  color: "#6b7280",
+                  color: isDark ? "#9ca3af" : "#6b7280",
                 }),
               }}
             />
