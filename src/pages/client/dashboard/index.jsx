@@ -52,7 +52,7 @@ const Dashboard = () => {
   return (
     <DefaultLayout>
       <div className="flex flex-col items-center justify-center text-center py-5">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">Welcome, {userName}</h1>
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-4">Welcome, {userName}</h1>
         <p className="text-gray-600 dark:text-gray-400 max-w-xl mb-10">
           This is your dashboard. From here, you can manage your wallet, transfer funds, view events, and much more. Use
           the cards below to navigate quickly.
@@ -63,10 +63,10 @@ const Dashboard = () => {
             <div
               key={index}
               onClick={() => navigate(card.route)}
-              className="cursor-pointer bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all p-6 flex flex-col items-center text-center"
+              className="cursor-pointer bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all p-4 flex flex-col items-center justify-between text-center"
             >
               <Icon icon={card.icon} width={40} className="text-accent mb-4" />
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">{card.title}</h3>
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{card.title}</h3>
               <p className="text-gray-600 dark:text-gray-400 text-sm">{card.description}</p>
             </div>
           ))}

@@ -36,8 +36,8 @@ const Platform = () => {
   return (
     <DefaultLayout>
       <div className="py-5">
-        <h1 className="text-2xl font-bold text-secondary dark:text-white mb-2">Download Our Trading Platform</h1>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-2">Download Our Trading Platform</h1>
+        <p className="text-gray-600 dark:text-gray-400 mb-10">
           Choose the platform that best suits your trading style. Whether you're on desktop, mobile, or browser — we've
           got you covered.
         </p>
@@ -45,16 +45,16 @@ const Platform = () => {
           {downloads.map(({ id, title, description, icon, color, link, button }) => (
             <div
               key={id}
-              className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-md rounded-lg p-6 flex flex-col items-center text-center hover:shadow-lg transition"
+              className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all p-4 flex flex-col items-center justify-between text-center"
             >
-              <Icon icon={icon} width="48" className={`${color} mb-4`} />
-              <h2 className="text-lg font-bold text-secondary dark:text-white mb-2">{title}</h2>
-              <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">{description}</p>
+              <Icon icon={icon} width={48} className={`${color} mb-4`} />
+              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{title}</h3>
+              <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">{description}</p>
               <a
                 href={link}
                 target={id === "web" ? "_blank" : "_self"}
                 rel="noopener noreferrer"
-                className="mt-auto inline-block px-4 py-2 bg-accent text-white font-semibold rounded hover:bg-accent/90 transition"
+                className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
                 download={id !== "web"}
               >
                 {button}
