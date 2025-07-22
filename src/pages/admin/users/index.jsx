@@ -101,7 +101,7 @@ const ManageUsers = () => {
     <DefaultLayout>
       <div className="py-5">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Manage Users</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-200">Manage Users</h1>
           <button
             onClick={handleAdd}
             className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
@@ -113,7 +113,7 @@ const ManageUsers = () => {
         {loading ? (
           <>
             <Spinner />
-            <p className="text-center text-gray-500 dark:text-gray-400 mt-4">Loading users...</p>
+            <p className="text-center text-gray-500 mt-4">Loading users...</p>
           </>
         ) : (
           <UserTable

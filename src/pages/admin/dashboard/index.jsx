@@ -43,7 +43,7 @@ const AdminDashboard = () => {
       <DefaultLayout>
         <div className="flex flex-col items-center justify-center py-20">
           <Spinner />
-          <p className="text-center text-gray-500 dark:text-gray-400 mt-4">Loading dashboard stats...</p>
+          <p className="text-center text-gray-500 mt-4">Loading dashboard stats...</p>
         </div>
       </DefaultLayout>
     );
@@ -52,10 +52,10 @@ const AdminDashboard = () => {
   const Card = ({ icon, title, value, badges = [] }) => (
     <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm p-4 hover:shadow-md transition-all flex flex-col justify-between">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-white">{title}</h3>
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{title}</h3>
         <Icon icon={icon} width={28} className="text-accent" />
       </div>
-      <p className="text-3xl font-bold text-gray-900 dark:text-white mb-3">{value}</p>
+      <p className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-3">{value}</p>
       <div className="flex flex-wrap gap-2">
         {badges.map((badge, idx) => (
           <Badge key={idx} text={badge.text} color={badge.color} size="sm" />
@@ -67,7 +67,7 @@ const AdminDashboard = () => {
   return (
     <DefaultLayout>
       <div className="py-5">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">Welcome, {userName}</h1>
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-2">Welcome, {userName}</h1>
         <p className="text-gray-600 dark:text-gray-400 mb-10">
           Here is an overview of the system analytics. Monitor user activity, transactions, and other key stats at a
           glance.

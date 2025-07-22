@@ -71,7 +71,7 @@ const ViewUser = () => {
     return (
       <DefaultLayout>
         <Spinner />
-        <p className="text-center text-gray-500 dark:text-gray-400 mt-4">Loading user...</p>
+        <p className="text-center text-gray-500 mt-4">Loading user...</p>
       </DefaultLayout>
     );
   }
@@ -79,7 +79,7 @@ const ViewUser = () => {
   if (!user) {
     return (
       <DefaultLayout>
-        <div className="text-gray-500 dark:text-gray-400 text-center py-10">No user data found.</div>
+        <div className="text-gray-700 dark:text-gray-300 text-center py-10">No user data found.</div>
       </DefaultLayout>
     );
   }
@@ -88,10 +88,9 @@ const ViewUser = () => {
     <DefaultLayout>
       <div className="py-5">
         <div className="grid grid-cols-1 xl:grid-cols-3 grid-rows-2 space-y-6 md:space-y-0 md:gap-6 max-w-7xl mx-auto">
-          {/* Profile Card */}
-          <div className="row-span-2 bg-white dark:bg-gray-900 dark:border-gray-800 shadow-xl rounded-2xl p-6 border border-gray-100 flex flex-col space-y-6 text-center">
+          <div className="row-span-2 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-xl rounded-2xl p-6 border border-gray-100 flex flex-col space-y-6 text-center">
             <div className="flex justify-center mb-4">
-              <IconComponent icon="mdi:account-circle" width="80" className="text-gray-300 dark:text-gray-600" />
+              <IconComponent icon="mdi:account-circle" width="80" className="text-gray-600 dark:text-gray-400" />
             </div>
             <h2 className="text-2xl font-bold mb-6 text-accent">Profile Information</h2>
             <div className="space-y-6 text-left">
@@ -100,46 +99,47 @@ const ViewUser = () => {
                 { label: "Email", value: user.email },
                 { label: "Phone Number", value: formatPhoneNumber(user.phone_number) },
                 { label: "Country", value: getCountryName(user.country_code) },
-                { label: "Promo Code", value: user.promo_code || "-" },
+                { label: "Promo Code", value: user.promo_code || "N/A" },
               ].map((field, i) => (
                 <div key={i}>
-                  <p className="text-gray-500 dark:text-gray-400 text-sm uppercase">{field.label}</p>
-                  <p className="text-gray-900 dark:text-gray-100 font-semibold text-lg">{field.value}</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm uppercase">{field.label}</p>
+                  <p className="text-gray-800 dark:text-gray-200 font-semibold text-lg">{field.value}</p>
                   <div className="border-b border-gray-200 dark:border-gray-700 mt-2" />
                 </div>
               ))}
-              <div>
-                <p className="text-gray-500 dark:text-gray-400 text-sm uppercase">Role</p>
-                <Badge text={user.role} color={user.role === "admin" ? "blue" : "gray"} />
-                <div className="border-b border-gray-200 dark:border-gray-700 mt-2" />
-              </div>
-              <div>
-                <p className="text-gray-500 dark:text-gray-400 text-sm uppercase">Email Verified</p>
-                <Badge
-                  text={user.email_verified ? "Verified" : "Not Verified"}
-                  color={user.email_verified ? "green" : "red"}
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm uppercase mb-1">Email Verified</p>
+                  <Badge
+                    text={user.email_verified ? "Verified" : "Not Verified"}
+                    color={user.email_verified ? "green" : "red"}
+                  />
+                </div>
+                <div>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm uppercase mb-1">Role</p>
+                  <Badge text={user.role} color={user.role === "admin" ? "blue" : "gray"} />
+                </div>
               </div>
             </div>
           </div>
 
           {/* KYC Documents */}
-          <div className="col-span-2 bg-white dark:bg-gray-900 dark:border-gray-800 shadow-xl rounded-2xl p-6 border border-gray-100 overflow-x-auto space-y-6">
+          <div className="col-span-2 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-xl rounded-2xl p-6 border border-gray-100 overflow-x-auto space-y-6">
             <h2 className="text-xl font-bold text-accent">KYC Documents</h2>
-            <table className="min-w-full text-sm divide-y divide-gray-200 dark:divide-gray-700">
-              <thead className="bg-gray-50 dark:bg-gray-800">
+            <table className="min-w-full text-sm divide-y divide-gray-300 dark:divide-gray-700">
+              <thead className="bg-gray-50 dark:bg-gray-950">
                 <tr>
                   {["Type", "Status", "Submitted", "Note", "Actions"].map((header) => (
                     <th
                       key={header}
-                      className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase"
+                      className="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase"
                     >
                       {header}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+              <tbody className="divide-y divide-gray-300 dark:divide-gray-700">
                 {user.KycDocuments.length === 0 ? (
                   <tr>
                     <td colSpan="5" className="px-4 py-4 text-center text-gray-500 dark:text-gray-400">
@@ -148,8 +148,13 @@ const ViewUser = () => {
                   </tr>
                 ) : (
                   user.KycDocuments.map((doc) => (
-                    <tr key={doc.id}>
-                      <td className="px-4 py-2 text-gray-700 dark:text-white">{getDocumentLabel(doc.document_type)}</td>
+                    <tr
+                      key={doc.id}
+                      className="even:bg-gray-300 even:dark:bg-gray-700 odd:bg-gray-100 odd:dark:bg-gray-900"
+                    >
+                      <td className="px-4 py-2 text-gray-800 dark:text-gray-200">
+                        {getDocumentLabel(doc.document_type)}
+                      </td>
                       <td className="px-4 py-2">
                         <Badge
                           text={doc.status}
@@ -157,14 +162,14 @@ const ViewUser = () => {
                           size="sm"
                         />
                       </td>
-                      <td className="px-4 py-2 text-gray-700 dark:text-gray-300">{formatDate(doc.submitted_at)}</td>
-                      <td className="px-4 py-2 text-gray-700 dark:text-gray-300">{doc.admin_note || "N/A"}</td>
+                      <td className="px-4 py-2 text-gray-800 dark:text-gray-200">{formatDate(doc.submitted_at)}</td>
+                      <td className="px-4 py-2 text-gray-800 dark:text-gray-200">{doc.admin_note || "N/A"}</td>
                       <td className="px-4 py-2">
                         <button
                           onClick={() => setPreviewModal({ open: true, documentPath: doc.document_path })}
-                          className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-700 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                          className="inline-flex items-center px-2 py-1 border border-gray-400 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition"
                         >
-                          <IconComponent icon="mdi:eye" width="18" className="text-gray-700 dark:text-gray-300" />
+                          <IconComponent icon="mdi:eye" width="18" className="text-gray-800 dark:text-gray-200" />
                         </button>
                       </td>
                     </tr>
@@ -175,22 +180,22 @@ const ViewUser = () => {
           </div>
 
           {/* Withdrawal Details */}
-          <div className="col-span-2 bg-white dark:bg-gray-900 dark:border-gray-800 shadow-xl rounded-2xl p-6 border border-gray-100 space-y-6">
+          <div className="col-span-2 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-xl rounded-2xl p-6 border border-gray-100 overflow-x-auto space-y-6">
             <h2 className="text-xl font-bold text-accent">Withdrawal Details</h2>
             {user.WithdrawalMethods?.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {user.WithdrawalMethods.map((method) => (
                   <div
                     key={method.id}
-                    className="p-5 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-md transition transform hover:-translate-y-0.5"
+                    className="p-5 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-md transition transform hover:-translate-y-0.5"
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <p className="text-gray-600 dark:text-gray-300 text-sm font-medium uppercase">
+                      <p className="text-gray-800 dark:text-gray-200 text-sm font-medium uppercase">
                         {method.type === "bank" ? "Bank" : "Crypto"}
                       </p>
                       <Badge text={method.status} color={method.status === "active" ? "green" : "gray"} />
                     </div>
-                    <div className="space-y-1 text-gray-800 dark:text-gray-100 text-sm">
+                    <div className="space-y-1 text-gray-800 dark:text-gray-200 text-sm">
                       {method.type === "bank" ? (
                         <>
                           <p>
@@ -227,7 +232,7 @@ const ViewUser = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 dark:text-gray-400">No withdrawal details added.</p>
+              <p className="text-gray-600 dark:text-gray-400">No withdrawal details added.</p>
             )}
           </div>
         </div>
@@ -249,7 +254,7 @@ const ViewUser = () => {
               className="max-w-full max-h-[500px] rounded shadow"
             />
           ) : (
-            <p className="text-gray-500 dark:text-gray-400">No document available.</p>
+            <p className="text-gray-600 dark:text-gray-400">No document available.</p>
           )}
         </div>
       </Modal>

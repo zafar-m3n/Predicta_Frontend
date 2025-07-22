@@ -96,7 +96,7 @@ const DepositMethods = () => {
     <DefaultLayout>
       <div className="py-5">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Deposit Methods</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-200">Deposit Methods</h1>
           <button
             onClick={handleCreate}
             className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
@@ -108,7 +108,7 @@ const DepositMethods = () => {
         {loading ? (
           <>
             <Spinner />
-            <p className="text-center text-gray-500 dark:text-gray-400 mt-4">Loading deposit methods...</p>
+            <p className="text-center text-gray-500 mt-4">Loading deposit methods...</p>
           </>
         ) : (
           <DepositMethodsTable

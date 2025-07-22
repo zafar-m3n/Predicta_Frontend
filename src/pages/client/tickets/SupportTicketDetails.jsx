@@ -115,11 +115,9 @@ const SupportTicketDetails = () => {
     <DefaultLayout>
       <div className="py-5">
         <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
-          <button
-            onClick={() => navigate(-1)}
-            className="mb-4 text-accent hover:underline flex items-center space-x-1 text-sm"
-          >
-            ← <span>Back to tickets</span>
+          <button onClick={() => navigate(-1)} className="mb-4 flex items-center space-x-1">
+            <Icon icon="mdi:arrow-left" width={36} className="cursor-pointer p-2 rounded bg-accent text-white" />
+            <span className="text-accent hover:underline text-sm">Back to tickets</span>
           </button>
 
           <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
