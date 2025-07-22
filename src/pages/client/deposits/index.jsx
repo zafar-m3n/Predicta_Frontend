@@ -39,9 +39,9 @@ const ClientDeposits = () => {
   if (loading) {
     return (
       <DefaultLayout>
-        <div className="py-5">
+        <div className="py-5 flex flex-col items-center justify-center text-center">
           <Spinner />
-          <p className="text-center text-gray-500 mt-4">Loading deposit options...</p>
+          <p className="text-gray-500 dark:text-gray-400 mt-4">Loading deposit options...</p>
         </div>
       </DefaultLayout>
     );
@@ -50,8 +50,8 @@ const ClientDeposits = () => {
   if (methods.length === 0) {
     return (
       <DefaultLayout>
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 px-4 py-5 rounded">
-          <p className="text-yellow-700 font-medium">
+        <div className="bg-yellow-50 dark:bg-yellow-100/10 border-l-4 border-yellow-400 px-4 py-5 rounded text-yellow-700 dark:text-yellow-300">
+          <p className="font-medium">
             No deposit methods available at this time. Please check back later or contact support for assistance.
           </p>
         </div>
@@ -62,8 +62,8 @@ const ClientDeposits = () => {
   return (
     <DefaultLayout>
       <div className="py-5">
-        <h1 className="text-2xl font-bold">Deposit Option</h1>
-        <p className="text-gray-600">Choose a deposit method to continue.</p>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-1">Deposit Option</h1>
+        <p className="text-gray-600 dark:text-gray-400">Choose a deposit method to continue.</p>
       </div>
 
       <DepositMethodsList methods={methods} onSelect={handleSelectMethod} />

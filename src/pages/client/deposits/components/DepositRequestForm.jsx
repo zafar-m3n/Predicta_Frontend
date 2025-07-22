@@ -58,11 +58,14 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(internalSubmit)} className="space-y-6 bg-white shadow-lg rounded-2xl p-6">
-      <h2 className="text-2xl font-bold text-gray-800">Submit Deposit Request</h2>
+    <form
+      onSubmit={handleSubmit(internalSubmit)}
+      className="space-y-6 bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6"
+    >
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Submit Deposit Request</h2>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">Select Amount</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Amount</label>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {predefinedAmounts.map((amt) => (
             <button
@@ -72,7 +75,7 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
               className={`border rounded-lg py-2 font-semibold transition-all ${
                 selectedAmount === amt
                   ? "bg-accent text-white border-accent"
-                  : "bg-gray-50 text-gray-700 border-gray-300 hover:bg-gray-100"
+                  : "bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600"
               }`}
             >
               ${amt}
@@ -84,7 +87,7 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
             className={`border rounded-lg py-2 font-semibold transition-all ${
               selectedAmount === "other"
                 ? "bg-accent text-white border-accent"
-                : "bg-gray-50 text-gray-700 border-gray-300 hover:bg-gray-100"
+                : "bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600"
             }`}
           >
             Other
@@ -94,13 +97,15 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
 
       {selectedAmount === "other" && (
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Enter Custom Amount (USD)</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Enter Custom Amount (USD)
+          </label>
           <input
             type="text"
             placeholder="e.g., 150"
             {...register("amount")}
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-              errors.amount ? "border-red-500" : "border-gray-300"
+            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-800 text-gray-800 dark:text-white ${
+              errors.amount ? "border-red-500" : "border-gray-300 dark:border-gray-600"
             }`}
           />
           <p className="text-red-500 text-sm">{errors.amount?.message}</p>
@@ -116,13 +121,13 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
       />
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Transaction Reference</label>
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Transaction Reference</label>
         <input
           type="text"
           placeholder="Enter transaction reference number"
           {...register("transaction_reference")}
-          className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-            errors.transaction_reference ? "border-red-500" : "border-gray-300"
+          className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-800 text-gray-800 dark:text-white ${
+            errors.transaction_reference ? "border-red-500" : "border-gray-300 dark:border-gray-600"
           }`}
         />
         <p className="text-red-500 text-sm">{errors.transaction_reference?.message}</p>

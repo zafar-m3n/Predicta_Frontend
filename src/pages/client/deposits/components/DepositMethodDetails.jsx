@@ -5,8 +5,8 @@ const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
 const Field = ({ label, value }) => (
   <div className="flex flex-col space-y-1 border-b border-dashed py-2">
-    <span className="text-gray-500 text-sm">{label}</span>
-    <span className="font-medium text-gray-800 break-words">{value || "-"}</span>
+    <span className="text-gray-500 dark:text-gray-400 text-sm">{label}</span>
+    <span className="font-medium text-gray-800 dark:text-white break-words">{value || "-"}</span>
   </div>
 );
 
@@ -28,10 +28,10 @@ const DepositMethodDetails = ({ method }) => {
   };
 
   return (
-    <div className="bg-white shadow-xl rounded-2xl p-6 space-y-5 border border-gray-100">
+    <div className="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 space-y-5 border border-gray-100 dark:border-gray-700">
       <div className="flex items-center gap-2 mb-2">
         <Icon icon="mdi:bank-transfer" className="text-accent" width="22" />
-        <h2 className="text-xl font-bold text-gray-800">Deposit Details</h2>
+        <h2 className="text-xl font-bold text-gray-800 dark:text-white">Deposit Details</h2>
       </div>
 
       {method.type === "bank" && details && (
@@ -47,19 +47,19 @@ const DepositMethodDetails = ({ method }) => {
       {method.type === "crypto" && details && (
         <div className="space-y-3">
           <div>
-            <p className="text-gray-500 text-sm mb-1">Network</p>
-            <p className="font-medium text-gray-800">{details.network || "-"}</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mb-1">Network</p>
+            <p className="font-medium text-gray-800 dark:text-white">{details.network || "-"}</p>
           </div>
 
           <div>
-            <p className="text-gray-500 text-sm mb-1">Address</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mb-1">Address</p>
             <div className="flex">
               <input
                 type="text"
                 value={details.address || ""}
                 readOnly
                 disabled
-                className="flex-1 border border-gray-300 rounded-l px-3 py-2 text-gray-700 bg-gray-50 focus:outline-none"
+                className="flex-1 border border-gray-300 dark:border-gray-700 rounded-l px-3 py-2 text-gray-700 dark:text-gray-100 bg-gray-50 dark:bg-gray-800 focus:outline-none"
               />
               <button
                 type="button"
@@ -76,9 +76,9 @@ const DepositMethodDetails = ({ method }) => {
               <img
                 src={`${apiBaseUrl}/${details.qr_code_path.replace("\\", "/")}`}
                 alt="QR Code"
-                className="w-40 h-40 object-contain border rounded-lg shadow-md"
+                className="w-40 h-40 object-contain border rounded-lg shadow-md bg-white"
               />
-              <p className="text-gray-500 text-sm mt-1">Scan to copy address</p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">Scan to copy address</p>
             </div>
           )}
         </div>
@@ -91,9 +91,9 @@ const DepositMethodDetails = ({ method }) => {
               <img
                 src={`${apiBaseUrl}/${details.qr_code_path.replace("\\", "/")}`}
                 alt="QR Code"
-                className="w-40 h-40 object-contain border rounded-lg shadow-md mb-2"
+                className="w-40 h-40 object-contain border rounded-lg shadow-md mb-2 bg-white"
               />
-              <p className="text-gray-500 text-sm">Scan for details</p>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">Scan for details</p>
             </div>
           )}
           <Field label="Notes" value={details.notes} />
