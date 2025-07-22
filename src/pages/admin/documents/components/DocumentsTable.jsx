@@ -47,65 +47,70 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
     <>
       <div className="overflow-x-auto rounded shadow hidden md:block">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-700">
+          <thead className="bg-white dark:bg-gray-700">
             <tr>
               {["ID", "User", "Document Type", "Status", "Submitted At", "Actions"].map((heading) => (
                 <th
                   key={heading}
-                  className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                  className="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider"
                 >
                   {heading}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             {documents.length === 0 ? (
               <tr>
-                <td colSpan="6" className="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
+                <td colSpan="6" className="p-4 text-center text-gray-600 dark:text-gray-400">
                   No documents found.
                 </td>
               </tr>
             ) : (
               documents.map((doc) => (
-                <tr key={doc.id} className="odd:bg-gray-50 even:bg-white dark:odd:bg-gray-800 dark:even:bg-gray-700">
-                  <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-200">{doc.id}</td>
-                  <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-200">
+                <tr
+                  key={doc.id}
+                  className="even:bg-gray-200 even:dark:bg-gray-700 odd:bg-gray-100 odd:dark:bg-gray-800"
+                >
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{doc.id}</td>
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     {doc.User?.full_name}
                     <br />
-                    <span className="text-xs text-gray-500 dark:text-gray-400">{doc.User?.email}</span>
+                    <span className="text-xs text-gray-600 dark:text-gray-400">{doc.User?.email}</span>
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-700 dark:text-gray-200">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     {getDocumentLabel(doc.document_type)}
                   </td>
-                  <td className="px-4 py-3 text-sm">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     <Badge
                       text={doc.status}
                       color={doc.status === "approved" ? "green" : doc.status === "rejected" ? "red" : "yellow"}
                       size="sm"
                     />
                   </td>
-                  <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">{formatDate(doc.submitted_at)}</td>
-                  <td className="px-4 py-3 text-sm space-x-2">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                    {formatDate(doc.submitted_at)}
+                  </td>
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 space-x-2">
                     <button
                       onClick={() => handleViewDocument(doc.document_path)}
                       className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                     >
-                      <Icon icon="mdi:eye" width="18" className="text-black dark:text-white" />
+                      <Icon icon="mdi:eye" width="18" className="text-gray-800 dark:text-gray-200" />
                     </button>
                     {doc.status === "pending" && (
                       <>
                         <button
                           onClick={() => handleActionClick("approve", doc)}
-                          className="inline-flex items-center px-2 py-1 border border-green-300 dark:border-green-600 rounded hover:bg-green-50 dark:hover:bg-green-900 transition"
+                          className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                         >
-                          <Icon icon="mdi:check" width="18" />
+                          <Icon icon="mdi:check" width="18" className="text-gray-800 dark:text-gray-200" />
                         </button>
                         <button
                           onClick={() => handleActionClick("reject", doc)}
-                          className="inline-flex items-center px-2 py-1 border border-red-300 dark:border-red-600 rounded hover:bg-red-50 dark:hover:bg-red-900 transition"
+                          className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                         >
-                          <Icon icon="mdi:close" width="18" />
+                          <Icon icon="mdi:close" width="18" className="text-gray-800 dark:text-gray-200" />
                         </button>
                       </>
                     )}

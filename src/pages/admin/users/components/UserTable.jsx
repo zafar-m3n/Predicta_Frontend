@@ -44,13 +44,13 @@ const UserTable = ({ users, onEdit, onDelete, onView, currentPage, totalPages, o
       {/* Desktop table view */}
       <div className="overflow-x-auto rounded shadow hidden md:block">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-700">
+          <thead className="bg-white dark:bg-gray-950">
             <tr>
               {["ID", "Name", "Email", "Phone", "Country", "Role", "Promo Code", "Verified", "Actions"].map(
                 (heading) => (
                   <th
                     key={heading}
-                    className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                    className="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider"
                   >
                     {heading}
                   </th>
@@ -58,61 +58,64 @@ const UserTable = ({ users, onEdit, onDelete, onView, currentPage, totalPages, o
               )}
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             {users.length === 0 ? (
               <tr>
-                <td colSpan="9" className="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
+                <td colSpan="9" className="p-4 text-center text-gray-600 dark:text-gray-400">
                   No users found.
                 </td>
               </tr>
             ) : (
               users.map((user) => (
-                <tr key={user.id} className="odd:bg-gray-50 even:bg-white dark:odd:bg-gray-800 dark:even:bg-gray-700">
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{user.id}</td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">
+                <tr
+                  key={user.id}
+                  className="even:bg-gray-200 even:dark:bg-gray-700 odd:bg-gray-100 odd:dark:bg-gray-800"
+                >
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{user.id}</td>
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     {user.full_name}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{user.email}</td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{user.email}</td>
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     {formatPhoneNumber(user.phone_number)}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     {getCountryName(user.country_code)}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     <Badge text={user.role} color={user.role === "admin" ? "blue" : "gray"} size="sm" />
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     {user.promo_code || "N/A"}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     <Badge
                       text={user.email_verified ? "Verified" : "Not Verified"}
                       color={user.email_verified ? "green" : "red"}
                       size="sm"
                     />
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm space-x-2">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 space-x-2">
                     <button
                       onClick={() => onView(user)}
                       className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                       title="View"
                     >
-                      <Icon icon="mdi:eye" width="18" className="text-black dark:text-white" />
+                      <Icon icon="mdi:eye" width="18" className="text-gray-800 dark:text-gray-200" />
                     </button>
                     <button
                       onClick={() => onEdit(user)}
-                      className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-900 transition"
+                      className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                       title="Edit"
                     >
-                      <Icon icon="mdi:pencil" width="18" className="text-black dark:text-white" />
+                      <Icon icon="mdi:pencil" width="18" className="text-gray-800 dark:text-gray-200" />
                     </button>
                     <button
                       onClick={() => confirmDelete(user)}
-                      className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-900 transition"
+                      className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                       title="Delete"
                     >
-                      <Icon icon="mdi:trash-can" width="18" className="text-black dark:text-white" />
+                      <Icon icon="mdi:trash-can" width="18" className="text-gray-800 dark:text-gray-200" />
                     </button>
                   </td>
                 </tr>

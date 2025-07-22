@@ -35,22 +35,22 @@ const DepositRequestsTable = ({ requests, onApprove, onReject, currentPage, tota
       {/* Desktop table */}
       <div className="overflow-x-auto rounded shadow hidden md:block">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-700">
+          <thead className="bg-white dark:bg-gray-950">
             <tr>
               {["ID", "User", "Method", "Amount", "Status", "Created At", "Actions"].map((heading) => (
                 <th
                   key={heading}
-                  className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                  className="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider"
                 >
                   {heading}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             {requests.length === 0 ? (
               <tr>
-                <td colSpan="7" className="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
+                <td colSpan="7" className="p-4 text-center text-gray-600 dark:text-gray-400">
                   No deposit requests found.
                 </td>
               </tr>
@@ -58,50 +58,50 @@ const DepositRequestsTable = ({ requests, onApprove, onReject, currentPage, tota
               requests.map((request) => (
                 <tr
                   key={request.id}
-                  className="odd:bg-gray-50 even:bg-white dark:odd:bg-gray-800 dark:even:bg-gray-700"
+                  className="even:bg-gray-200 even:dark:bg-gray-700 odd:bg-gray-100 odd:dark:bg-gray-800"
                 >
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{request.id}</td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{request.id}</td>
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     {request.User?.full_name}
                     <br />
-                    <span className="text-gray-500 dark:text-gray-400 text-xs">{request.User?.email}</span>
+                    <span className="text-gray-600 dark:text-gray-400 text-xs">{request.User?.email}</span>
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     {request.DepositMethod?.name}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     ${request.amount}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     <Badge
                       text={request.status}
                       color={request.status === "approved" ? "green" : request.status === "rejected" ? "red" : "yellow"}
                       size="sm"
                     />
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     {formatDate(request.createdAt)}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm space-x-2">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm space-x-2">
                     <button
                       onClick={() => handleViewProof(request.proof_path)}
                       className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                     >
-                      <Icon icon="mdi:eye" width="18" className="text-black dark:text-white" />
+                      <Icon icon="mdi:eye" width="18" className="text-gray-800 dark:text-gray-200" />
                     </button>
                     {request.status === "pending" && (
                       <>
                         <button
                           onClick={() => handleActionClick("approve", request)}
-                          className="inline-flex items-center px-2 py-1 border border-green-300 dark:border-green-600 rounded hover:bg-green-50 dark:hover:bg-green-900 transition"
+                          className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                         >
-                          <Icon icon="mdi:check" width="18" />
+                          <Icon icon="mdi:check" width="18" className="text-gray-800 dark:text-gray-200" />
                         </button>
                         <button
                           onClick={() => handleActionClick("reject", request)}
-                          className="inline-flex items-center px-2 py-1 border border-red-300 dark:border-red-600 rounded hover:bg-red-50 dark:hover:bg-red-900 transition"
+                          className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                         >
-                          <Icon icon="mdi:close" width="18" />
+                          <Icon icon="mdi:close" width="18" className="text-gray-800 dark:text-gray-200" />
                         </button>
                       </>
                     )}

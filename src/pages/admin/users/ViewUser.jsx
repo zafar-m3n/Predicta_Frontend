@@ -127,12 +127,12 @@ const ViewUser = () => {
           <div className="col-span-2 bg-white dark:bg-gray-800 dark:border-gray-700 shadow-xl rounded-2xl p-6 border border-gray-100 overflow-x-auto space-y-6">
             <h2 className="text-xl font-bold text-accent">KYC Documents</h2>
             <table className="min-w-full text-sm divide-y divide-gray-300 dark:divide-gray-700">
-              <thead className="bg-gray-50 dark:bg-gray-950">
+              <thead className="bg-white dark:bg-gray-950">
                 <tr>
                   {["Type", "Status", "Submitted", "Note", "Actions"].map((header) => (
                     <th
                       key={header}
-                      className="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase"
+                      className="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider"
                     >
                       {header}
                     </th>
@@ -142,7 +142,7 @@ const ViewUser = () => {
               <tbody className="divide-y divide-gray-300 dark:divide-gray-700">
                 {user.KycDocuments.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="px-4 py-4 text-center text-gray-500 dark:text-gray-400">
+                    <td colSpan="5" className="p-4 text-center text-gray-600 dark:text-gray-400">
                       No documents found.
                     </td>
                   </tr>
@@ -152,19 +152,23 @@ const ViewUser = () => {
                       key={doc.id}
                       className="even:bg-gray-300 even:dark:bg-gray-700 odd:bg-gray-100 odd:dark:bg-gray-900"
                     >
-                      <td className="px-4 py-2 text-gray-800 dark:text-gray-200">
+                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                         {getDocumentLabel(doc.document_type)}
                       </td>
-                      <td className="px-4 py-2">
+                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                         <Badge
                           text={doc.status}
                           color={doc.status === "approved" ? "green" : doc.status === "rejected" ? "red" : "yellow"}
                           size="sm"
                         />
                       </td>
-                      <td className="px-4 py-2 text-gray-800 dark:text-gray-200">{formatDate(doc.submitted_at)}</td>
-                      <td className="px-4 py-2 text-gray-800 dark:text-gray-200">{doc.admin_note || "N/A"}</td>
-                      <td className="px-4 py-2">
+                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                        {formatDate(doc.submitted_at)}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                        {doc.admin_note || "N/A"}
+                      </td>
+                      <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                         <button
                           onClick={() => setPreviewModal({ open: true, documentPath: doc.document_path })}
                           className="inline-flex items-center px-2 py-1 border border-gray-400 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition"

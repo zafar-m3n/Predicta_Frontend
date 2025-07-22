@@ -24,57 +24,60 @@ const DepositMethodsTable = ({ methods, currentPage, totalPages, onPageChange, o
       {/* Desktop table */}
       <div className="overflow-x-auto rounded shadow hidden md:block">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-700">
+          <thead className="bg-white dark:bg-gray-950">
             <tr>
               {["ID", "Name", "Type", "Status", "Created At", "Actions"].map((heading) => (
                 <th
                   key={heading}
-                  className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                  className="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider"
                 >
                   {heading}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             {methods.length === 0 ? (
               <tr>
-                <td colSpan="6" className="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
+                <td colSpan="6" className="p-4 text-center text-gray-600 dark:text-gray-400">
                   No deposit methods found.
                 </td>
               </tr>
             ) : (
               methods.map((method) => (
-                <tr key={method.id} className="odd:bg-gray-50 even:bg-white dark:odd:bg-gray-800 dark:even:bg-gray-700">
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">{method.id}</td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-200">
+                <tr
+                  key={method.id}
+                  className="even:bg-gray-200 even:dark:bg-gray-700 odd:bg-gray-100 odd:dark:bg-gray-800"
+                >
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{method.id}</td>
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     {method.name}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     <Badge
                       text={method.type}
                       color={method.type === "bank" ? "blue" : method.type === "crypto" ? "yellow" : "gray"}
                       size="sm"
                     />
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     <Badge text={method.status} color={method.status === "active" ? "green" : "red"} size="sm" />
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                     {formatDate(method.createdAt)}
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm space-x-2">
+                  <td className="px-4 py-2 whitespace-nowrap text-sm space-x-2">
                     <button
                       onClick={() => onView(method)}
                       className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                     >
-                      <Icon icon="mdi:eye" width="18" className="text-black dark:text-white" />
+                      <Icon icon="mdi:eye" width="18" className="text-gray-800 dark:text-gray-200" />
                     </button>
                     <button
                       onClick={() => onEdit(method)}
                       className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                     >
-                      <Icon icon="mdi:pencil" width="18" className="text-black dark:text-white" />
+                      <Icon icon="mdi:pencil" width="18" className="text-gray-800 dark:text-gray-200" />
                     </button>
                     <button
                       onClick={() => handleToggleClick(method)}
@@ -83,7 +86,7 @@ const DepositMethodsTable = ({ methods, currentPage, totalPages, onPageChange, o
                       <Icon
                         icon={method.status === "active" ? "mdi:toggle-switch" : "mdi:toggle-switch-off-outline"}
                         width="20"
-                        className="text-black dark:text-white"
+                        className="text-gray-800 dark:text-gray-200"
                       />
                     </button>
                   </td>
