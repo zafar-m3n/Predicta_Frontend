@@ -203,10 +203,7 @@ const RegisterPage = () => {
                     setValue("phone_number", value, { shouldValidate: true });
                     setPhoneError("");
                   }}
-                  className="w-full"
-                  inputClassName={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 ${
-                    errors.phone_number || phoneError ? "border-red-500" : "border-gray-300 dark:border-gray-700"
-                  }`}
+                  className="react-international-phone-input-container w-full"
                 />
               )}
             />
