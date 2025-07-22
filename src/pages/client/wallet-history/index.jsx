@@ -75,7 +75,7 @@ const WalletHistory = () => {
     <DefaultLayout>
       <div className="py-5">
         <div className="mb-4">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">Wallet History</h1>
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">Wallet History</h1>
           <p className="text-gray-600 dark:text-gray-400">Track your deposit and withdrawal activities here.</p>
         </div>
 
