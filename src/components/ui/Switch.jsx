@@ -8,7 +8,7 @@ const Switch = ({ isOn = false, onToggle = () => {}, label = "" }) => {
         <input type="checkbox" className="sr-only" checked={isOn} onChange={(e) => onToggle(e.target.checked)} />
         <div
           className={`w-10 h-6 flex items-center rounded-full p-1 transition-all duration-300 ease-in-out ${
-            isOn ? "bg-blue-500" : "bg-gray-300 dark:bg-gray-600"
+            isOn ? "bg-accent" : "bg-gray-300 dark:bg-gray-600"
           }`}
         >
           <div
