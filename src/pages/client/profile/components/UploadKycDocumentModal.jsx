@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -7,6 +7,7 @@ import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import StyledFileInput from "@/components/ui/StyledFileInput";
 import Spinner from "@/components/ui/Spinner";
+import { ThemeContext } from "@/context/ThemeContext";
 
 const schema = Yup.object().shape({
   document_type: Yup.string().required("Document type is required"),
@@ -19,6 +20,9 @@ const options = [
 ];
 
 const UploadKycDocumentModal = ({ onSuccess, onClose }) => {
+  const { theme } = useContext(ThemeContext);
+  const isDark = theme === "dark";
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [file, setFile] = useState(null);
 
@@ -77,6 +81,7 @@ const UploadKycDocumentModal = ({ onSuccess, onClose }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-white dark:bg-gray-900 rounded-2xl">
+      {/* Document Type Dropdown */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Select Document Type</label>
         <Controller
@@ -93,28 +98,47 @@ const UploadKycDocumentModal = ({ onSuccess, onClose }) => {
               styles={{
                 control: (base, state) => ({
                   ...base,
-                  backgroundColor: "#fff",
-                  borderColor: errors.document_type ? "#f87171" : "#d1d5db",
-                  color: "#111827",
+                  backgroundColor: isDark ? "#1E2939" : "#fff",
+                  borderColor: errors.document_type
+                    ? "#f87171"
+                    : state.isFocused
+                    ? "#309f6d"
+                    : isDark
+                    ? "#4b5563"
+                    : "#d1d5db",
+                  color: isDark ? "#f9fafb" : "#111827",
                   boxShadow: "none",
+                  "&:hover": {
+                    borderColor: "#309f6d",
+                  },
                 }),
                 menu: (base) => ({
                   ...base,
-                  backgroundColor: "#fff",
-                  color: "#111827",
+                  backgroundColor: isDark ? "#1E2939" : "#fff",
+                  color: isDark ? "#f9fafb" : "#111827",
+                  zIndex: 50,
                 }),
                 singleValue: (base) => ({
                   ...base,
-                  color: "#111827",
+                  color: isDark ? "#f9fafb" : "#111827",
                 }),
-                option: (base, { isFocused }) => ({
+                option: (base, { isFocused, isSelected }) => ({
                   ...base,
-                  backgroundColor: isFocused ? "#f3f4f6" : "#fff",
-                  color: "#111827",
+                  backgroundColor: isSelected
+                    ? "#309f6d"
+                    : isFocused
+                    ? isDark
+                      ? "#4b5563"
+                      : "#f3f4f6"
+                    : isDark
+                    ? "#1E2939"
+                    : "#fff",
+                  color: isSelected ? "#ffffff" : isDark ? "#f9fafb" : "#111827",
+                  cursor: "pointer",
                 }),
                 placeholder: (base) => ({
                   ...base,
-                  color: "#6b7280", // gray-500
+                  color: isDark ? "#9ca3af" : "#6b7280",
                 }),
               }}
             />
@@ -123,6 +147,7 @@ const UploadKycDocumentModal = ({ onSuccess, onClose }) => {
         <p className="text-red-500 text-sm">{errors.document_type?.message}</p>
       </div>
 
+      {/* File Input */}
       <StyledFileInput
         label="Upload Document"
         preferredSize="Max size: 5MB"
@@ -131,6 +156,7 @@ const UploadKycDocumentModal = ({ onSuccess, onClose }) => {
         onRemove={removeFile}
       />
 
+      {/* Submit Button */}
       <button
         type="submit"
         disabled={isSubmitting}

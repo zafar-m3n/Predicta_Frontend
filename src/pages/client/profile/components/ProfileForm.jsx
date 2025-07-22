@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useContext } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -13,6 +13,7 @@ import { parsePhoneNumberFromString } from "libphonenumber-js";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
 import Spinner from "@/components/ui/Spinner";
+import { ThemeContext } from "@/context/ThemeContext";
 
 countries.registerLocale(enLocale);
 
@@ -23,6 +24,9 @@ const schema = Yup.object().shape({
 });
 
 const ProfileForm = () => {
+  const { theme } = useContext(ThemeContext);
+  const isDark = theme === "dark";
+
   const options = useMemo(() => countryList().getData(), []);
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -192,29 +196,51 @@ const ProfileForm = () => {
                   onChange={(selected) => {
                     field.onChange(selected ? selected.value : "");
                   }}
-                  className="react-select-container"
                   classNamePrefix="react-select"
                   styles={{
                     control: (base, state) => ({
                       ...base,
-                      backgroundColor: "#fff",
-                      borderColor: state.isFocused ? "#4f46e5" : "#d1d5db",
-                      color: "#111827",
+                      backgroundColor: isDark ? "#1E2939" : "#fff",
+                      borderColor: errors.country_code
+                        ? "#f87171"
+                        : state.isFocused
+                        ? "#309f6d"
+                        : isDark
+                        ? "#4b5563"
+                        : "#d1d5db",
+                      color: isDark ? "#f9fafb" : "#111827",
                       boxShadow: "none",
+                      "&:hover": {
+                        borderColor: "#309f6d",
+                      },
                     }),
                     menu: (base) => ({
                       ...base,
-                      backgroundColor: "#fff",
-                      color: "#111827",
+                      backgroundColor: isDark ? "#1E2939" : "#fff",
+                      color: isDark ? "#f9fafb" : "#111827",
+                      zIndex: 50,
                     }),
                     singleValue: (base) => ({
                       ...base,
-                      color: "#111827",
+                      color: isDark ? "#f9fafb" : "#111827",
                     }),
-                    option: (base, { isFocused }) => ({
+                    option: (base, { isFocused, isSelected }) => ({
                       ...base,
-                      backgroundColor: isFocused ? "#f3f4f6" : "#fff",
-                      color: "#111827",
+                      backgroundColor: isSelected
+                        ? "#309f6d"
+                        : isFocused
+                        ? isDark
+                          ? "#4b5563"
+                          : "#f3f4f6"
+                        : isDark
+                        ? "#1E2939"
+                        : "#fff",
+                      color: isSelected ? "#ffffff" : isDark ? "#f9fafb" : "#111827",
+                      cursor: "pointer",
+                    }),
+                    placeholder: (base) => ({
+                      ...base,
+                      color: isDark ? "#9ca3af" : "#6b7280",
                     }),
                   }}
                 />
