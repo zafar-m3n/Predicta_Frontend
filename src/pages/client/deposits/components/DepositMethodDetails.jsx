@@ -4,9 +4,9 @@ import Notification from "@/components/ui/Notification";
 const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
 const Field = ({ label, value }) => (
-  <div className="flex flex-col space-y-1 border-b border-dashed py-2">
-    <span className="text-gray-500 dark:text-gray-400 text-sm">{label}</span>
-    <span className="font-medium text-gray-800 dark:text-white break-words">{value || "-"}</span>
+  <div className="flex flex-col space-y-1 border-b border-dashed py-2 border-gray-600 dark:border-gray-400">
+    <span className="text-gray-600 dark:text-gray-400 text-sm">{label}</span>
+    <span className="font-medium text-gray-800 dark:text-gray-200 break-words">{value || "N/A"}</span>
   </div>
 );
 

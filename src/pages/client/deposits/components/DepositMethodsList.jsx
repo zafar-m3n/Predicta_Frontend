@@ -6,7 +6,7 @@ const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
 const DepositMethodsList = ({ methods, onSelect }) => {
   if (!methods || methods.length === 0) {
-    return <p className="text-gray-500 dark:text-gray-400">No active deposit methods available.</p>;
+    return <p className="text-gray-600 dark:text-gray-400">No active deposit methods available.</p>;
   }
 
   const reversedMethods = [...methods].reverse();
@@ -26,15 +26,15 @@ const DepositMethodsList = ({ methods, onSelect }) => {
         return (
           <div
             key={method.id}
-            className="border border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center p-6"
+            className="border border-gray-200 dark:border-gray-800 rounded-xl bg-white dark:bg-gray-800 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col items-center text-center p-4"
           >
             {logoSrc && (
-              <div className="w-20 h-20 mb-3 rounded-full overflow-hidden border border-gray-200 dark:border-gray-700 shadow-inner">
+              <div className="w-20 h-20 mb-3 rounded-full overflow-hidden border border-gray-200 dark:border-gray-800 shadow-inner">
                 <img src={logoSrc} alt={method.name} className="w-full h-full object-contain bg-white" />
               </div>
             )}
 
-            <h3 className="text-sm text-gray-600 dark:text-gray-300 mb-1">Deposit with {method.name}</h3>
+            <h3 className="text-sm text-gray-700 dark:text-gray-300 mb-1">Deposit with {method.name}</h3>
 
             <Badge
               text={method.type}

@@ -41,7 +41,7 @@ const ClientDeposits = () => {
       <DefaultLayout>
         <div className="py-5 flex flex-col items-center justify-center text-center">
           <Spinner />
-          <p className="text-gray-500 dark:text-gray-400 mt-4">Loading deposit options...</p>
+          <p className="text-gray-500 mt-4">Loading deposit options...</p>
         </div>
       </DefaultLayout>
     );
@@ -62,7 +62,7 @@ const ClientDeposits = () => {
   return (
     <DefaultLayout>
       <div className="py-5">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-white mb-1">Deposit Option</h1>
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">Deposit Option</h1>
         <p className="text-gray-600 dark:text-gray-400">Choose a deposit method to continue.</p>
       </div>
 
