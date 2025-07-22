@@ -64,7 +64,7 @@ const SupportTickets = () => {
     <DefaultLayout>
       <div className="py-5">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-bold">Support Tickets</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Support Tickets</h1>
           <button
             onClick={handleOpenCreateModal}
             className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
@@ -76,7 +76,7 @@ const SupportTickets = () => {
         {loading ? (
           <>
             <Spinner />
-            <p className="text-center text-gray-500 mt-4">Loading tickets...</p>
+            <p className="text-center text-gray-500 dark:text-gray-400 mt-4">Loading tickets...</p>
           </>
         ) : (
           <SupportTicketsTable

@@ -47,7 +47,7 @@ const CreateSupportTicketForm = ({ isOpen, onClose, onSuccess }) => {
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setAttachmentFile(e.target.files[0]);
-      setAttachmentPath(""); // Reset preview path
+      setAttachmentPath("");
     }
   };
 
@@ -93,13 +93,13 @@ const CreateSupportTicketForm = ({ isOpen, onClose, onSuccess }) => {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Subject */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Subject</label>
           <input
             type="text"
             {...register("subject")}
             placeholder="Enter subject"
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-              errors.subject ? "border-red-500" : "border-gray-300"
+            className={`w-full border rounded px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:border-accent transition ${
+              errors.subject ? "border-red-500" : "border-gray-300 dark:border-gray-600"
             }`}
           />
           <p className="text-red-500 text-sm">{errors.subject?.message}</p>
@@ -107,7 +107,7 @@ const CreateSupportTicketForm = ({ isOpen, onClose, onSuccess }) => {
 
         {/* Category */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Category</label>
           <Controller
             name="category"
             control={control}
@@ -119,20 +119,6 @@ const CreateSupportTicketForm = ({ isOpen, onClose, onSuccess }) => {
                 value={categoryOptions.find((opt) => opt.value === field.value) || null}
                 onChange={(selected) => field.onChange(selected ? selected.value : "")}
                 classNamePrefix="react-select"
-                styles={{
-                  control: (base, state) => ({
-                    ...base,
-                    borderColor: errors.category ? "red" : state.isFocused ? "#86efac" : "#d1d5db",
-                    borderRadius: "0.375rem",
-                    minHeight: "2.5rem",
-                    boxShadow: "none",
-                    "&:hover": { borderColor: "#86efac" },
-                  }),
-                  valueContainer: (base) => ({
-                    ...base,
-                    paddingLeft: "0.75rem",
-                  }),
-                }}
               />
             )}
           />
@@ -141,13 +127,13 @@ const CreateSupportTicketForm = ({ isOpen, onClose, onSuccess }) => {
 
         {/* Message */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Message</label>
           <textarea
             {...register("message")}
             placeholder="Describe your issue..."
             rows={5}
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-              errors.message ? "border-red-500" : "border-gray-300"
+            className={`w-full border rounded px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:border-accent transition ${
+              errors.message ? "border-red-500" : "border-gray-300 dark:border-gray-600"
             }`}
           />
           <p className="text-red-500 text-sm">{errors.message?.message}</p>
