@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useContext } from "react";
 import AuthLayout from "@/layouts/AuthLayout";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,6 +12,7 @@ import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Icon from "@/components/ui/Icon";
 import Spinner from "@/components/ui/Spinner";
+import { ThemeContext } from "@/context/ThemeContext";
 
 const schema = Yup.object().shape({
   full_name: Yup.string().required("Full name is required"),
@@ -28,6 +29,7 @@ const RegisterPage = () => {
   const [phoneError, setPhoneError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const { theme } = useContext(ThemeContext);
 
   const {
     register,
@@ -43,6 +45,42 @@ const RegisterPage = () => {
   });
 
   const selectedCountryCode = watch("country_code");
+
+  const customSelectStyles = {
+    control: (base, state) => ({
+      ...base,
+      backgroundColor: theme === "dark" ? "#101828" : "#fff",
+      borderColor: errors.country_code
+        ? "#f87171"
+        : state.isFocused
+        ? "#309f6d"
+        : theme === "dark"
+        ? "#4b5563"
+        : "#d1d5db",
+      boxShadow: "none",
+      color: theme === "dark" ? "#f3f4f6" : "#111827",
+    }),
+    menu: (base) => ({
+      ...base,
+      backgroundColor: theme === "dark" ? "#101828" : "#fff",
+      color: theme === "dark" ? "#f3f4f6" : "#111827",
+      zIndex: 50,
+    }),
+    singleValue: (base) => ({
+      ...base,
+      color: theme === "dark" ? "#f3f4f6" : "#111827",
+    }),
+    option: (base, { isFocused }) => ({
+      ...base,
+      backgroundColor: isFocused ? (theme === "dark" ? "#374151" : "#f3f4f6") : theme === "dark" ? "#101828" : "#fff",
+      color: theme === "dark" ? "#f3f4f6" : "#111827",
+      cursor: "pointer",
+    }),
+    placeholder: (base) => ({
+      ...base,
+      color: theme === "dark" ? "#9ca3af" : "#6b7280",
+    }),
+  };
 
   const onSubmit = async (data) => {
     const isValidForm = await trigger();
@@ -145,33 +183,7 @@ const RegisterPage = () => {
                   value={options.find((opt) => opt.value === selectedCountryCode) || null}
                   onChange={(selected) => field.onChange(selected?.value || "")}
                   classNamePrefix="react-select"
-                  styles={{
-                    control: (base, state) => ({
-                      ...base,
-                      backgroundColor: "var(--tw-bg-opacity)" in document.documentElement.style ? "" : "white",
-                      borderColor: errors.country_code ? "red" : state.isFocused ? "#86efac" : "#d1d5db",
-                      borderRadius: "0.375rem",
-                      minHeight: "2.5rem",
-                      boxShadow: "none",
-                    }),
-                    menu: (base) => ({
-                      ...base,
-                      backgroundColor: "#1f2937", // dark:bg-gray-800
-                      color: "#f3f4f6", // dark:text-gray-100
-                    }),
-                    singleValue: (base) => ({
-                      ...base,
-                      color: "inherit",
-                    }),
-                  }}
-                  theme={(theme) => ({
-                    ...theme,
-                    colors: {
-                      ...theme.colors,
-                      primary25: "#d1fae5", // light green highlight
-                      primary: "#10b981", // accent
-                    },
-                  })}
+                  styles={customSelectStyles}
                 />
               )}
             />

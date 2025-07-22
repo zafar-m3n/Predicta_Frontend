@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -6,10 +6,14 @@ import Switch from "@/components/ui/Switch";
 import StyledFileInput from "@/components/ui/StyledFileInput";
 import Select from "react-select";
 import Spinner from "@/components/ui/Spinner";
+import { ThemeContext } from "@/context/ThemeContext";
 
 const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
 const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
+  const { theme } = useContext(ThemeContext);
+  const isDark = theme === "dark";
+
   const [qrCodeFile, setQrCodeFile] = useState(null);
   const [logoFile, setLogoFile] = useState(null);
   const [status, setStatus] = useState(initialData?.status === "active");
@@ -114,14 +118,14 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
           type="text"
           placeholder="Enter method name"
           {...register("name")}
-          className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-900 text-gray-800 dark:text-white ${
+          className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-800 text-gray-800 dark:text-white ${
             errors.name ? "border-red-500" : "border-gray-300 dark:border-gray-600"
           }`}
         />
         <p className="text-red-500 text-sm">{errors.name?.message}</p>
       </div>
 
-      {/* Type */}
+      {/* Type Dropdown */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Type</label>
         <Controller
@@ -134,36 +138,47 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
               placeholder="Select type"
               value={typeOptions.find((opt) => opt.value === field.value) || null}
               onChange={(selected) => field.onChange(selected ? selected.value : "")}
-              className="react-select-container"
               classNamePrefix="react-select"
               styles={{
                 control: (base, state) => ({
                   ...base,
-                  backgroundColor: "#fff",
-                  borderColor: errors.type ? "#f87171" : "#d1d5db",
-                  color: "#111827",
+                  backgroundColor: isDark ? "#1E2939" : "#fff",
+                  borderColor: errors.type ? "#f87171" : state.isFocused ? "#309f6d" : isDark ? "#4b5563" : "#d1d5db",
+                  color: isDark ? "#f9fafb" : "#111827",
                   borderRadius: "0.375rem",
                   minHeight: "2.5rem",
                   boxShadow: "none",
+                  "&:hover": {
+                    borderColor: "#309f6d",
+                  },
                 }),
                 menu: (base) => ({
                   ...base,
-                  backgroundColor: "#fff",
-                  color: "#111827",
+                  backgroundColor: isDark ? "#1E2939" : "#fff",
+                  color: isDark ? "#f9fafb" : "#111827",
+                  zIndex: 50,
                 }),
                 singleValue: (base) => ({
                   ...base,
-                  color: "#111827",
+                  color: isDark ? "#f9fafb" : "#111827",
                 }),
                 option: (base, { isFocused, isSelected }) => ({
                   ...base,
-                  backgroundColor: isSelected ? "#22c55e" : isFocused ? "#f3f4f6" : "#fff",
-                  color: "#111827",
+                  backgroundColor: isSelected
+                    ? "#309f6d"
+                    : isFocused
+                    ? isDark
+                      ? "#4b5563"
+                      : "#f3f4f6"
+                    : isDark
+                    ? "#1E2939"
+                    : "#fff",
+                  color: isSelected ? "#ffffff" : isDark ? "#f9fafb" : "#111827",
                   cursor: "pointer",
                 }),
                 placeholder: (base) => ({
                   ...base,
-                  color: "#6b7280",
+                  color: isDark ? "#9ca3af" : "#6b7280",
                 }),
               }}
             />
@@ -172,7 +187,7 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
         <p className="text-red-500 text-sm">{errors.type?.message}</p>
       </div>
 
-      {/* Status */}
+      {/* Status Toggle */}
       <div>
         <Switch isOn={status} onToggle={setStatus} label="Active Status" />
       </div>

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useContext } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -8,6 +8,7 @@ import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import Notification from "@/components/ui/Notification";
 import Spinner from "@/components/ui/Spinner";
+import { ThemeContext } from "@/context/ThemeContext";
 
 const roleOptions = [
   { value: "client", label: "Client" },
@@ -26,6 +27,9 @@ const schema = Yup.object().shape({
 
 const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
   const options = useMemo(() => countryList().getData(), []);
+  const { theme } = useContext(ThemeContext);
+  const isDark = theme === "dark";
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -88,22 +92,44 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
   };
 
   const selectStyles = (hasError) => ({
-    control: (base) => ({
+    control: (base, state) => ({
       ...base,
-      backgroundColor: "#fff",
-      borderColor: hasError ? "#f87171" : "#d1d5db",
-      color: "#111827",
+      backgroundColor: isDark ? "#101828" : "#fff",
+      borderColor: hasError ? "#f87171" : state.isFocused ? "#309f6d" : isDark ? "#4b5563" : "#d1d5db",
+      color: isDark ? "#f9fafb" : "#111827",
       boxShadow: "none",
+      "&:hover": {
+        borderColor: "#309f6d",
+      },
     }),
-    singleValue: (base) => ({ ...base, color: "#111827" }),
-    menu: (base) => ({ ...base, backgroundColor: "#fff", color: "#111827", zIndex: 50 }),
+    singleValue: (base) => ({
+      ...base,
+      color: isDark ? "#f9fafb" : "#111827",
+    }),
+    menu: (base) => ({
+      ...base,
+      backgroundColor: isDark ? "#101828" : "#fff",
+      color: isDark ? "#f9fafb" : "#111827",
+      zIndex: 50,
+    }),
     option: (base, { isFocused, isSelected }) => ({
       ...base,
-      backgroundColor: isSelected ? "#2563eb" : isFocused ? "#f3f4f6" : "#fff",
-      color: "#111827",
+      backgroundColor: isSelected
+        ? "#309f6d"
+        : isFocused
+        ? isDark
+          ? "#4b5563"
+          : "#f3f4f6"
+        : isDark
+        ? "#101828"
+        : "#fff",
+      color: isSelected ? "#ffffff" : isDark ? "#f9fafb" : "#111827",
       cursor: "pointer",
     }),
-    placeholder: (base) => ({ ...base, color: "#6b7280" }),
+    placeholder: (base) => ({
+      ...base,
+      color: isDark ? "#9ca3af" : "#6b7280",
+    }),
   });
 
   return (
@@ -148,7 +174,7 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
         <p className="text-red-500 text-sm">{errors.email?.message}</p>
       </div>
 
-      {/* Country and Phone Row */}
+      {/* Country and Phone */}
       <div className="flex flex-col md:flex-row gap-4">
         <div className="flex-1">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Country</label>
@@ -169,6 +195,7 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
           />
           <p className="text-red-500 text-sm">{errors.country_code?.message}</p>
         </div>
+
         <div className="flex-1">
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Phone Number</label>
           <Controller
