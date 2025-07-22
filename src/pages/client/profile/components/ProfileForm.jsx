@@ -194,16 +194,29 @@ const ProfileForm = () => {
                   }}
                   className="react-select-container"
                   classNamePrefix="react-select"
-                  theme={(theme) => ({
-                    ...theme,
-                    colors: {
-                      ...theme.colors,
-                      neutral0: "hsl(222, 47%, 11%)", // bg
-                      neutral80: "white", // text
-                      primary25: "#1e293b", // hover
-                      primary: "#4f46e5", // border
-                    },
-                  })}
+                  styles={{
+                    control: (base, state) => ({
+                      ...base,
+                      backgroundColor: "#fff",
+                      borderColor: state.isFocused ? "#4f46e5" : "#d1d5db",
+                      color: "#111827",
+                      boxShadow: "none",
+                    }),
+                    menu: (base) => ({
+                      ...base,
+                      backgroundColor: "#fff",
+                      color: "#111827",
+                    }),
+                    singleValue: (base) => ({
+                      ...base,
+                      color: "#111827",
+                    }),
+                    option: (base, { isFocused }) => ({
+                      ...base,
+                      backgroundColor: isFocused ? "#f3f4f6" : "#fff",
+                      color: "#111827",
+                    }),
+                  }}
                 />
               )}
             />
@@ -252,7 +265,7 @@ const ProfileForm = () => {
                 country_code: user.country_code,
               });
             }}
-            className="w-full bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-300 py-2 rounded font-semibold flex items-center justify-center transition"
+            className="w-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-2 rounded font-semibold flex items-center justify-center transition"
           >
             Cancel
           </button>

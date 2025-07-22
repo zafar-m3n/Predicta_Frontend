@@ -119,9 +119,37 @@ const CreateSupportTicketForm = ({ isOpen, onClose, onSuccess }) => {
                 value={categoryOptions.find((opt) => opt.value === field.value) || null}
                 onChange={(selected) => field.onChange(selected ? selected.value : "")}
                 classNamePrefix="react-select"
+                styles={{
+                  control: (base, state) => ({
+                    ...base,
+                    backgroundColor: "#fff",
+                    borderColor: errors.category ? "#f87171" : "#d1d5db",
+                    color: "#111827",
+                    boxShadow: "none",
+                  }),
+                  menu: (base) => ({
+                    ...base,
+                    backgroundColor: "#fff",
+                    color: "#111827",
+                  }),
+                  singleValue: (base) => ({
+                    ...base,
+                    color: "#111827",
+                  }),
+                  option: (base, { isFocused }) => ({
+                    ...base,
+                    backgroundColor: isFocused ? "#f3f4f6" : "#fff",
+                    color: "#111827",
+                  }),
+                  placeholder: (base) => ({
+                    ...base,
+                    color: "#6b7280", // gray-500
+                  }),
+                }}
               />
             )}
           />
+
           <p className="text-red-500 text-sm">{errors.category?.message}</p>
         </div>
 

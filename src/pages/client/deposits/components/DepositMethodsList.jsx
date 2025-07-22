@@ -30,7 +30,7 @@ const DepositMethodsList = ({ methods, onSelect }) => {
           >
             {logoSrc && (
               <div className="w-20 h-20 mb-3 rounded-full overflow-hidden border border-gray-200 dark:border-gray-700 shadow-inner">
-                <img src={logoSrc} alt={method.name} className="w-full h-full object-contain" />
+                <img src={logoSrc} alt={method.name} className="w-full h-full object-contain bg-white" />
               </div>
             )}
 

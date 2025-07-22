@@ -93,27 +93,28 @@ const UploadKycDocumentModal = ({ onSuccess, onClose }) => {
               styles={{
                 control: (base, state) => ({
                   ...base,
-                  backgroundColor: "hsl(222, 47%, 11%)", // dark bg
-                  borderColor: errors.document_type ? "#f87171" : base.borderColor,
-                  color: "white",
-                }),
-                singleValue: (base) => ({
-                  ...base,
-                  color: "white",
+                  backgroundColor: "#fff",
+                  borderColor: errors.document_type ? "#f87171" : "#d1d5db",
+                  color: "#111827",
+                  boxShadow: "none",
                 }),
                 menu: (base) => ({
                   ...base,
-                  backgroundColor: "#1f2937", // dark menu
-                  color: "white",
+                  backgroundColor: "#fff",
+                  color: "#111827",
                 }),
-                option: (base, state) => ({
+                singleValue: (base) => ({
                   ...base,
-                  backgroundColor: state.isFocused ? "#374151" : "#1f2937",
-                  color: "white",
+                  color: "#111827",
+                }),
+                option: (base, { isFocused }) => ({
+                  ...base,
+                  backgroundColor: isFocused ? "#f3f4f6" : "#fff",
+                  color: "#111827",
                 }),
                 placeholder: (base) => ({
                   ...base,
-                  color: "#9ca3af", // gray-400
+                  color: "#6b7280", // gray-500
                 }),
               }}
             />

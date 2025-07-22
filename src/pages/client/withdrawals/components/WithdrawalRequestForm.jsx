@@ -1,54 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import Select from "react-select";
 import Spinner from "@/components/ui/Spinner";
-import { ThemeContext } from "@/context/ThemeContext";
-
-// Custom react-select styles based on theme and error
-const getSelectStyles = (theme, hasError) => ({
-  control: (base, state) => ({
-    ...base,
-    backgroundColor: theme === "dark" ? "#1f2937" : "#ffffff",
-    borderColor: hasError ? "#f87171" : base.borderColor,
-    color: theme === "dark" ? "#f9fafb" : "#111827",
-    boxShadow: state.isFocused ? "0 0 0 1px var(--tw-ring-color)" : base.boxShadow,
-    "&:hover": {
-      borderColor: theme === "dark" ? "#9ca3af" : "#6b7280",
-    },
-  }),
-  menu: (base) => ({
-    ...base,
-    backgroundColor: theme === "dark" ? "#1f2937" : "#ffffff",
-    zIndex: 50,
-  }),
-  singleValue: (base) => ({
-    ...base,
-    color: theme === "dark" ? "#f9fafb" : "#111827",
-  }),
-  option: (base, state) => ({
-    ...base,
-    backgroundColor: state.isSelected
-      ? "#2563eb"
-      : state.isFocused
-      ? theme === "dark"
-        ? "#374151"
-        : "#f3f4f6"
-      : theme === "dark"
-      ? "#1f2937"
-      : "#ffffff",
-    color: theme === "dark" ? "#f9fafb" : "#111827",
-    cursor: "pointer",
-  }),
-  placeholder: (base) => ({
-    ...base,
-    color: theme === "dark" ? "#9ca3af" : "#6b7280",
-  }),
-});
 
 const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => {
-  const { theme } = useContext(ThemeContext);
   const [selectedAmount, setSelectedAmount] = useState(null);
   const predefinedAmounts = [100, 200, 500, 1000];
 
@@ -71,7 +28,7 @@ const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => 
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      method_id: methods[0]?.id || null,
+      method_id: null,
       amount: "",
       note: "",
     },
@@ -116,9 +73,37 @@ const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => 
               options={methodOptions}
               placeholder="Choose a method..."
               classNamePrefix="react-select"
-              onChange={(option) => field.onChange(option.value)}
+              onChange={(option) => field.onChange(option?.value ?? null)}
               value={methodOptions.find((opt) => opt.value === field.value) || null}
-              styles={getSelectStyles(theme, !!errors.method_id)}
+              styles={{
+                control: (base, state) => ({
+                  ...base,
+                  backgroundColor: "#fff",
+                  borderColor: errors.method_id ? "#f87171" : "#d1d5db",
+                  color: "#111827",
+                  boxShadow: "none",
+                }),
+                menu: (base) => ({
+                  ...base,
+                  backgroundColor: "#fff",
+                  color: "#111827",
+                  zIndex: 50,
+                }),
+                singleValue: (base) => ({
+                  ...base,
+                  color: "#111827",
+                }),
+                option: (base, { isFocused, isSelected }) => ({
+                  ...base,
+                  backgroundColor: isSelected ? "#2563eb" : isFocused ? "#f3f4f6" : "#fff",
+                  color: "#111827",
+                  cursor: "pointer",
+                }),
+                placeholder: (base) => ({
+                  ...base,
+                  color: "#6b7280",
+                }),
+              }}
             />
           )}
         />
