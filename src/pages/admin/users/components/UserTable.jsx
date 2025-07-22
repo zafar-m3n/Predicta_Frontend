@@ -98,21 +98,21 @@ const UserTable = ({ users, onEdit, onDelete, onView, currentPage, totalPages, o
                       className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                       title="View"
                     >
-                      <Icon icon="mdi:eye" width="18" />
+                      <Icon icon="mdi:eye" width="18" className="text-black dark:text-white" />
                     </button>
                     <button
                       onClick={() => onEdit(user)}
-                      className="inline-flex items-center px-2 py-1 border border-green-300 dark:border-blue-600 rounded hover:bg-blue-50 dark:hover:bg-blue-900 transition"
+                      className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-900 transition"
                       title="Edit"
                     >
-                      <Icon icon="mdi:pencil" width="18" className="text-blue-500" />
+                      <Icon icon="mdi:pencil" width="18" className="text-black dark:text-white" />
                     </button>
                     <button
                       onClick={() => confirmDelete(user)}
-                      className="inline-flex items-center px-2 py-1 border border-red-300 dark:border-red-600 rounded hover:bg-red-50 dark:hover:bg-red-900 transition"
+                      className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-900 transition"
                       title="Delete"
                     >
-                      <Icon icon="mdi:trash-can" width="18" className="text-red-500" />
+                      <Icon icon="mdi:trash-can" width="18" className="text-black dark:text-white" />
                     </button>
                   </td>
                 </tr>
@@ -161,21 +161,21 @@ const UserTable = ({ users, onEdit, onDelete, onView, currentPage, totalPages, o
               <div className="flex flex-wrap gap-2 pt-2">
                 <button
                   onClick={() => onView(user)}
-                  className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition text-sm text-black dark:text-gray-200"
+                  className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition text-sm text-black dark:text-white"
                   title="View"
                 >
                   <Icon icon="mdi:eye" width="18" className="mr-1" /> View
                 </button>
                 <button
                   onClick={() => onEdit(user)}
-                  className="inline-flex items-center px-2 py-1 border border-green-300 dark:border-green-600 rounded hover:bg-blue-50 dark:hover:bg-blue-900 transition text-sm text-blue-600 dark:text-blue-400"
+                  className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-900 transition text-sm text-black dark:text-white"
                   title="Edit"
                 >
                   <Icon icon="mdi:pencil" width="18" className="mr-1" /> Edit
                 </button>
                 <button
                   onClick={() => confirmDelete(user)}
-                  className="inline-flex items-center px-2 py-1 border border-red-300 dark:border-red-600 rounded hover:bg-red-50 dark:hover:bg-red-900 transition text-sm text-red-600 dark:text-red-400"
+                  className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-900 transition text-sm text-black dark:text-white"
                   title="Delete"
                 >
                   <Icon icon="mdi:trash-can" width="18" className="mr-1" /> Delete

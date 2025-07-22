@@ -75,7 +75,7 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
                       <img
                         src={`${apiBaseUrl}/${details.qr_code_path}`}
                         alt="QR Code"
-                        className="w-28 h-28 object-contain rounded shadow-md"
+                        className="w-28 h-28 object-contain rounded shadow-md bg-white"
                       />
                       <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">QR Code</p>
                     </div>
@@ -85,7 +85,7 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
                       <img
                         src={`${apiBaseUrl}/${details.logo_path}`}
                         alt="Logo"
-                        className="w-28 h-28 object-contain rounded shadow-md"
+                        className="w-28 h-28 object-contain rounded shadow-md bg-white"
                       />
                       <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">Logo</p>
                     </div>
@@ -110,7 +110,7 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
                       <img
                         src={`${apiBaseUrl}/${details.qr_code_path}`}
                         alt="QR Code"
-                        className="w-28 h-28 object-contain rounded shadow-md"
+                        className="w-28 h-28 object-contain rounded shadow-md bg-white"
                       />
                       <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">QR Code</p>
                     </div>
@@ -120,7 +120,7 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
                       <img
                         src={`${apiBaseUrl}/${details.logo_path}`}
                         alt="Logo"
-                        className="w-28 h-28 object-contain rounded shadow-md"
+                        className="w-28 h-28 object-contain rounded shadow-md bg-white"
                       />
                       <p className="text-gray-500 dark:text-gray-400 text-xs mt-1">Logo</p>
                     </div>

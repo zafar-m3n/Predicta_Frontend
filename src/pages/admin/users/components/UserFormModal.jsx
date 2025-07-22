@@ -87,6 +87,25 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
     }
   };
 
+  const selectStyles = (hasError) => ({
+    control: (base) => ({
+      ...base,
+      backgroundColor: "#fff",
+      borderColor: hasError ? "#f87171" : "#d1d5db",
+      color: "#111827",
+      boxShadow: "none",
+    }),
+    singleValue: (base) => ({ ...base, color: "#111827" }),
+    menu: (base) => ({ ...base, backgroundColor: "#fff", color: "#111827", zIndex: 50 }),
+    option: (base, { isFocused, isSelected }) => ({
+      ...base,
+      backgroundColor: isSelected ? "#2563eb" : isFocused ? "#f3f4f6" : "#fff",
+      color: "#111827",
+      cursor: "pointer",
+    }),
+    placeholder: (base) => ({ ...base, color: "#6b7280" }),
+  });
+
   return (
     <form onSubmit={handleSubmit(submitHandler)} className="space-y-4 text-left">
       {/* Full Name */}
@@ -142,21 +161,9 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
                 options={options}
                 placeholder="Select Country"
                 value={options.find((opt) => opt.value === countryCode) || null}
-                onChange={(selected) => {
-                  field.onChange(selected ? selected.value : "");
-                }}
-                className="react-select-container"
+                onChange={(selected) => field.onChange(selected ? selected.value : "")}
                 classNamePrefix="react-select"
-                styles={{
-                  control: (base) => ({
-                    ...base,
-                    backgroundColor: "var(--tw-bg-opacity)" in document.documentElement.style ? "inherit" : "#1f2937",
-                    borderColor: errors.country_code ? "#f87171" : undefined,
-                    color: "inherit",
-                  }),
-                  singleValue: (base) => ({ ...base, color: "inherit" }),
-                  menu: (base) => ({ ...base, backgroundColor: "white", color: "black" }),
-                }}
+                styles={selectStyles(!!errors.country_code)}
               />
             )}
           />
@@ -195,19 +202,10 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
               {...field}
               options={roleOptions}
               placeholder="Select role..."
-              onChange={(option) => field.onChange(option.value)}
+              onChange={(option) => field.onChange(option?.value || "")}
               value={roleOptions.find((opt) => opt.value === field.value) || null}
               classNamePrefix="react-select"
-              styles={{
-                control: (base) => ({
-                  ...base,
-                  backgroundColor: "var(--tw-bg-opacity)" in document.documentElement.style ? "inherit" : "#1f2937",
-                  borderColor: errors.role ? "#f87171" : undefined,
-                  color: "inherit",
-                }),
-                singleValue: (base) => ({ ...base, color: "inherit" }),
-                menu: (base) => ({ ...base, backgroundColor: "white", color: "black" }),
-              }}
+              styles={selectStyles(!!errors.role)}
             />
           )}
         />

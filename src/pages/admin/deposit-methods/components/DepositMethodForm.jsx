@@ -139,33 +139,33 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
               styles={{
                 control: (base, state) => ({
                   ...base,
-                  backgroundColor: "var(--tw-bg-white, white)",
-                  borderColor: errors.type ? "red" : state.isFocused ? "#86efac" : "#d1d5db",
+                  backgroundColor: "#fff",
+                  borderColor: errors.type ? "#f87171" : "#d1d5db",
+                  color: "#111827",
                   borderRadius: "0.375rem",
                   minHeight: "2.5rem",
                   boxShadow: "none",
                 }),
                 menu: (base) => ({
                   ...base,
-                  backgroundColor: "white",
-                  color: "black",
+                  backgroundColor: "#fff",
+                  color: "#111827",
                 }),
                 singleValue: (base) => ({
                   ...base,
-                  color: "black",
+                  color: "#111827",
+                }),
+                option: (base, { isFocused, isSelected }) => ({
+                  ...base,
+                  backgroundColor: isSelected ? "#22c55e" : isFocused ? "#f3f4f6" : "#fff",
+                  color: "#111827",
+                  cursor: "pointer",
+                }),
+                placeholder: (base) => ({
+                  ...base,
+                  color: "#6b7280",
                 }),
               }}
-              theme={(theme) => ({
-                ...theme,
-                borderRadius: 6,
-                colors: {
-                  ...theme.colors,
-                  primary25: "#f3f4f6", // hover
-                  primary: "#22c55e", // accent
-                  neutral0: "white", // input background
-                  neutral80: "black", // text color
-                },
-              })}
             />
           )}
         />
