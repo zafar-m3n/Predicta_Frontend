@@ -5,6 +5,7 @@ import Notification from "@/components/ui/Notification";
 import WithdrawalRequestForm from "./components/WithdrawalRequestForm";
 import { useNavigate } from "react-router-dom";
 import Spinner from "@/components/ui/Spinner";
+import Heading from "@/components/ui/Heading";
 
 const ClientWithdrawals = () => {
   const [methods, setMethods] = useState([]);
@@ -74,12 +75,7 @@ const ClientWithdrawals = () => {
   if (loading) {
     return (
       <DefaultLayout>
-        <div className="py-5">
-          <Spinner />
-          <p className="text-center text-gray-500 dark:text-gray-400 mt-4">
-            Please wait while we check if you are eligible for a withdrawal.
-          </p>
-        </div>
+        <Spinner message="Please wait while we check if you are eligible for a withdrawal." />
       </DefaultLayout>
     );
   }
@@ -87,11 +83,9 @@ const ClientWithdrawals = () => {
   if (methods.length === 0) {
     return (
       <DefaultLayout>
-        <div className="bg-yellow-50 dark:bg-yellow-900 border-l-4 border-yellow-400 dark:border-yellow-300 px-4 py-5 rounded">
-          <p className="text-yellow-700 dark:text-yellow-200 font-medium">
-            You do not have any active withdrawal details. Please add one from your profile page before requesting a
-            withdrawal.
-          </p>
+        <div className="bg-yellow-50 dark:bg-yellow-100/10 border-l-4 border-yellow-400 px-4 py-5 rounded text-yellow-700 dark:text-yellow-300 font-medium">
+          You do not have any active withdrawal details. Please add one from your profile page before requesting a
+          withdrawal.
         </div>
       </DefaultLayout>
     );
@@ -99,22 +93,18 @@ const ClientWithdrawals = () => {
 
   return (
     <DefaultLayout>
-      <div className="py-5">
-        <div className="mb-4">
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">Request Withdrawal</h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Fill out the form to request a withdrawal from your wallet balance.
-          </p>
-        </div>
+      <Heading>Request Withdrawal</Heading>
+      <p className="text-gray-600 dark:text-gray-400 mb-6 text-sm">
+        Fill out the form to request a withdrawal from your wallet balance.
+      </p>
 
-        <div className="max-w-xl mx-auto">
-          <WithdrawalRequestForm
-            methods={methods}
-            onSubmit={handleFormSubmit}
-            isSubmitting={isSubmitting}
-            balance={balance}
-          />
-        </div>
+      <div className="max-w-xl mx-auto">
+        <WithdrawalRequestForm
+          methods={methods}
+          onSubmit={handleFormSubmit}
+          isSubmitting={isSubmitting}
+          balance={balance}
+        />
       </div>
     </DefaultLayout>
   );

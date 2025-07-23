@@ -1,6 +1,8 @@
 import React from "react";
 import Icon from "@/components/ui/Icon";
 import Notification from "@/components/ui/Notification";
+import Heading from "@/components/ui/Heading";
+
 const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
 const Field = ({ label, value }) => (
@@ -30,8 +32,8 @@ const DepositMethodDetails = ({ method }) => {
   return (
     <div className="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 space-y-5 border border-gray-100 dark:border-gray-700">
       <div className="flex items-center gap-2 mb-2">
-        <Icon icon="mdi:bank-transfer" className="text-accent" width="22" />
-        <h2 className="text-xl font-bold text-gray-800 dark:text-white">Deposit Details</h2>
+        <Icon icon="mdi:bank-transfer" className="text-accent" width={30} />
+        <Heading>Deposit Details</Heading>
       </div>
 
       {method.type === "bank" && details && (

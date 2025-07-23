@@ -1,13 +1,15 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import Select from "react-select";
+
+import Select from "@/components/form/Select";
+import TextInput from "@/components/form/TextInput";
+import AccentButton from "@/components/ui/AccentButton";
 import Spinner from "@/components/ui/Spinner";
-import { ThemeContext } from "@/context/ThemeContext";
+import Heading from "@/components/ui/Heading";
 
 const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => {
-  const { theme } = useContext(ThemeContext);
   const [selectedAmount, setSelectedAmount] = useState(null);
   const predefinedAmounts = [100, 200, 500, 1000];
 
@@ -54,84 +56,28 @@ const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => 
     label: method.type === "bank" ? `${method.bank_name} (${method.account_number})` : `${method.network} Wallet`,
   }));
 
-  const isDark = theme === "dark";
-
   return (
     <form
       onSubmit={handleSubmit(internalSubmit)}
       className="space-y-6 bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6"
     >
-      <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Submit Withdrawal Request</h2>
+      <Heading>Submit Withdrawal Request</Heading>
 
-      {/* Select Withdrawal Method */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Select Withdrawal Method
-        </label>
-        <Controller
-          name="method_id"
-          control={control}
-          render={({ field }) => (
-            <Select
-              {...field}
-              options={methodOptions}
-              placeholder="Choose a method..."
-              classNamePrefix="react-select"
-              onChange={(option) => field.onChange(option?.value ?? null)}
-              value={methodOptions.find((opt) => opt.value === field.value) || null}
-              styles={{
-                control: (base, state) => ({
-                  ...base,
-                  backgroundColor: isDark ? "#1E2939" : "#fff",
-                  borderColor: errors.method_id
-                    ? "#f87171"
-                    : state.isFocused
-                    ? "#309f6d"
-                    : isDark
-                    ? "#4b5563"
-                    : "#d1d5db",
-                  color: isDark ? "#f9fafb" : "#111827",
-                  boxShadow: "none",
-                  "&:hover": {
-                    borderColor: "#309f6d",
-                  },
-                }),
-                menu: (base) => ({
-                  ...base,
-                  backgroundColor: isDark ? "#1E2939" : "#fff",
-                  color: isDark ? "#f9fafb" : "#111827",
-                  zIndex: 50,
-                }),
-                singleValue: (base) => ({
-                  ...base,
-                  color: isDark ? "#f9fafb" : "#111827",
-                }),
-                option: (base, { isFocused, isSelected }) => ({
-                  ...base,
-                  backgroundColor: isSelected
-                    ? "#309f6d"
-                    : isFocused
-                    ? isDark
-                      ? "#4b5563"
-                      : "#f3f4f6"
-                    : isDark
-                    ? "#1E2939"
-                    : "#fff",
-                  color: isSelected ? "#ffffff" : isDark ? "#f9fafb" : "#111827",
-                  cursor: "pointer",
-                }),
-                placeholder: (base) => ({
-                  ...base,
-                  color: isDark ? "#9ca3af" : "#6b7280",
-                }),
-              }}
-            />
-          )}
-        />
-        <p className="text-red-500 text-sm">{errors.method_id?.message}</p>
-      </div>
+      <Controller
+        name="method_id"
+        control={control}
+        render={({ field }) => (
+          <Select
+            label="Select Withdrawal Method"
+            options={methodOptions}
+            value={field.value}
+            onChange={(val) => field.onChange(val)}
+            error={errors.method_id?.message}
+            placeholder="Choose a method..."
+          />
+        )}
+      />
 
-      {/* Select or Enter Amount */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Amount</label>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -143,7 +89,7 @@ const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => 
               className={`border rounded-lg py-2 font-semibold transition-all ${
                 selectedAmount === amt
                   ? "bg-accent text-white border-accent"
-                  : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  : "bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600"
               }`}
             >
               ${amt}
@@ -155,7 +101,7 @@ const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => 
             className={`border rounded-lg py-2 font-semibold transition-all ${
               selectedAmount === "other"
                 ? "bg-accent text-white border-accent"
-                : "bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700"
+                : "bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600"
             }`}
           >
             Other
@@ -163,48 +109,25 @@ const WithdrawalRequestForm = ({ methods, onSubmit, isSubmitting, balance }) => 
         </div>
       </div>
 
-      {/* Custom Amount Input */}
       {selectedAmount === "other" && (
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Enter Custom Amount (USD)
-          </label>
-          <input
-            type="text"
-            placeholder="e.g., 150"
-            {...register("amount")}
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 ${
-              errors.amount ? "border-red-500" : "border-gray-300 dark:border-gray-700"
-            }`}
-          />
-          <p className="text-red-500 text-sm">{errors.amount?.message}</p>
-        </div>
+        <TextInput
+          label="Enter Custom Amount (USD)"
+          placeholder="e.g., 150"
+          type="text"
+          error={errors.amount?.message}
+          {...register("amount")}
+        />
       )}
 
-      {/* Note */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Note (Optional)</label>
-        <textarea
-          {...register("note")}
-          placeholder="Any note you want to add"
-          rows={3}
-          className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 ${
-            errors.note ? "border-red-500" : "border-gray-300 dark:border-gray-700"
-          }`}
-        />
-        <p className="text-red-500 text-sm">{errors.note?.message}</p>
-      </div>
+      <TextInput
+        label="Note (Optional)"
+        placeholder="Any note you want to add"
+        type="text"
+        {...register("note")}
+        error={errors.note?.message}
+      />
 
-      {/* Submit */}
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className={`w-full bg-accent text-white py-2 rounded-md font-semibold shadow transition-all ${
-          isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
-        } flex justify-center items-center gap-2`}
-      >
-        {isSubmitting ? <Spinner color="white" /> : "Submit Request"}
-      </button>
+      <AccentButton type="submit" text="Submit Request" loading={isSubmitting} spinner={<Spinner color="white" />} />
     </form>
   );
 };

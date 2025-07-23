@@ -48,10 +48,8 @@ const ClientDeposits = () => {
   if (methods.length === 0) {
     return (
       <DefaultLayout>
-        <div className="bg-yellow-50 dark:bg-yellow-100/10 border-l-4 border-yellow-400 px-4 py-5 rounded text-yellow-700 dark:text-yellow-300">
-          <p className="font-medium">
-            No deposit methods available at this time. Please check back later or contact support for assistance.
-          </p>
+        <div className="bg-yellow-50 dark:bg-yellow-100/10 border-l-4 border-yellow-400 px-4 py-5 rounded text-yellow-700 dark:text-yellow-300 font-medium">
+          No deposit methods available at this time. Please check back later or contact support for assistance.
         </div>
       </DefaultLayout>
     );
