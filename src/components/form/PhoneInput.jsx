@@ -2,9 +2,10 @@ import React from "react";
 import { PhoneInput as IntlPhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 
-const PhoneInput = ({ value, onChange, error = "", className = "", ...rest }) => {
+const PhoneInput = ({ value, onChange, error = "", className = "", label, ...rest }) => {
   return (
     <div className="w-full">
+      {label && <label className="block mb-1 text-sm font-medium text-gray-800 dark:text-gray-200">{label}</label>}
       <IntlPhoneInput
         defaultCountry="GB"
         value={value}

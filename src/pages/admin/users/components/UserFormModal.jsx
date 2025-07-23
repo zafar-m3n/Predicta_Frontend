@@ -1,49 +1,53 @@
-import React, { useState, useMemo, useEffect, useContext } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import Select from "react-select";
 import countryList from "react-select-country-list";
-import { PhoneInput } from "react-international-phone";
-import "react-international-phone/style.css";
-import Notification from "@/components/ui/Notification";
+import libphonenumber from "google-libphonenumber";
+
+import TextInput from "@/components/form/TextInput";
+import Select from "@/components/form/Select";
+import PhoneInput from "@/components/form/PhoneInput";
+import AccentButton from "@/components/ui/AccentButton";
 import Spinner from "@/components/ui/Spinner";
-import { ThemeContext } from "@/context/ThemeContext";
+import Notification from "@/components/ui/Notification";
+
+const schema = Yup.object().shape({
+  full_name: Yup.string().required("Full name is required"),
+  email: Yup.string().email("Invalid email").required("Email is required"),
+  phone_number: Yup.string().required("Phone number is required"),
+  country_code: Yup.string().required("Country is required"),
+  role: Yup.string().oneOf(["client", "admin"], "Invalid role").required("Role is required"),
+  password: Yup.string(),
+  promo_code: Yup.string(),
+});
 
 const roleOptions = [
   { value: "client", label: "Client" },
   { value: "admin", label: "Admin" },
 ];
 
-const schema = Yup.object().shape({
-  full_name: Yup.string().required("Full name is required"),
-  email: Yup.string().email("Invalid email format").required("Email is required"),
-  phone_number: Yup.string().required("Phone number is required"),
-  country_code: Yup.string().required("Country is required"),
-  role: Yup.string().oneOf(["client", "admin"], "Invalid role").required("Role is required"),
-  password: Yup.string(),
-  promo_code: Yup.string().nullable(),
-});
-
-const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
+const UserFormModal = ({ onSubmit, onClose, initialData = null, isEdit = false }) => {
   const options = useMemo(() => countryList().getData(), []);
-  const { theme } = useContext(ThemeContext);
-  const isDark = theme === "dark";
+  const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
 
+  const [phoneError, setPhoneError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
+    register,
     handleSubmit,
     control,
     setValue,
-    reset,
     watch,
+    reset,
+    trigger,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const countryCode = watch("country_code");
+  const selectedCountryCode = watch("country_code");
 
   useEffect(() => {
     if (initialData) {
@@ -56,236 +60,143 @@ const UserFormModal = ({ onSubmit, onClose, initialData, isEdit }) => {
         password: "",
         promo_code: initialData.promo_code || "",
       });
-    } else {
-      reset({
-        full_name: "",
-        email: "",
-        phone_number: "",
-        country_code: "",
-        role: "client",
-        password: "",
-        promo_code: "",
-      });
     }
   }, [initialData, reset]);
 
-  const submitHandler = async (data) => {
-    setIsSubmitting(true);
+  const handleFormSubmit = async (data) => {
+    const isValidForm = await trigger();
+    if (!isValidForm) {
+      setPhoneError("");
+      return;
+    }
+
     try {
-      const res = await onSubmit(data);
+      const parsedNumber = phoneUtil.parseAndKeepRawInput(data.phone_number);
+      if (!phoneUtil.isValidNumber(parsedNumber)) {
+        setPhoneError("Invalid phone number");
+        return;
+      }
+    } catch {
+      setPhoneError("Invalid phone number");
+      return;
+    }
+
+    setPhoneError("");
+    setIsSubmitting(true);
+
+    try {
+      const payload = {
+        full_name: data.full_name,
+        email: data.email,
+        phone_number: data.phone_number,
+        country_code: data.country_code,
+        role: data.role,
+        password: data.password || undefined,
+        promo_code: data.promo_code || null,
+      };
+
+      const res = await onSubmit(payload);
+
       if (res?.status === 200 && res.data?.code === "OK") {
         Notification.success(`User ${isEdit ? "updated" : "created"} successfully.`);
         onClose();
       } else {
-        const msg = res?.data?.error || "Unexpected error occurred.";
-        Notification.error(msg);
+        Notification.error(res?.data?.error || "Unexpected response from server.");
       }
     } catch (error) {
-      let msg = "Something went wrong. Please try again.";
-      if (error.response?.data?.error) {
-        msg = error.response.data.error;
-      }
+      const status = error.response?.status;
+      let msg = "Something went wrong.";
+      if (status === 400) msg = error.response?.data?.error || "Bad Request.";
+      else if (status === 500) msg = "Server error.";
       Notification.error(msg);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const selectStyles = (hasError) => ({
-    control: (base, state) => ({
-      ...base,
-      backgroundColor: isDark ? "#101828" : "#fff",
-      borderColor: hasError ? "#f87171" : state.isFocused ? "#309f6d" : isDark ? "#4b5563" : "#d1d5db",
-      color: isDark ? "#f9fafb" : "#111827",
-      boxShadow: "none",
-      "&:hover": {
-        borderColor: "#309f6d",
-      },
-    }),
-    singleValue: (base) => ({
-      ...base,
-      color: isDark ? "#f9fafb" : "#111827",
-    }),
-    menu: (base) => ({
-      ...base,
-      backgroundColor: isDark ? "#101828" : "#fff",
-      color: isDark ? "#f9fafb" : "#111827",
-      zIndex: 50,
-    }),
-    option: (base, { isFocused, isSelected }) => ({
-      ...base,
-      backgroundColor: isSelected
-        ? "#309f6d"
-        : isFocused
-        ? isDark
-          ? "#4b5563"
-          : "#f3f4f6"
-        : isDark
-        ? "#101828"
-        : "#fff",
-      color: isSelected ? "#ffffff" : isDark ? "#f9fafb" : "#111827",
-      cursor: "pointer",
-    }),
-    placeholder: (base) => ({
-      ...base,
-      color: isDark ? "#9ca3af" : "#6b7280",
-    }),
-  });
-
   return (
-    <form onSubmit={handleSubmit(submitHandler)} className="space-y-4 text-left">
-      {/* Full Name */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Full Name</label>
+    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4 text-left">
+      <TextInput
+        placeholder="Enter User's Fullname"
+        {...register("full_name")}
+        error={errors.full_name?.message}
+        label="Full Name"
+      />
+
+      <TextInput
+        type="email"
+        placeholder="Enter Email Address"
+        {...register("email")}
+        error={errors.email?.message}
+        label="Email"
+      />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Controller
-          name="full_name"
+          name="country_code"
           control={control}
           render={({ field }) => (
-            <input
-              {...field}
-              type="text"
-              placeholder="Enter full name"
-              className={`w-full border rounded px-3 py-2 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-accent ${
-                errors.full_name ? "border-red-500" : "border-gray-300 dark:border-gray-600"
-              }`}
+            <Select
+              value={field.value}
+              onChange={(value) => field.onChange(value)}
+              options={options}
+              placeholder="Select Country"
+              error={errors.country_code?.message}
+              label="Country"
             />
           )}
         />
-        <p className="text-red-500 text-sm">{errors.full_name?.message}</p>
-      </div>
 
-      {/* Email */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Email</label>
         <Controller
-          name="email"
+          name="phone_number"
           control={control}
           render={({ field }) => (
-            <input
-              {...field}
-              type="email"
-              placeholder="Enter email"
-              className={`w-full border rounded px-3 py-2 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-accent ${
-                errors.email ? "border-red-500" : "border-gray-300 dark:border-gray-600"
-              }`}
+            <PhoneInput
+              value={field.value}
+              onChange={(value) => {
+                field.onChange(value);
+                setValue("phone_number", value, { shouldValidate: true });
+                setPhoneError("");
+              }}
+              error={errors.phone_number?.message || phoneError}
+              label="Phone Number"
             />
           )}
         />
-        <p className="text-red-500 text-sm">{errors.email?.message}</p>
       </div>
 
-      {/* Country and Phone */}
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Country</label>
-          <Controller
-            name="country_code"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                options={options}
-                placeholder="Select Country"
-                value={options.find((opt) => opt.value === countryCode) || null}
-                onChange={(selected) => field.onChange(selected ? selected.value : "")}
-                classNamePrefix="react-select"
-                styles={selectStyles(!!errors.country_code)}
-              />
-            )}
-          />
-          <p className="text-red-500 text-sm">{errors.country_code?.message}</p>
-        </div>
+      <TextInput
+        type="password"
+        placeholder={isEdit ? "Leave blank for same password" : "Enter New Password"}
+        {...register("password")}
+        error={errors.password?.message}
+        label={isEdit ? "New Password (optional)" : "Password"}
+      />
 
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Phone Number</label>
-          <Controller
-            name="phone_number"
-            control={control}
-            render={({ field }) => (
-              <PhoneInput
-                defaultCountry="GB"
-                value={field.value}
-                onChange={(value) => {
-                  field.onChange(value);
-                  setValue("phone_number", value, { shouldValidate: true });
-                }}
-                className={`w-full ${errors.phone_number ? "border-red-500" : "border-gray-300 dark:border-gray-600"}`}
-                inputClassName="w-full border rounded px-3 py-2 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-accent"
-              />
-            )}
-          />
-          <p className="text-red-500 text-sm">{errors.phone_number?.message}</p>
-        </div>
-      </div>
-
-      {/* Role */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Role</label>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Controller
           name="role"
           control={control}
           render={({ field }) => (
             <Select
-              {...field}
+              value={field.value}
+              onChange={(value) => field.onChange(value)}
               options={roleOptions}
-              placeholder="Select role..."
-              onChange={(option) => field.onChange(option?.value || "")}
-              value={roleOptions.find((opt) => opt.value === field.value) || null}
-              classNamePrefix="react-select"
-              styles={selectStyles(!!errors.role)}
+              placeholder="Select Role"
+              error={errors.role?.message}
+              label="Role"
             />
           )}
         />
-        <p className="text-red-500 text-sm">{errors.role?.message}</p>
+        <TextInput placeholder="Enter the Promo Code" {...register("promo_code")} label="Promo Code (Optional)" />
       </div>
 
-      {/* Password */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
-          {isEdit ? "New Password (optional)" : "Password"}
-        </label>
-        <Controller
-          name="password"
-          control={control}
-          render={({ field }) => (
-            <input
-              {...field}
-              type="password"
-              placeholder={isEdit ? "Leave blank to keep current" : "Enter password"}
-              className="w-full border rounded px-3 py-2 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-accent border-gray-300 dark:border-gray-600"
-            />
-          )}
-        />
-        <p className="text-red-500 text-sm">{errors.password?.message}</p>
-      </div>
-
-      {/* Promo Code */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Promo Code (optional)</label>
-        <Controller
-          name="promo_code"
-          control={control}
-          render={({ field }) => (
-            <input
-              {...field}
-              type="text"
-              placeholder="Enter promo code"
-              className="w-full border rounded px-3 py-2 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 focus:outline-none focus:border-accent border-gray-300 dark:border-gray-600"
-            />
-          )}
-        />
-      </div>
-
-      {/* Submit */}
-      <button
+      <AccentButton
         type="submit"
-        disabled={isSubmitting}
-        className={`w-full bg-accent text-white py-2 rounded font-semibold transition ${
-          isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
-        }`}
-      >
-        {isSubmitting ? <Spinner color="white" /> : isEdit ? "Update User" : "Create User"}
-      </button>
+        loading={isSubmitting}
+        text={isEdit ? "Update User" : "Create User"}
+        spinner={<Spinner color="white" />}
+      />
     </form>
   );
 };

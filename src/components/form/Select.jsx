@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import SelectLib from "react-select";
 import { ThemeContext } from "@/context/ThemeContext";
 
-const Select = ({ value, onChange, options = [], placeholder = "Select", error, ...rest }) => {
+const Select = ({ value, onChange, options = [], placeholder = "Select", error, label, ...rest }) => {
   const { theme } = useContext(ThemeContext);
 
   const customStyles = {
@@ -37,6 +37,7 @@ const Select = ({ value, onChange, options = [], placeholder = "Select", error, 
 
   return (
     <div className="w-full">
+      {label && <label className="block mb-1 text-sm font-medium text-gray-800 dark:text-gray-200">{label}</label>}
       <SelectLib
         options={options}
         value={options.find((opt) => opt.value === value) || null}
