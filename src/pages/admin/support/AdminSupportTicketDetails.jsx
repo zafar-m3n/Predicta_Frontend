@@ -128,14 +128,15 @@ const AdminSupportTicketDetails = () => {
     <DefaultLayout>
       <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 shadow-sm rounded-2xl p-4 border border-gray-100 dark:border-gray-700">
         <button onClick={() => navigate(-1)} className="mb-4 flex items-center space-x-2">
-          <Icon icon="mdi:arrow-left" width={36} className="cursor-pointer p-2 rounded bg-accent text-white" />
+          <Icon icon="mdi:arrow-left" width={36} className="cursor-pointer p-2 rounded bg-accent text-gray-200" />
           <span className="text-accent hover:underline text-sm">Back to tickets</span>
         </button>
 
         <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
-            <h2 className="text-xl font-semibold mb-1 text-gray-800 dark:text-gray-200">{ticket.subject}</h2>
+            <Heading>{ticket.subject}</Heading>
             <div className="flex flex-wrap gap-2 items-center">
+              <Badge text={ticket.category} color="blue" size="sm" />
               <Badge text={ticket.status} color={ticket.status === "closed" ? "red" : "yellow"} size="sm" />
               <Badge text={ticket.User.full_name} color="blue" size="sm" />
               <span className="text-gray-700 dark:text-gray-300 text-sm">{ticket.User.email}</span>
@@ -178,7 +179,7 @@ const AdminSupportTicketDetails = () => {
             <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded overflow-hidden focus-within:border-accent bg-gray-100 dark:bg-gray-900">
               <input
                 {...register("message")}
-                placeholder="Type your reply..."
+                placeholder="Type your message..."
                 className="flex-1 px-3 py-2 outline-none text-sm bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
               />
 

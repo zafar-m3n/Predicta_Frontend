@@ -1,14 +1,16 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import Select from "react-select";
+
+import TextInput from "@/components/form/TextInput";
+import Select from "@/components/form/Select";
+import AccentButton from "@/components/ui/AccentButton";
+import StyledFileInput from "@/components/ui/StyledFileInput";
+import Modal from "@/components/ui/Modal";
+import Spinner from "@/components/ui/Spinner";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
-import Modal from "@/components/ui/Modal";
-import StyledFileInput from "@/components/ui/StyledFileInput";
-import Spinner from "@/components/ui/Spinner";
-import { ThemeContext } from "@/context/ThemeContext";
 
 const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
@@ -26,9 +28,6 @@ const schema = Yup.object().shape({
 });
 
 const CreateSupportTicketForm = ({ isOpen, onClose, onSuccess }) => {
-  const { theme } = useContext(ThemeContext);
-  const isDark = theme === "dark";
-
   const [attachmentFile, setAttachmentFile] = useState(null);
   const [attachmentPath, setAttachmentPath] = useState("");
   const [loading, setLoading] = useState(false);
@@ -86,7 +85,7 @@ const CreateSupportTicketForm = ({ isOpen, onClose, onSuccess }) => {
     } catch (error) {
       const msg = error.response?.data?.error || "Failed to create support ticket.";
       Notification.error(msg);
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -95,101 +94,41 @@ const CreateSupportTicketForm = ({ isOpen, onClose, onSuccess }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Create New Support Ticket" size="md">
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Subject */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Subject</label>
-          <input
-            type="text"
-            {...register("subject")}
-            placeholder="Enter subject"
-            className={`w-full border rounded px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:border-accent transition ${
-              errors.subject ? "border-red-500" : "border-gray-300 dark:border-gray-600"
-            }`}
-          />
-          <p className="text-red-500 text-sm">{errors.subject?.message}</p>
-        </div>
+        <TextInput
+          label="Subject"
+          placeholder="Enter subject"
+          error={errors.subject?.message}
+          {...register("subject")}
+        />
 
-        {/* Category */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Category</label>
-          <Controller
-            name="category"
-            control={control}
-            render={({ field }) => (
-              <Select
-                {...field}
-                options={categoryOptions}
-                placeholder="Select category"
-                value={categoryOptions.find((opt) => opt.value === field.value) || null}
-                onChange={(selected) => field.onChange(selected ? selected.value : "")}
-                classNamePrefix="react-select"
-                styles={{
-                  control: (base, state) => ({
-                    ...base,
-                    backgroundColor: isDark ? "#1E2939" : "#fff",
-                    borderColor: errors.category
-                      ? "#f87171"
-                      : state.isFocused
-                      ? "#309f6d"
-                      : isDark
-                      ? "#4b5563"
-                      : "#d1d5db",
-                    color: isDark ? "#f9fafb" : "#111827",
-                    boxShadow: "none",
-                    "&:hover": {
-                      borderColor: "#309f6d",
-                    },
-                  }),
-                  menu: (base) => ({
-                    ...base,
-                    backgroundColor: isDark ? "#1E2939" : "#fff",
-                    color: isDark ? "#f9fafb" : "#111827",
-                    zIndex: 50,
-                  }),
-                  singleValue: (base) => ({
-                    ...base,
-                    color: isDark ? "#f9fafb" : "#111827",
-                  }),
-                  option: (base, { isFocused, isSelected }) => ({
-                    ...base,
-                    backgroundColor: isSelected
-                      ? "#309f6d"
-                      : isFocused
-                      ? isDark
-                        ? "#4b5563"
-                        : "#f3f4f6"
-                      : isDark
-                      ? "#1E2939"
-                      : "#fff",
-                    color: isSelected ? "#ffffff" : isDark ? "#f9fafb" : "#111827",
-                    cursor: "pointer",
-                  }),
-                  placeholder: (base) => ({
-                    ...base,
-                    color: isDark ? "#9ca3af" : "#6b7280",
-                  }),
-                }}
-              />
-            )}
-          />
-          <p className="text-red-500 text-sm">{errors.category?.message}</p>
-        </div>
+        <Controller
+          name="category"
+          control={control}
+          render={({ field }) => (
+            <Select
+              label="Category"
+              placeholder="Choose Ticket Category"
+              options={categoryOptions}
+              value={field.value}
+              onChange={field.onChange}
+              error={errors.category?.message}
+            />
+          )}
+        />
 
-        {/* Message */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Message</label>
+          <label className="block mb-1 text-sm font-medium text-gray-800 dark:text-gray-200">Message</label>
           <textarea
             {...register("message")}
             placeholder="Describe your issue..."
             rows={5}
-            className={`w-full border rounded px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:border-accent transition ${
-              errors.message ? "border-red-500" : "border-gray-300 dark:border-gray-600"
+            className={`w-full border rounded px-3 py-2 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-accent transition ${
+              errors.message ? "border-red-500" : "border-gray-300 dark:border-gray-700"
             }`}
           />
-          <p className="text-red-500 text-sm">{errors.message?.message}</p>
+          {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message.message}</p>}
         </div>
 
-        {/* Screenshot */}
         <StyledFileInput
           label="Screenshot"
           preferredSize="Preferred Size 800 × 600"
@@ -199,16 +138,13 @@ const CreateSupportTicketForm = ({ isOpen, onClose, onSuccess }) => {
           onRemove={removeFile}
         />
 
-        {/* Submit Button */}
-        <button
+        <AccentButton
           type="submit"
+          text="Submit Ticket"
           disabled={loading}
-          className={`w-full bg-accent text-white py-2 rounded font-semibold flex items-center justify-center transition ${
-            loading ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
-          }`}
-        >
-          {loading ? <Spinner color="white" /> : "Submit Ticket"}
-        </button>
+          loading={loading}
+          spinner={<Spinner color="white" />}
+        />
       </form>
     </Modal>
   );

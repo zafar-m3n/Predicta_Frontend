@@ -10,6 +10,7 @@ import TicketMessageBubble from "./components/TicketMessageBubble";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import Icon from "@/components/ui/Icon";
 import Spinner from "@/components/ui/Spinner";
+import Heading from "@/components/ui/Heading";
 
 const schema = yup.object().shape({
   message: yup.string().required("Message is required"),
@@ -95,10 +96,7 @@ const SupportTicketDetails = () => {
   if (loading) {
     return (
       <DefaultLayout>
-        <>
-          <Spinner />
-          <p className="text-center text-gray-500 dark:text-gray-400 mt-4">Loading ticket details...</p>
-        </>
+        <Spinner message="Loading ticket details..." />
       </DefaultLayout>
     );
   }
@@ -106,82 +104,80 @@ const SupportTicketDetails = () => {
   if (!ticket) {
     return (
       <DefaultLayout>
-        <div className="text-center text-gray-500 dark:text-gray-400 py-12">Ticket not found.</div>
+        <div className="text-center text-gray-600 dark:text-gray-400 py-12">Ticket not found.</div>
       </DefaultLayout>
     );
   }
 
   return (
     <DefaultLayout>
-      <div className="py-5">
-        <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
-          <button onClick={() => navigate(-1)} className="mb-4 flex items-center space-x-1">
-            <Icon icon="mdi:arrow-left" width={36} className="cursor-pointer p-2 rounded bg-accent text-white" />
-            <span className="text-accent hover:underline text-sm">Back to tickets</span>
-          </button>
+      <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 shadow-sm rounded-2xl p-4 border border-gray-100 dark:border-gray-700">
+        <button onClick={() => navigate(-1)} className="mb-4 flex items-center space-x-2">
+          <Icon icon="mdi:arrow-left" width={36} className="cursor-pointer p-2 rounded bg-accent text-gray-200" />
+          <span className="text-accent hover:underline text-sm">Back to tickets</span>
+        </button>
 
-          <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <div>
-              <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-1">{ticket.subject}</h2>
-              <div className="flex flex-wrap gap-2 items-center">
-                <Badge text={ticket.category} color="blue" size="sm" />
-                <Badge text={ticket.status} color={ticket.status === "closed" ? "red" : "yellow"} size="sm" />
-              </div>
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <Heading>{ticket.subject}</Heading>
+            <div className="flex flex-wrap gap-2 items-center">
+              <Badge text={ticket.category} color="blue" size="sm" />
+              <Badge text={ticket.status} color={ticket.status === "closed" ? "red" : "yellow"} size="sm" />
             </div>
           </div>
+        </div>
 
-          {/* Messages */}
-          <div className="space-y-4 mb-6 max-h-[500px] overflow-y-auto pr-2 bg-gray-50 dark:bg-gray-700 p-4 rounded border border-gray-200 dark:border-gray-600">
-            {ticket.SupportTicketMessages.map((msg) => (
-              <TicketMessageBubble key={msg.id} message={msg} />
-            ))}
-          </div>
+        {/* Messages */}
+        <div className="space-y-4 mb-6 max-h-[500px] overflow-y-auto pr-2 bg-gray-100 dark:bg-gray-900 p-4 rounded border border-gray-200 dark:border-gray-800">
+          {ticket.SupportTicketMessages.map((msg) => (
+            <TicketMessageBubble key={msg.id} message={msg} />
+          ))}
+        </div>
 
-          {ticket.status !== "closed" && (
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
-              {attachmentFile && (
-                <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 px-3 py-2 rounded">
-                  <span className="text-sm text-gray-700 dark:text-gray-200 truncate max-w-[250px]">
-                    {attachmentFile.name}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={removeFile}
-                    className="text-gray-500 hover:text-gray-700 dark:hover:text-white"
-                  >
-                    <Icon icon="mdi:close" width="18" />
-                  </button>
-                </div>
-              )}
-
-              <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded overflow-hidden focus-within:border-accent shadow-sm">
-                <input
-                  {...register("message")}
-                  placeholder="Type your message..."
-                  className="flex-1 px-3 py-2 outline-none text-sm bg-white dark:bg-gray-800 text-gray-800 dark:text-white"
-                />
-
-                <label
-                  htmlFor="attachment"
-                  className="cursor-pointer px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 border-l border-gray-300 dark:border-gray-600 flex items-center"
-                >
-                  <Icon icon="mdi:paperclip" width="20" className="text-black dark:text-white" />
-                </label>
-                <input id="attachment" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
-
+        {ticket.status !== "closed" && (
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-2">
+            {attachmentFile && (
+              <div className="flex items-center justify-between bg-gray-100 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 px-3 py-2 rounded">
+                <span className="text-sm text-gray-800 dark:text-gray-200 truncate max-w-[250px]">
+                  {attachmentFile.name}
+                </span>
                 <button
-                  type="submit"
-                  disabled={sending}
-                  className={`px-4 py-2 bg-accent text-white flex items-center justify-center font-medium hover:bg-accent/90 transition disabled:opacity-50`}
+                  type="button"
+                  onClick={removeFile}
+                  className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition"
                 >
-                  {sending ? <Spinner color="white" /> : <Icon icon="mdi:send" width="20" />}
+                  <Icon icon="mdi:close" width="18" />
                 </button>
               </div>
+            )}
 
-              {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message.message}</p>}
-            </form>
-          )}
-        </div>
+            <div className="flex items-center border border-gray-300 dark:border-gray-700 rounded overflow-hidden focus-within:border-accent bg-gray-100 dark:bg-gray-900">
+              <input
+                {...register("message")}
+                placeholder="Type your message..."
+                className="flex-1 px-3 py-2 outline-none text-sm bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200"
+              />
+
+              <label
+                htmlFor="attachment"
+                className="cursor-pointer px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-950 border-l border-gray-300 dark:border-gray-700 flex items-center"
+              >
+                <Icon icon="mdi:paperclip" width="20" className="text-gray-800 dark:text-gray-200" />
+              </label>
+              <input id="attachment" type="file" accept="image/*" onChange={handleFileChange} className="hidden" />
+
+              <button
+                type="submit"
+                disabled={sending}
+                className={`p-3 bg-accent text-white flex items-center justify-center font-medium hover:bg-accent/90 transition disabled:opacity-50`}
+              >
+                <Icon icon="mdi:send" width="20" />
+              </button>
+            </div>
+
+            {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message.message}</p>}
+          </form>
+        )}
       </div>
     </DefaultLayout>
   );

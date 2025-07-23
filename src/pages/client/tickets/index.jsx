@@ -5,6 +5,8 @@ import CreateSupportTicketForm from "./components/CreateSupportTicketForm";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Spinner from "@/components/ui/Spinner";
+import Heading from "@/components/ui/Heading";
+import AccentButton from "@/components/ui/AccentButton";
 import useWidth from "@/hooks/useWidth";
 
 const SupportTickets = () => {
@@ -62,37 +64,29 @@ const SupportTickets = () => {
 
   return (
     <DefaultLayout>
-      <div className="py-5">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">Support Tickets</h1>
-          <button
-            onClick={handleOpenCreateModal}
-            className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
-          >
-            {isMobile ? "+" : "New Ticket"}
-          </button>
+      <div className="flex justify-between items-center mb-6">
+        <Heading>Support Tickets</Heading>
+        <div className="w-fit">
+          <AccentButton onClick={handleOpenCreateModal} text={isMobile ? "+" : "New Ticket"} />
         </div>
-
-        {loading ? (
-          <>
-            <Spinner />
-            <p className="text-center text-gray-500 dark:text-gray-400 mt-4">Loading tickets...</p>
-          </>
-        ) : (
-          <SupportTicketsTable
-            tickets={tickets}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-        )}
-
-        <CreateSupportTicketForm
-          isOpen={isCreateModalOpen}
-          onClose={handleCloseCreateModal}
-          onSuccess={handleTicketCreated}
-        />
       </div>
+
+      {loading ? (
+        <Spinner message="Loading your tickets..." />
+      ) : (
+        <SupportTicketsTable
+          tickets={tickets}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
+
+      <CreateSupportTicketForm
+        isOpen={isCreateModalOpen}
+        onClose={handleCloseCreateModal}
+        onSuccess={handleTicketCreated}
+      />
     </DefaultLayout>
   );
 };
