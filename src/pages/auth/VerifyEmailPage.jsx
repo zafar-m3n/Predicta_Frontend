@@ -73,12 +73,7 @@ const VerifyEmailPage = () => {
           </>
         )}
 
-        {status === "loading" && (
-          <>
-            <Spinner />
-            <p className="mt-4 text-gray-500">Verifying your email...</p>
-          </>
-        )}
+        {status === "loading" && <Spinner message="Verifying your email" />}
 
         {status === "success" && (
           <>
