@@ -4,7 +4,11 @@ import DepositHistoryTable from "./components/DepositHistoryTable";
 import WithdrawalHistoryTable from "./components/WithdrawalHistoryTable";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
+import Heading from "@/components/ui/Heading";
 import Spinner from "@/components/ui/Spinner";
+
+import AccentButton from "@/components/ui/AccentButton";
+import GrayButton from "@/components/ui/GrayButton";
 
 const WalletHistory = () => {
   const [deposits, setDeposits] = useState([]);
@@ -31,12 +35,10 @@ const WalletHistory = () => {
         setCurrentPage(res.data.data.page || 1);
         setTotalPages(res.data.data.totalPages || 1);
       } else {
-        const msg = res.data.error || "Failed to load deposit history.";
-        Notification.error(msg);
+        Notification.error(res.data.error || "Failed to load deposit history.");
       }
     } catch (error) {
-      const msg = error.response?.data?.error || "Failed to load deposit history.";
-      Notification.error(msg);
+      Notification.error(error.response?.data?.error || "Failed to load deposit history.");
     } finally {
       setLoading(false);
     }
@@ -51,12 +53,10 @@ const WalletHistory = () => {
         setCurrentPage(res.data.data.page || 1);
         setTotalPages(res.data.data.totalPages || 1);
       } else {
-        const msg = res.data.error || "Failed to load withdrawal history.";
-        Notification.error(msg);
+        Notification.error(res.data.error || "Failed to load withdrawal history.");
       }
     } catch (error) {
-      const msg = error.response?.data?.error || "Failed to load withdrawal history.";
-      Notification.error(msg);
+      Notification.error(error.response?.data?.error || "Failed to load withdrawal history.");
     } finally {
       setLoading(false);
     }
@@ -66,65 +66,58 @@ const WalletHistory = () => {
     setCurrentPage(page);
     if (activeTab === "deposits") {
       fetchDepositHistory(page);
-    } else if (activeTab === "withdrawals") {
+    } else {
       fetchWithdrawalHistory(page);
     }
   };
 
   return (
     <DefaultLayout>
-      <div className="py-5">
-        <div className="mb-4">
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">Wallet History</h1>
-          <p className="text-gray-600 dark:text-gray-400">Track your deposit and withdrawal activities here.</p>
-        </div>
+      <Heading>Wallet History</Heading>
+      <p className="text-gray-600 dark:text-gray-400 mb-6 text-sm">
+        Track your deposit and withdrawal activities here.
+      </p>
 
-        <div className="flex space-x-4 mb-4">
-          <button
-            onClick={() => setActiveTab("deposits")}
-            className={`px-4 py-2 rounded font-medium transition ${
-              activeTab === "deposits"
-                ? "bg-accent text-white shadow"
-                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
-            }`}
-          >
-            Deposits
-          </button>
-          <button
-            onClick={() => setActiveTab("withdrawals")}
-            className={`px-4 py-2 rounded font-medium transition ${
-              activeTab === "withdrawals"
-                ? "bg-accent text-white shadow"
-                : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
-            }`}
-          >
-            Withdrawals
-          </button>
-        </div>
-
-        {loading ? (
-          <>
-            <Spinner />
-            <p className="text-center text-gray-500 dark:text-gray-400 mt-4">
-              {activeTab === "deposits" ? "Loading deposit history..." : "Loading withdrawal history..."}
-            </p>
-          </>
-        ) : activeTab === "deposits" ? (
-          <DepositHistoryTable
-            deposits={deposits}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+      {/* Tabs */}
+      <div className="flex space-x-2 mb-4">
+        {activeTab === "deposits" ? (
+          <div className="w-fit">
+            <AccentButton onClick={() => setActiveTab("deposits")} text="Deposits" />
+          </div>
         ) : (
-          <WithdrawalHistoryTable
-            withdrawals={withdrawals}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
+          <div className="w-fit">
+            <GrayButton onClick={() => setActiveTab("deposits")} text="Deposits" />
+          </div>
+        )}
+
+        {activeTab === "withdrawals" ? (
+          <div className="w-fit">
+            <AccentButton onClick={() => setActiveTab("withdrawals")} text="Withdrawals" />
+          </div>
+        ) : (
+          <div className="w-fit">
+            <GrayButton onClick={() => setActiveTab("withdrawals")} text="Withdrawals" />
+          </div>
         )}
       </div>
+
+      {loading ? (
+        <Spinner message={activeTab === "deposits" ? "Loading deposit history..." : "Loading withdrawal history..."} />
+      ) : activeTab === "deposits" ? (
+        <DepositHistoryTable
+          deposits={deposits}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      ) : (
+        <WithdrawalHistoryTable
+          withdrawals={withdrawals}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </DefaultLayout>
   );
 };
