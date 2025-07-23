@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import DefaultLayout from "@/layouts/DefaultLayout";
 import token from "@/lib/utilities";
 import Icon from "@/components/ui/Icon";
+import Heading from "@/components/ui/Heading";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -51,26 +52,24 @@ const Dashboard = () => {
 
   return (
     <DefaultLayout>
-      <div className="flex flex-col items-center justify-center text-center py-5">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-4">Welcome, {userName}</h1>
-        <p className="text-gray-600 dark:text-gray-400 max-w-xl mb-10">
-          This is your dashboard. From here, you can manage your wallet, transfer funds, view events, and much more. Use
-          the cards below to navigate quickly.
-        </p>
+      <Heading className="text-center">Welcome, {userName}</Heading>
+      <p className="text-gray-600 dark:text-gray-400 mb-6 text-sm text-center max-w-xl mx-auto">
+        This is your dashboard. From here, you can manage your wallet, transfer funds, view events, and much more. Use
+        the cards below to navigate quickly.
+      </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
-          {cards.map((card, index) => (
-            <div
-              key={index}
-              onClick={() => navigate(card.route)}
-              className="cursor-pointer bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all p-4 flex flex-col items-center justify-between text-center"
-            >
-              <Icon icon={card.icon} width={40} className="text-accent mb-4" />
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{card.title}</h3>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">{card.description}</p>
-            </div>
-          ))}
-        </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
+        {cards.map((card, index) => (
+          <div
+            key={index}
+            onClick={() => navigate(card.route)}
+            className="cursor-pointer bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-1 transition-all p-4 flex flex-col items-center justify-between text-center"
+          >
+            <Icon icon={card.icon} width={40} className="text-accent mb-4" />
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{card.title}</h3>
+            <p className="text-gray-600 dark:text-gray-400 text-sm">{card.description}</p>
+          </div>
+        ))}
       </div>
     </DefaultLayout>
   );

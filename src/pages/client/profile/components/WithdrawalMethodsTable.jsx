@@ -4,6 +4,8 @@ import Notification from "@/components/ui/Notification";
 import Modal from "@/components/ui/Modal";
 import AddWithdrawalMethodForm from "./AddWithdrawalMethodsForm";
 import Spinner from "@/components/ui/Spinner";
+import Heading from "@/components/ui/Heading";
+import AccentButton from "@/components/ui/AccentButton";
 import useWidth from "@/hooks/useWidth";
 
 const WithdrawalMethodsTable = () => {
@@ -35,26 +37,18 @@ const WithdrawalMethodsTable = () => {
   const cryptoMethods = methods.filter((m) => m.type === "crypto" && m.status === "active");
 
   if (loading) {
-    return (
-      <>
-        <Spinner />
-        <p className="text-center text-gray-500 dark:text-gray-400 mt-4">Loading withdrawal details...</p>
-      </>
-    );
+    return <Spinner message="Loading withdrawal details" />;
   }
 
   return (
     <div className="w-full">
       {/* Bank Section */}
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border border-gray-100 dark:border-gray-700 mb-6">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Bank Withdrawal Details</h2>
-          <button
-            onClick={() => setIsBankModalOpen(true)}
-            className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
-          >
-            {isMobile ? "+" : "Add Bank Details"}
-          </button>
+        <div className="flex justify-between items-center mb-6">
+          <Heading>Bank Withdrawal Details</Heading>
+          <div className="w-fit">
+            <AccentButton onClick={() => setIsBankModalOpen(true)} text={isMobile ? "+" : "Add Bank Details"} />
+          </div>
         </div>
 
         <div className="overflow-x-auto rounded">
@@ -110,14 +104,11 @@ const WithdrawalMethodsTable = () => {
 
       {/* Crypto Section */}
       <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border border-gray-100 dark:border-gray-700">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Crypto Withdrawal Details</h2>
-          <button
-            onClick={() => setIsCryptoModalOpen(true)}
-            className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
-          >
-            {isMobile ? "+" : "Add Crypto Details"}
-          </button>
+        <div className="flex justify-between items-center mb-6">
+          <Heading>Crypto Withdrawal Details</Heading>
+          <div className="w-fit">
+            <AccentButton onClick={() => setIsCryptoModalOpen(true)} text={isMobile ? "+" : "Add Crypto Details"} />
+          </div>
         </div>
 
         <div className="overflow-x-auto rounded">
@@ -165,12 +156,10 @@ const WithdrawalMethodsTable = () => {
         </div>
       </div>
 
-      {/* Bank Modal */}
       <Modal isOpen={isBankModalOpen} onClose={() => setIsBankModalOpen(false)} title="Add Bank Withdrawal Details">
         <AddWithdrawalMethodForm type="bank" onSuccess={fetchMethods} onClose={() => setIsBankModalOpen(false)} />
       </Modal>
 
-      {/* Crypto Modal */}
       <Modal
         isOpen={isCryptoModalOpen}
         onClose={() => setIsCryptoModalOpen(false)}

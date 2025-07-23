@@ -2,17 +2,23 @@ import React, { useEffect, useMemo, useState, useContext } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import Select from "react-select";
 import countryList from "react-select-country-list";
-import { PhoneInput } from "react-international-phone";
-import "react-international-phone/style.css";
-import API from "@/services/index";
-import Notification from "@/components/ui/Notification";
-import IconComponent from "@/components/ui/Icon";
 import { parsePhoneNumberFromString } from "libphonenumber-js";
 import countries from "i18n-iso-countries";
 import enLocale from "i18n-iso-countries/langs/en.json";
+
+import API from "@/services/index";
+import Notification from "@/components/ui/Notification";
+import IconComponent from "@/components/ui/Icon";
 import Spinner from "@/components/ui/Spinner";
+import Heading from "@/components/ui/Heading";
+
+import TextInput from "@/components/form/TextInput";
+import PhoneInput from "@/components/form/PhoneInput";
+import Select from "@/components/form/Select";
+import AccentButton from "@/components/ui/AccentButton";
+import GrayButton from "@/components/ui/GrayButton";
+
 import { ThemeContext } from "@/context/ThemeContext";
 
 countries.registerLocale(enLocale);
@@ -60,12 +66,13 @@ const ProfileForm = () => {
             country_code: userData.country_code,
           });
         }
-      } catch (error) {
+      } catch {
         Notification.error("Failed to fetch profile data.");
       } finally {
         setIsLoading(false);
       }
     };
+
     fetchProfile();
   }, [reset]);
 
@@ -73,8 +80,7 @@ const ProfileForm = () => {
     if (!number) return "-";
     try {
       const phoneNumber = parsePhoneNumberFromString(number);
-      if (!phoneNumber) return number;
-      return phoneNumber.formatInternational();
+      return phoneNumber ? phoneNumber.formatInternational() : number;
     } catch {
       return number;
     }
@@ -99,10 +105,7 @@ const ProfileForm = () => {
         setIsEditing(false);
       }
     } catch (error) {
-      let msg = "Something went wrong. Please try again.";
-      if (error.response?.data?.message) {
-        msg = error.response.data.message;
-      }
+      const msg = error.response?.data?.message || "Something went wrong. Please try again.";
       Notification.error(msg);
     } finally {
       setIsSubmitting(false);
@@ -110,23 +113,21 @@ const ProfileForm = () => {
   };
 
   if (isLoading) {
-    return (
-      <>
-        <Spinner />
-        <p className="text-gray-500 dark:text-gray-400 mt-4">Loading profile...</p>
-      </>
-    );
+    return <Spinner message="Loading profile..." />;
   }
 
-  if (!user) return <div className="text-gray-700 dark:text-gray-300">No user data available.</div>;
+  if (!user) {
+    return <div className="text-gray-700 dark:text-gray-300">No user data available.</div>;
+  }
 
   return (
     <div className="bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-6 border border-gray-100 dark:border-gray-700 w-full max-w-lg mx-auto text-center">
       <div className="flex justify-center mb-4">
         <IconComponent icon="mdi:account-circle" width="80" className="text-gray-300 dark:text-gray-600" />
       </div>
-
-      <h2 className="text-2xl font-bold mb-6 text-accent">Profile Information</h2>
+      <Heading className="mb-6" accented>
+        Profile Information
+      </Heading>
 
       {!isEditing ? (
         <>
@@ -161,128 +162,52 @@ const ProfileForm = () => {
             </div>
           </div>
 
-          <button
-            onClick={() => setIsEditing(true)}
-            className="w-full bg-accent text-white py-2 rounded font-semibold mt-6 hover:bg-accent/90 transition"
-          >
-            Edit Profile
-          </button>
+          <AccentButton onClick={() => setIsEditing(true)} text="Edit Profile" className="mt-6" />
         </>
       ) : (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 text-left mt-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Full Name</label>
-            <input
-              type="text"
-              {...register("full_name")}
-              className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-800 text-gray-900 dark:text-white ${
-                errors.full_name ? "border-red-500" : "border-gray-300 dark:border-gray-600"
-              }`}
-            />
-            <p className="text-red-500 text-sm">{errors.full_name?.message}</p>
-          </div>
+          <TextInput
+            label="Full Name"
+            placeholder="Enter your name"
+            error={errors.full_name?.message}
+            {...register("full_name")}
+          />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Country</label>
-            <Controller
-              name="country_code"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  {...field}
-                  options={options}
-                  placeholder="Select Country"
-                  value={options.find((opt) => opt.value === countryCode) || null}
-                  onChange={(selected) => {
-                    field.onChange(selected ? selected.value : "");
-                  }}
-                  classNamePrefix="react-select"
-                  styles={{
-                    control: (base, state) => ({
-                      ...base,
-                      backgroundColor: isDark ? "#1E2939" : "#fff",
-                      borderColor: errors.country_code
-                        ? "#f87171"
-                        : state.isFocused
-                        ? "#309f6d"
-                        : isDark
-                        ? "#4b5563"
-                        : "#d1d5db",
-                      color: isDark ? "#f9fafb" : "#111827",
-                      boxShadow: "none",
-                      "&:hover": {
-                        borderColor: "#309f6d",
-                      },
-                    }),
-                    menu: (base) => ({
-                      ...base,
-                      backgroundColor: isDark ? "#1E2939" : "#fff",
-                      color: isDark ? "#f9fafb" : "#111827",
-                      zIndex: 50,
-                    }),
-                    singleValue: (base) => ({
-                      ...base,
-                      color: isDark ? "#f9fafb" : "#111827",
-                    }),
-                    option: (base, { isFocused, isSelected }) => ({
-                      ...base,
-                      backgroundColor: isSelected
-                        ? "#309f6d"
-                        : isFocused
-                        ? isDark
-                          ? "#4b5563"
-                          : "#f3f4f6"
-                        : isDark
-                        ? "#1E2939"
-                        : "#fff",
-                      color: isSelected ? "#ffffff" : isDark ? "#f9fafb" : "#111827",
-                      cursor: "pointer",
-                    }),
-                    placeholder: (base) => ({
-                      ...base,
-                      color: isDark ? "#9ca3af" : "#6b7280",
-                    }),
-                  }}
-                />
-              )}
-            />
-            <p className="text-red-500 text-sm">{errors.country_code?.message}</p>
-          </div>
+          <Controller
+            name="country_code"
+            control={control}
+            render={({ field }) => (
+              <Select
+                label="Country"
+                options={options}
+                value={field.value}
+                onChange={(val) => field.onChange(val)}
+                error={errors.country_code?.message}
+              />
+            )}
+          />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Phone Number</label>
-            <Controller
-              name="phone_number"
-              control={control}
-              render={({ field }) => (
-                <PhoneInput
-                  defaultCountry="GB"
-                  value={field.value}
-                  onChange={(value) => {
-                    field.onChange(value);
-                    setValue("phone_number", value, { shouldValidate: true });
-                  }}
-                  className={`w-full ${
-                    errors.phone_number ? "border-red-500" : "border-gray-300 dark:border-gray-600"
-                  }`}
-                  inputClassName="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                />
-              )}
-            />
-            <p className="text-red-500 text-sm">{errors.phone_number?.message}</p>
-          </div>
+          <Controller
+            name="phone_number"
+            control={control}
+            render={({ field }) => (
+              <PhoneInput
+                label="Phone Number"
+                value={field.value}
+                onChange={(val) => {
+                  field.onChange(val);
+                  setValue("phone_number", val, { shouldValidate: true });
+                }}
+                error={errors.phone_number?.message}
+              />
+            )}
+          />
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className={`w-full bg-accent text-white py-2 rounded font-semibold flex items-center justify-center transition ${
-              isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
-            }`}
-          >
-            {isSubmitting ? <Spinner color="white" /> : "Save Changes"}
-          </button>
-          <button
+          <AccentButton type="submit" loading={isSubmitting} text="Save Changes" spinner={<Spinner color="white" />} />
+
+          <GrayButton
             type="button"
+            text="Cancel"
             onClick={() => {
               setIsEditing(false);
               reset({
@@ -291,10 +216,7 @@ const ProfileForm = () => {
                 country_code: user.country_code,
               });
             }}
-            className="w-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 py-2 rounded font-semibold flex items-center justify-center transition"
-          >
-            Cancel
-          </button>
+          />
         </form>
       )}
     </div>

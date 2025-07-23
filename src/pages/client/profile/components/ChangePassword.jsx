@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
-import Icon from "@/components/ui/Icon";
 import Spinner from "@/components/ui/Spinner";
+import Heading from "@/components/ui/Heading";
+
+import TextInput from "@/components/form/TextInput";
+import AccentButton from "@/components/ui/AccentButton";
 
 const schema = Yup.object().shape({
   current_password: Yup.string().required("Current password is required"),
@@ -17,9 +21,6 @@ const schema = Yup.object().shape({
 
 const ChangePasswordForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showCurrent, setShowCurrent] = useState(false);
-  const [showNew, setShowNew] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
 
   const {
     register,
@@ -53,80 +54,35 @@ const ChangePasswordForm = () => {
     }
   };
 
-  const inputClass = (hasError) =>
-    `w-full border rounded px-3 py-2 focus:outline-none focus:border-accent ${
-      hasError ? "border-red-500" : "border-gray-300 dark:border-gray-600"
-    } dark:bg-gray-800 dark:text-gray-100`;
-
   return (
-    <div className="bg-white dark:bg-gray-900 shadow-md rounded-lg p-6 border border-gray-100 dark:border-gray-700 w-full">
-      <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">Change Password</h2>
+    <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 border border-gray-100 dark:border-gray-700 w-full">
+      <Heading className="mb-4">Change Password</Heading>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* Current Password */}
-        <div className="relative">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Current Password</label>
-          <input
-            type={showCurrent ? "text" : "password"}
-            placeholder="Enter current password"
-            {...register("current_password")}
-            className={inputClass(errors.current_password)}
-          />
-          <span
-            onClick={() => setShowCurrent(!showCurrent)}
-            className="absolute right-3 top-1/2 cursor-pointer text-gray-500 dark:text-gray-400"
-          >
-            <Icon icon={showCurrent ? "mdi:eye-off" : "mdi:eye"} width="20" />
-          </span>
-          <p className="text-red-500 text-sm">{errors.current_password?.message}</p>
-        </div>
+        <TextInput
+          label="Current Password"
+          type="password"
+          placeholder="Enter current password"
+          error={errors.current_password?.message}
+          {...register("current_password")}
+        />
 
-        {/* New Password */}
-        <div className="relative">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">New Password</label>
-          <input
-            type={showNew ? "text" : "password"}
-            placeholder="Enter new password"
-            {...register("new_password")}
-            className={inputClass(errors.new_password)}
-          />
-          <span
-            onClick={() => setShowNew(!showNew)}
-            className="absolute right-3 top-1/2 cursor-pointer text-gray-500 dark:text-gray-400"
-          >
-            <Icon icon={showNew ? "mdi:eye-off" : "mdi:eye"} width="20" />
-          </span>
-          <p className="text-red-500 text-sm">{errors.new_password?.message}</p>
-        </div>
+        <TextInput
+          label="New Password"
+          type="password"
+          placeholder="Enter new password"
+          error={errors.new_password?.message}
+          {...register("new_password")}
+        />
 
-        {/* Confirm New Password */}
-        <div className="relative">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Confirm New Password
-          </label>
-          <input
-            type={showConfirm ? "text" : "password"}
-            placeholder="Re-enter new password"
-            {...register("confirm_password")}
-            className={inputClass(errors.confirm_password)}
-          />
-          <span
-            onClick={() => setShowConfirm(!showConfirm)}
-            className="absolute right-3 top-1/2 cursor-pointer text-gray-500 dark:text-gray-400"
-          >
-            <Icon icon={showConfirm ? "mdi:eye-off" : "mdi:eye"} width="20" />
-          </span>
-          <p className="text-red-500 text-sm">{errors.confirm_password?.message}</p>
-        </div>
+        <TextInput
+          label="Confirm New Password"
+          type="password"
+          placeholder="Re-enter new password"
+          error={errors.confirm_password?.message}
+          {...register("confirm_password")}
+        />
 
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className={`w-full bg-accent text-white py-2 rounded font-semibold transition ${
-            isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
-          }`}
-        >
-          {isSubmitting ? <Spinner color="white" /> : "Change Password"}
-        </button>
+        <AccentButton type="submit" text="Change Password" loading={isSubmitting} spinner={<Spinner color="white" />} />
       </form>
     </div>
   );

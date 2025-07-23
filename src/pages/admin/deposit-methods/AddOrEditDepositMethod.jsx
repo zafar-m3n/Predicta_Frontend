@@ -101,7 +101,9 @@ const AddOrEditDepositMethod = () => {
     <DefaultLayout>
       <div className="flex justify-between items-center mb-6">
         <Heading>{pageTitle}</Heading>
-        <GrayButton onClick={() => navigate("/admin/deposit-methods")} text="Back" disabled={isSubmitting} />
+        <div className="w-fit">
+          <GrayButton onClick={() => navigate("/admin/deposit-methods")} text="Back" disabled={isSubmitting} />
+        </div>
       </div>
 
       <div className="bg-white dark:bg-gray-800 shadow rounded p-6">

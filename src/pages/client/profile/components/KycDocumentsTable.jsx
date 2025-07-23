@@ -6,6 +6,8 @@ import UploadKycDocumentModal from "./UploadKycDocumentModal";
 import Badge from "@/components/ui/Badge";
 import Icon from "@/components/ui/Icon";
 import Spinner from "@/components/ui/Spinner";
+import Heading from "@/components/ui/Heading";
+import AccentButton from "@/components/ui/AccentButton";
 import { formatDate } from "@/utils/formatDate";
 import useWidth from "@/hooks/useWidth";
 
@@ -51,24 +53,16 @@ const KycDocumentsTable = () => {
   };
 
   if (loading) {
-    return (
-      <>
-        <Spinner />
-        <p className="text-gray-500 dark:text-gray-400 mt-4">Loading KYC documents...</p>
-      </>
-    );
+    return <Spinner message="Loading KYC documents..." />;
   }
 
   return (
     <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 border border-gray-100 dark:border-gray-700 w-full">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-100">KYC Documents</h2>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
-        >
-          {isMobile ? "+" : "Upload New"}
-        </button>
+      <div className="flex justify-between items-center mb-6">
+        <Heading>KYC Documents</Heading>
+        <div className="w-fit">
+          <AccentButton onClick={() => setIsModalOpen(true)} text={isMobile ? "+" : "Upload New"} />
+        </div>
       </div>
 
       <div className="overflow-x-auto rounded">
