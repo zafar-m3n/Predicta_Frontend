@@ -4,9 +4,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import Switch from "@/components/ui/Switch";
 import StyledFileInput from "@/components/ui/StyledFileInput";
-import Select from "react-select";
 import Spinner from "@/components/ui/Spinner";
 import { ThemeContext } from "@/context/ThemeContext";
+import TextInput from "@/components/form/TextInput";
+import Select from "@/components/form/Select";
 
 const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
@@ -111,133 +112,43 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
 
   return (
     <form onSubmit={handleSubmit(internalSubmit)} className="space-y-4">
-      {/* Name */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Method Name</label>
-        <input
-          type="text"
-          placeholder="Enter method name"
-          {...register("name")}
-          className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-800 text-gray-800 dark:text-white ${
-            errors.name ? "border-red-500" : "border-gray-300 dark:border-gray-600"
-          }`}
-        />
-        <p className="text-red-500 text-sm">{errors.name?.message}</p>
-      </div>
+      <TextInput
+        label="Method Name"
+        placeholder="Enter method name"
+        error={errors.name?.message}
+        {...register("name")}
+      />
 
-      {/* Type Dropdown */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Type</label>
-        <Controller
-          name="type"
-          control={control}
-          render={({ field }) => (
-            <Select
-              {...field}
-              options={typeOptions}
-              placeholder="Select type"
-              value={typeOptions.find((opt) => opt.value === field.value) || null}
-              onChange={(selected) => field.onChange(selected ? selected.value : "")}
-              classNamePrefix="react-select"
-              styles={{
-                control: (base, state) => ({
-                  ...base,
-                  backgroundColor: isDark ? "#1E2939" : "#fff",
-                  borderColor: errors.type ? "#f87171" : state.isFocused ? "#309f6d" : isDark ? "#4b5563" : "#d1d5db",
-                  color: isDark ? "#f9fafb" : "#111827",
-                  borderRadius: "0.375rem",
-                  minHeight: "2.5rem",
-                  boxShadow: "none",
-                  "&:hover": {
-                    borderColor: "#309f6d",
-                  },
-                }),
-                menu: (base) => ({
-                  ...base,
-                  backgroundColor: isDark ? "#1E2939" : "#fff",
-                  color: isDark ? "#f9fafb" : "#111827",
-                  zIndex: 50,
-                }),
-                singleValue: (base) => ({
-                  ...base,
-                  color: isDark ? "#f9fafb" : "#111827",
-                }),
-                option: (base, { isFocused, isSelected }) => ({
-                  ...base,
-                  backgroundColor: isSelected
-                    ? "#309f6d"
-                    : isFocused
-                    ? isDark
-                      ? "#4b5563"
-                      : "#f3f4f6"
-                    : isDark
-                    ? "#1E2939"
-                    : "#fff",
-                  color: isSelected ? "#ffffff" : isDark ? "#f9fafb" : "#111827",
-                  cursor: "pointer",
-                }),
-                placeholder: (base) => ({
-                  ...base,
-                  color: isDark ? "#9ca3af" : "#6b7280",
-                }),
-              }}
-            />
-          )}
-        />
-        <p className="text-red-500 text-sm">{errors.type?.message}</p>
-      </div>
+      <Controller
+        name="type"
+        control={control}
+        render={({ field }) => (
+          <Select
+            value={field.value}
+            onChange={field.onChange}
+            options={typeOptions}
+            placeholder="Select type"
+            error={errors.type?.message}
+          />
+        )}
+      />
 
-      {/* Status Toggle */}
-      <div>
-        <Switch isOn={status} onToggle={setStatus} label="Active Status" />
-      </div>
+      <Switch isOn={status} onToggle={setStatus} label="Active Status" />
 
-      {/* Bank Fields */}
       {selectedType === "bank" && (
         <>
-          {[
-            { name: "beneficiary_name", label: "Beneficiary Name", placeholder: "Enter beneficiary name" },
-            { name: "bank_name", label: "Bank Name", placeholder: "Enter bank name" },
-            { name: "branch", label: "Branch", placeholder: "Enter branch" },
-            { name: "account_number", label: "Account Number", placeholder: "Enter account number" },
-            { name: "ifsc_code", label: "IFSC Code / Swift Code / Agency", placeholder: "Enter code" },
-          ].map((field) => (
-            <div key={field.name}>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">{field.label}</label>
-              <input
-                type="text"
-                placeholder={field.placeholder}
-                {...register(field.name)}
-                className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-white"
-              />
-            </div>
-          ))}
+          <TextInput label="Beneficiary Name" placeholder="Enter beneficiary name" {...register("beneficiary_name")} />
+          <TextInput label="Bank Name" placeholder="Enter bank name" {...register("bank_name")} />
+          <TextInput label="Branch" placeholder="Enter branch" {...register("branch")} />
+          <TextInput label="Account Number" placeholder="Enter account number" {...register("account_number")} />
+          <TextInput label="IFSC Code / Swift Code / Agency" placeholder="Enter code" {...register("ifsc_code")} />
         </>
       )}
 
-      {/* Crypto Fields */}
       {selectedType === "crypto" && (
         <>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Network</label>
-            <input
-              type="text"
-              placeholder="Enter network"
-              {...register("network")}
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-white"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Address</label>
-            <input
-              type="text"
-              placeholder="Enter crypto address"
-              {...register("address")}
-              className="w-full border rounded px-3 py-2 focus:outline-none focus:border-accent border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900 text-gray-800 dark:text-white"
-            />
-          </div>
-
+          <TextInput label="Network" placeholder="Enter network" {...register("network")} />
+          <TextInput label="Address" placeholder="Enter crypto address" {...register("address")} />
           <StyledFileInput
             label="QR Code"
             preferredSize="Preferred Size 200 × 200"
@@ -246,7 +157,6 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
             onChange={(e) => handleFileChange(e, setQrCodeFile, setQrCodePath)}
             onRemove={() => removeFile(setQrCodeFile, setQrCodePath)}
           />
-
           <StyledFileInput
             label="Logo"
             preferredSize="Preferred Size 200 × 200"
@@ -258,7 +168,6 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
         </>
       )}
 
-      {/* Other Fields */}
       {selectedType === "other" && (
         <>
           <StyledFileInput
@@ -269,7 +178,6 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
             onChange={(e) => handleFileChange(e, setQrCodeFile, setQrCodePath)}
             onRemove={() => removeFile(setQrCodeFile, setQrCodePath)}
           />
-
           <StyledFileInput
             label="Logo"
             preferredSize="Preferred Size 200 × 200"
@@ -278,7 +186,6 @@ const DepositMethodForm = ({ initialData = null, onSubmit, isSubmitting }) => {
             onChange={(e) => handleFileChange(e, setLogoFile, setLogoPath)}
             onRemove={() => removeFile(setLogoFile, setLogoPath)}
           />
-
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">Notes</label>
             <textarea

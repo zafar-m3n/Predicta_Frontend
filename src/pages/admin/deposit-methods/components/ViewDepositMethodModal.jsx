@@ -12,7 +12,7 @@ const ViewDepositMethodModal = ({ isOpen, onClose, method, details }) => {
     <div className="flex justify-between py-1">
       <span className="text-gray-500 dark:text-gray-400">{label}:</span>
       <span className="text-gray-700 dark:text-gray-200 font-medium text-right max-w-[60%] break-words">
-        {value || "-"}
+        {value || "N/A"}
       </span>
     </div>
   );
