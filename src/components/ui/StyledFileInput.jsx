@@ -17,7 +17,7 @@ const StyledFileInput = ({ label, file, filePath, onChange, onRemove, preferredS
         {label} {preferredSize && <span className="text-gray-400 dark:text-gray-500">({preferredSize})</span>}
       </label>
 
-      <div className="flex border border-gray-300 dark:border-gray-600 rounded overflow-hidden focus-within:border-accent">
+      <div className="flex border border-gray-300 dark:border-gray-600 dark:bg-gray-900 rounded overflow-hidden focus-within:border-accent">
         <button
           type="button"
           onClick={() => fileInputRef.current.click()}

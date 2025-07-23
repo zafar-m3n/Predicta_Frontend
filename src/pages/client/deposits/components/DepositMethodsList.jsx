@@ -1,6 +1,7 @@
 import React from "react";
 import bankTransfer from "@/assets/bankTransfer.png";
 import Badge from "@/components/ui/Badge";
+import AccentButton from "@/components/ui/AccentButton";
 
 const apiBaseUrl = import.meta.env.VITE_TRADERSROOM_API_BASEURL;
 
@@ -43,12 +44,7 @@ const DepositMethodsList = ({ methods, onSelect }) => {
               rounded="rounded-full"
             />
 
-            <button
-              onClick={() => onSelect(method)}
-              className="mt-4 w-full bg-accent text-white py-2 rounded-md font-medium hover:bg-accent/90 transition"
-            >
-              Deposit
-            </button>
+            <AccentButton onClick={() => onSelect(method)} text="Deposit" className="mt-4 w-full" />
           </div>
         );
       })}

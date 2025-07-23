@@ -2,8 +2,12 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+
+import TextInput from "@/components/form/TextInput";
+import AccentButton from "@/components/ui/AccentButton";
 import StyledFileInput from "@/components/ui/StyledFileInput";
 import Spinner from "@/components/ui/Spinner";
+import Heading from "@/components/ui/Heading";
 
 const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
   const [proofFile, setProofFile] = useState(null);
@@ -62,7 +66,7 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
       onSubmit={handleSubmit(internalSubmit)}
       className="space-y-4 bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6"
     >
-      <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200">Submit Deposit Request</h2>
+      <Heading>Submit Deposit Request</Heading>
 
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Amount</label>
@@ -96,20 +100,13 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
       </div>
 
       {selectedAmount === "other" && (
-        <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Enter Custom Amount (USD)
-          </label>
-          <input
-            type="text"
-            placeholder="e.g., 150"
-            {...register("amount")}
-            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-800 text-gray-800 dark:text-white ${
-              errors.amount ? "border-red-500" : "border-gray-300 dark:border-gray-600"
-            }`}
-          />
-          <p className="text-red-500 text-sm">{errors.amount?.message}</p>
-        </div>
+        <TextInput
+          label="Enter Custom Amount (USD)"
+          placeholder="e.g., 150"
+          type="text"
+          error={errors.amount?.message}
+          {...register("amount")}
+        />
       )}
 
       <StyledFileInput
@@ -120,28 +117,15 @@ const DepositRequestForm = ({ onSubmit, isSubmitting }) => {
         onRemove={removeFile}
       />
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Transaction Reference</label>
-        <input
-          type="text"
-          placeholder="Enter transaction reference number"
-          {...register("transaction_reference")}
-          className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-accent bg-white dark:bg-gray-800 text-gray-800 dark:text-white ${
-            errors.transaction_reference ? "border-red-500" : "border-gray-300 dark:border-gray-600"
-          }`}
-        />
-        <p className="text-red-500 text-sm">{errors.transaction_reference?.message}</p>
-      </div>
+      <TextInput
+        label="Transaction Reference"
+        placeholder="Enter transaction reference number"
+        type="text"
+        error={errors.transaction_reference?.message}
+        {...register("transaction_reference")}
+      />
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className={`w-full bg-accent text-white py-2 rounded-md font-semibold shadow transition-all ${
-          isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
-        }`}
-      >
-        {isSubmitting ? <Spinner color="white" /> : "Submit Request"}
-      </button>
+      <AccentButton type="submit" text="Submit Request" loading={isSubmitting} spinner={<Spinner color="white" />} />
     </form>
   );
 };

@@ -5,6 +5,7 @@ import DepositMethodsList from "./components/DepositMethodsList";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Spinner from "@/components/ui/Spinner";
+import Heading from "@/components/ui/Heading";
 
 const ClientDeposits = () => {
   const navigate = useNavigate();
@@ -39,10 +40,7 @@ const ClientDeposits = () => {
   if (loading) {
     return (
       <DefaultLayout>
-        <div className="py-5 flex flex-col items-center justify-center text-center">
-          <Spinner />
-          <p className="text-gray-500 mt-4">Loading deposit options...</p>
-        </div>
+        <Spinner className="Loading Deposit Options..." />
       </DefaultLayout>
     );
   }
@@ -61,11 +59,8 @@ const ClientDeposits = () => {
 
   return (
     <DefaultLayout>
-      <div className="py-5">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">Deposit Option</h1>
-        <p className="text-gray-600 dark:text-gray-400">Choose a deposit method to continue.</p>
-      </div>
-
+      <Heading>Deposit Option</Heading>
+      <p className="text-gray-600 dark:text-gray-400 mb-6 text-sm">Choose a deposit method to continue.</p>
       <DepositMethodsList methods={methods} onSelect={handleSelectMethod} />
     </DefaultLayout>
   );

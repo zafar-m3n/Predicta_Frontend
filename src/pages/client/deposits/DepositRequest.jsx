@@ -6,6 +6,7 @@ import DepositMethodDetails from "./components/DepositMethodDetails";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Spinner from "@/components/ui/Spinner";
+import Heading from "@/components/ui/Heading";
 
 const DepositRequest = () => {
   const { methodId } = useParams();
@@ -72,26 +73,19 @@ const DepositRequest = () => {
   if (loading) {
     return (
       <DefaultLayout>
-        <div className="py-5">
-          <Spinner />
-          <p className="text-center text-gray-500 mt-4">Loading deposit details...</p>
-        </div>
+        <Spinner message="Loading Deposit Details..." />
       </DefaultLayout>
     );
   }
 
   return (
     <DefaultLayout>
-      <div className="py-5">
-        <div className="mb-4">
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">{method.name} Deposit</h1>
-          <p className="text-gray-600 dark:text-gray-400">Fill out the form and upload your payment proof.</p>
-        </div>
+      <Heading>{method.name} Deposit</Heading>
+      <p className="text-gray-600 dark:text-gray-400 mb-6 text-sm">Fill out the form and upload your payment proof.</p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <DepositRequestForm onSubmit={handleFormSubmit} isSubmitting={false} method={method} />
-          <DepositMethodDetails method={method} />
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <DepositRequestForm onSubmit={handleFormSubmit} isSubmitting={false} method={method} />
+        <DepositMethodDetails method={method} />
       </div>
     </DefaultLayout>
   );
