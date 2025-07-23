@@ -21,7 +21,7 @@ const AdminTicketMessageBubble = ({ message }) => {
 
       <div
         className={`max-w-md w-fit rounded-lg px-4 py-2 ${
-          isClient ? "bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100" : "bg-accent text-white"
+          isClient ? "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-100" : "bg-accent text-white"
         }`}
       >
         <p className="text-sm whitespace-pre-line">{message.message}</p>

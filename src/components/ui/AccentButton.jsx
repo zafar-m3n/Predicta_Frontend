@@ -14,7 +14,7 @@ const AccentButton = ({
       type={type}
       onClick={onClick}
       disabled={disabled || loading}
-      className={`w-full bg-accent text-white py-2 rounded font-semibold transition ${
+      className={`w-full bg-accent text-white px-4 py-2 rounded font-semibold transition ${
         disabled || loading ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
       } flex justify-center items-center gap-2 ${className}`}
     >

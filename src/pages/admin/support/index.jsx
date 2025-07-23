@@ -4,6 +4,7 @@ import AdminSupportTicketsTable from "./components/AdminSupportTicketsTable";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Spinner from "@/components/ui/Spinner";
+import Heading from "@/components/ui/Heading";
 
 const CustomerSupport = () => {
   const [tickets, setTickets] = useState([]);
@@ -42,25 +43,20 @@ const CustomerSupport = () => {
 
   return (
     <DefaultLayout>
-      <div className="py-5">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-200">Customer Support Tickets</h1>
-        </div>
-
-        {loading ? (
-          <>
-            <Spinner />
-            <p className="text-center text-gray-500 mt-4">Loading tickets...</p>
-          </>
-        ) : (
-          <AdminSupportTicketsTable
-            tickets={tickets}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-        )}
+      <div className="flex items-center justify-between mb-6">
+        <Heading>Customer Support Tickets</Heading>
       </div>
+
+      {loading ? (
+        <Spinner message="Loading tickets..." />
+      ) : (
+        <AdminSupportTicketsTable
+          tickets={tickets}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </DefaultLayout>
   );
 };

@@ -8,6 +8,8 @@ import Notification from "@/components/ui/Notification";
 import Modal from "@/components/ui/Modal";
 import Spinner from "@/components/ui/Spinner";
 import useWidth from "@/hooks/useWidth";
+import Heading from "@/components/ui/Heading";
+import AccentButton from "@/components/ui/AccentButton";
 
 const ManageUsers = () => {
   const navigate = useNavigate();
@@ -99,48 +101,40 @@ const ManageUsers = () => {
 
   return (
     <DefaultLayout>
-      <div className="py-5">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-200">Manage Users</h1>
-          <button
-            onClick={handleAdd}
-            className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
-          >
-            {isMobile ? "+" : "Add New User"}
-          </button>
+      <div className="flex justify-between items-center mb-6">
+        <Heading>Manage Users</Heading>
+        <div className="w-fit">
+          <AccentButton onClick={handleAdd} text={isMobile ? "+" : "Add New User"} />
         </div>
-
-        {loading ? (
-          <>
-            <Spinner />
-            <p className="text-center text-gray-500 mt-4">Loading users...</p>
-          </>
-        ) : (
-          <UserTable
-            users={users}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onView={handleView}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        )}
-
-        <Modal
-          isOpen={isFormOpen}
-          onClose={() => setIsFormOpen(false)}
-          title={isEdit ? "Edit User" : "Add New User"}
-          size="md"
-        >
-          <UserFormModal
-            onSubmit={handleSubmit}
-            onClose={() => setIsFormOpen(false)}
-            initialData={selectedUser}
-            isEdit={isEdit}
-          />
-        </Modal>
       </div>
+
+      {loading ? (
+        <Spinner message="Loading users..." />
+      ) : (
+        <UserTable
+          users={users}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+          onView={handleView}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      )}
+
+      <Modal
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        title={isEdit ? "Edit User" : "Add New User"}
+        size="md"
+      >
+        <UserFormModal
+          onSubmit={handleSubmit}
+          onClose={() => setIsFormOpen(false)}
+          initialData={selectedUser}
+          isEdit={isEdit}
+        />
+      </Modal>
     </DefaultLayout>
   );
 };

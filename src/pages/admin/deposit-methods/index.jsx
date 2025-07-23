@@ -7,6 +7,7 @@ import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Spinner from "@/components/ui/Spinner";
 import Heading from "@/components/ui/Heading";
+import AccentButton from "@/components/ui/AccentButton";
 import useWidth from "@/hooks/useWidth";
 
 const DepositMethods = () => {
@@ -97,12 +98,9 @@ const DepositMethods = () => {
     <DefaultLayout>
       <div className="flex justify-between items-center mb-6">
         <Heading>Deposit Methods</Heading>
-        <button
-          onClick={handleCreate}
-          className="bg-accent text-white px-4 py-2 rounded font-medium hover:bg-accent/90 transition"
-        >
-          {isMobile ? "+" : "Add New Method"}
-        </button>
+        <div className="w-fit">
+          <AccentButton onClick={handleCreate} text={isMobile ? "+" : "Add New Method"} />
+        </div>
       </div>
 
       {loading ? (

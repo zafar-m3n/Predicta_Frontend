@@ -4,6 +4,7 @@ import DocumentsTable from "./components/DocumentsTable";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Spinner from "@/components/ui/Spinner";
+import Heading from "@/components/ui/Heading";
 
 const Documents = () => {
   const [documents, setDocuments] = useState([]);
@@ -65,27 +66,20 @@ const Documents = () => {
 
   return (
     <DefaultLayout>
-      <div className="py-5">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-200">KYC Documents</h1>
-        </div>
+      <Heading className="mb-6">KYC Documents</Heading>
 
-        {loading ? (
-          <>
-            <Spinner />
-            <p className="text-center text-gray-500 mt-4">Loading KYC documents...</p>
-          </>
-        ) : (
-          <DocumentsTable
-            documents={documents}
-            onApprove={handleApprove}
-            onReject={handleReject}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-        )}
-      </div>
+      {loading ? (
+        <Spinner message="Loading KYC documents..." />
+      ) : (
+        <DocumentsTable
+          documents={documents}
+          onApprove={handleApprove}
+          onReject={handleReject}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </DefaultLayout>
   );
 };

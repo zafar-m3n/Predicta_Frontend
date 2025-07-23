@@ -4,6 +4,7 @@ import DepositRequestsTable from "./components/DepositRequestsTable";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Spinner from "@/components/ui/Spinner";
+import Heading from "@/components/ui/Heading";
 
 const DepositRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -71,27 +72,20 @@ const DepositRequests = () => {
 
   return (
     <DefaultLayout>
-      <div className="py-5">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-xl md:text-2xl font-bold text-gray-800 dark:text-gray-200">Deposit Requests</h1>
-        </div>
+      <Heading className="mb-6">Deposit Requests</Heading>
 
-        {loading ? (
-          <>
-            <Spinner />
-            <p className="text-center text-gray-500 mt-4">Loading deposit requests...</p>
-          </>
-        ) : (
-          <DepositRequestsTable
-            requests={requests}
-            onApprove={handleApprove}
-            onReject={handleReject}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={handlePageChange}
-          />
-        )}
-      </div>
+      {loading ? (
+        <Spinner message="Loading deposit requests..." />
+      ) : (
+        <DepositRequestsTable
+          requests={requests}
+          onApprove={handleApprove}
+          onReject={handleReject}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      )}
     </DefaultLayout>
   );
 };
