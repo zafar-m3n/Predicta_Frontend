@@ -10,6 +10,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 
 import TextInput from "@/components/form/TextInput";
 import AccentButton from "@/components/ui/AccentButton";
+import Heading from "@/components/ui/Heading";
 
 const schema = Yup.object().shape({
   password: Yup.string().min(6, "Minimum 6 characters").required("Password is required"),
@@ -67,10 +68,10 @@ const ResetPasswordPage = () => {
   return (
     <AuthLayout>
       <div className="bg-white dark:bg-gray-800 shadow-2xl rounded-lg p-6 w-full max-w-md mx-auto border border-gray-100 dark:border-gray-700 transition-all duration-300">
-        <h1 className="text-2xl font-bold text-center mb-1 text-gray-800 dark:text-white">
+        <Heading className="text-center mb-1">
           Reset <span className="text-accent">Your Password</span>
-        </h1>
-        <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-4">Enter your new password below.</p>
+        </Heading>
+        <p className="text-center text-sm text-gray-600 dark:text-gray-400 mb-4">Enter your new password below.</p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
           <TextInput

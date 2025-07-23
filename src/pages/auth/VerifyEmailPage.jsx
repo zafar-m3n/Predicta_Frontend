@@ -5,6 +5,7 @@ import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Spinner from "@/components/ui/Spinner";
 import AccentButton from "@/components/ui/AccentButton";
+import Heading from "@/components/ui/Heading";
 
 const VerifyEmailPage = () => {
   const [searchParams] = useSearchParams();
@@ -62,10 +63,10 @@ const VerifyEmailPage = () => {
       <div className="bg-white dark:bg-gray-800 shadow-2xl rounded-lg p-6 w-full max-w-md mx-auto border border-gray-100 dark:border-gray-700 transition-all duration-300">
         {status === "idle" && (
           <>
-            <h1 className="text-2xl font-bold text-center mb-1 text-gray-800 dark:text-white">
+            <Heading className="text-center mb-1">
               Verify <span className="text-accent">Your Email</span>{" "}
-            </h1>
-            <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-4">
+            </Heading>
+            <p className="text-center text-sm text-gray-600 dark:text-gray-400 mb-4">
               Click the button below to verify your email address.
             </p>
             <AccentButton onClick={handleVerify} text="Verify Email" />

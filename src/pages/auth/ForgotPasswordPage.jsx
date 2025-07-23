@@ -8,6 +8,7 @@ import Notification from "@/components/ui/Notification";
 import Spinner from "@/components/ui/Spinner";
 import TextInput from "@/components/form/TextInput";
 import AccentButton from "@/components/ui/AccentButton";
+import Heading from "@/components/ui/Heading";
 
 const schema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -53,10 +54,10 @@ const ForgotPasswordPage = () => {
   return (
     <AuthLayout>
       <div className="bg-white dark:bg-gray-800 shadow-2xl rounded-lg p-6 w-full max-w-md mx-auto border border-gray-100 dark:border-gray-700 transition-all duration-300">
-        <h1 className="text-2xl font-bold text-center mb-1 text-gray-800 dark:text-white">
+        <Heading className="text-center mb-1">
           Forgot Your <span className="text-accent">Password?</span>
-        </h1>
-        <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-4">
+        </Heading>
+        <p className="text-center text-sm text-gray-600 dark:text-gray-400 mb-4">
           Enter your email to receive a reset link.
         </p>
 

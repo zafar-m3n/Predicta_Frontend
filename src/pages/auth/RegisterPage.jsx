@@ -13,6 +13,7 @@ import TextInput from "@/components/form/TextInput";
 import Select from "@/components/form/Select";
 import PhoneInput from "@/components/form/PhoneInput";
 import AccentButton from "@/components/ui/AccentButton";
+import Heading from "@/components/ui/Heading";
 
 const schema = Yup.object().shape({
   full_name: Yup.string().required("Full name is required"),
@@ -98,9 +99,9 @@ const RegisterPage = () => {
   return (
     <AuthLayout>
       <div className="bg-white dark:bg-gray-800 shadow-2xl rounded-lg p-6 w-full max-w-md mx-auto border border-gray-100 dark:border-gray-700 transition-all duration-300">
-        <h1 className="text-2xl font-bold text-center mb-1 text-gray-800 dark:text-white">
+        <Heading className="text-center">
           Register Now & Trade <span className="text-accent">With EQUITYFX</span>
-        </h1>
+        </Heading>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
           <TextInput placeholder="Enter Your Fullname" {...register("full_name")} error={errors.full_name?.message} />
