@@ -4,6 +4,7 @@ import AuthLayout from "@/layouts/AuthLayout";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import Spinner from "@/components/ui/Spinner";
+import AccentButton from "@/components/ui/AccentButton";
 
 const VerifyEmailPage = () => {
   const [searchParams] = useSearchParams();
@@ -58,52 +59,39 @@ const VerifyEmailPage = () => {
 
   return (
     <AuthLayout>
-      <div className="bg-white dark:bg-gray-900 shadow-2xl rounded-lg p-6 w-full max-w-md mx-auto border border-gray-100 dark:border-gray-700 text-center transition">
+      <div className="bg-white dark:bg-gray-800 shadow-2xl rounded-lg p-6 w-full max-w-md mx-auto border border-gray-100 dark:border-gray-700 transition-all duration-300">
         {status === "idle" && (
           <>
-            <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Verify Your Email</h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">
+            <h1 className="text-2xl font-bold text-center mb-1 text-gray-800 dark:text-white">
+              Verify <span className="text-accent">Your Email</span>{" "}
+            </h1>
+            <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-4">
               Click the button below to verify your email address.
             </p>
-            <button
-              onClick={handleVerify}
-              className="bg-accent text-white py-2 px-4 rounded font-semibold hover:bg-accent/90 transition"
-            >
-              Verify Email
-            </button>
+            <AccentButton onClick={handleVerify} text="Verify Email" />
           </>
         )}
 
         {status === "loading" && (
           <>
             <Spinner />
-            <p className="mt-4 text-gray-600 dark:text-gray-400">Verifying your email...</p>
+            <p className="mt-4 text-gray-500">Verifying your email...</p>
           </>
         )}
 
         {status === "success" && (
           <>
-            <h2 className="text-2xl font-bold text-green-600 dark:text-green-400 mb-2">Email Verified!</h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">{message}</p>
-            <button
-              onClick={handleGoToLogin}
-              className="bg-accent text-white py-2 px-4 rounded font-semibold hover:bg-accent/90 transition"
-            >
-              Go to Login
-            </button>
+            <h1 className="text-2xl font-bold text-center text-accent">Email Verified!</h1>
+            <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-4">{message}</p>
+            <AccentButton onClick={handleGoToLogin} text="Go to Login" />
           </>
         )}
 
         {status === "error" && (
           <>
-            <h2 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">Verification Failed</h2>
-            <p className="mb-4 text-gray-600 dark:text-gray-400">{message}</p>
-            <button
-              onClick={handleGoToLogin}
-              className="bg-accent text-white py-2 px-4 rounded font-semibold hover:bg-accent/90 transition"
-            >
-              Go to Login
-            </button>
+            <h1 className="text-2xl font-bold text-center text-red-600 dark:text-red-400">Verification Failed!</h1>
+            <p className="text-center text-sm text-gray-500 dark:text-gray-400 mb-4">{message}</p>
+            <AccentButton onClick={handleGoToLogin} text="Go to Login" />
           </>
         )}
       </div>

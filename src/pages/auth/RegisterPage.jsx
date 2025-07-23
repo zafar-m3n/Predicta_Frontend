@@ -1,18 +1,18 @@
-import React, { useMemo, useState, useContext } from "react";
+import React, { useMemo, useState } from "react";
 import AuthLayout from "@/layouts/AuthLayout";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import Select from "react-select";
 import countryList from "react-select-country-list";
-import { PhoneInput } from "react-international-phone";
-import "react-international-phone/style.css";
 import libphonenumber from "google-libphonenumber";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
-import Icon from "@/components/ui/Icon";
 import Spinner from "@/components/ui/Spinner";
-import { ThemeContext } from "@/context/ThemeContext";
+
+import TextInput from "@/components/form/TextInput";
+import Select from "@/components/form/Select";
+import PhoneInput from "@/components/form/PhoneInput";
+import AccentButton from "@/components/ui/AccentButton";
 
 const schema = Yup.object().shape({
   full_name: Yup.string().required("Full name is required"),
@@ -26,10 +26,9 @@ const schema = Yup.object().shape({
 const RegisterPage = () => {
   const options = useMemo(() => countryList().getData(), []);
   const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();
+
   const [phoneError, setPhoneError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const { theme } = useContext(ThemeContext);
 
   const {
     register,
@@ -46,42 +45,6 @@ const RegisterPage = () => {
 
   const selectedCountryCode = watch("country_code");
 
-  const customSelectStyles = {
-    control: (base, state) => ({
-      ...base,
-      backgroundColor: theme === "dark" ? "#101828" : "#fff",
-      borderColor: errors.country_code
-        ? "#f87171"
-        : state.isFocused
-        ? "#309f6d"
-        : theme === "dark"
-        ? "#4b5563"
-        : "#d1d5db",
-      boxShadow: "none",
-      color: theme === "dark" ? "#f3f4f6" : "#111827",
-    }),
-    menu: (base) => ({
-      ...base,
-      backgroundColor: theme === "dark" ? "#101828" : "#fff",
-      color: theme === "dark" ? "#f3f4f6" : "#111827",
-      zIndex: 50,
-    }),
-    singleValue: (base) => ({
-      ...base,
-      color: theme === "dark" ? "#f3f4f6" : "#111827",
-    }),
-    option: (base, { isFocused }) => ({
-      ...base,
-      backgroundColor: isFocused ? (theme === "dark" ? "#374151" : "#f3f4f6") : theme === "dark" ? "#101828" : "#fff",
-      color: theme === "dark" ? "#f3f4f6" : "#111827",
-      cursor: "pointer",
-    }),
-    placeholder: (base) => ({
-      ...base,
-      color: theme === "dark" ? "#9ca3af" : "#6b7280",
-    }),
-  };
-
   const onSubmit = async (data) => {
     const isValidForm = await trigger();
     if (!isValidForm) {
@@ -95,7 +58,7 @@ const RegisterPage = () => {
         setPhoneError("Invalid phone number");
         return;
       }
-    } catch (error) {
+    } catch {
       setPhoneError("Invalid phone number");
       return;
     }
@@ -116,9 +79,7 @@ const RegisterPage = () => {
       const res = await API.private.registerUser(payload);
 
       if (res.data.code === "OK") {
-        Notification.success(
-          res.data.data?.message || "Registration successful! Please check your email to verify your account."
-        );
+        Notification.success(res.data.data?.message || "Registration successful! Please check your email.");
         reset();
       } else {
         Notification.error(res.data.error || "Unexpected response from server.");
@@ -126,13 +87,8 @@ const RegisterPage = () => {
     } catch (error) {
       const status = error.response?.status;
       let msg = "Something went wrong during registration.";
-
-      if (status === 400) {
-        msg = error.response?.data?.error || "Email already in use.";
-      } else if (status === 500) {
-        msg = "Server error. Please try again later.";
-      }
-
+      if (status === 400) msg = error.response?.data?.error || "Email already in use.";
+      else if (status === 500) msg = "Server error. Please try again later.";
       Notification.error(msg);
     } finally {
       setIsSubmitting(false);
@@ -147,110 +103,60 @@ const RegisterPage = () => {
         </h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
-          <div>
-            <input
-              type="text"
-              placeholder="Enter Your Fullname"
-              {...register("full_name")}
-              className={`w-full bg-white dark:bg-gray-900 border rounded px-3 py-2 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-accent ${
-                errors.full_name ? "border-red-500" : "border-gray-300 dark:border-gray-700"
-              }`}
-            />
-            <p className="text-red-500 text-sm">{errors.full_name?.message}</p>
-          </div>
+          <TextInput placeholder="Enter Your Fullname" {...register("full_name")} error={errors.full_name?.message} />
 
-          <div>
-            <input
-              type="email"
-              placeholder="Enter Your Email"
-              {...register("email")}
-              className={`w-full bg-white dark:bg-gray-900 border rounded px-3 py-2 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-accent ${
-                errors.email ? "border-red-500" : "border-gray-300 dark:border-gray-700"
-              }`}
-            />
-            <p className="text-red-500 text-sm">{errors.email?.message}</p>
-          </div>
+          <TextInput type="email" placeholder="Enter Your Email" {...register("email")} error={errors.email?.message} />
 
-          <div>
-            <Controller
-              name="country_code"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  {...field}
-                  options={options}
-                  placeholder="Select Country"
-                  value={options.find((opt) => opt.value === selectedCountryCode) || null}
-                  onChange={(selected) => field.onChange(selected?.value || "")}
-                  classNamePrefix="react-select"
-                  styles={customSelectStyles}
-                />
-              )}
-            />
-            <p className="text-red-500 text-sm">{errors.country_code?.message}</p>
-          </div>
+          <Controller
+            name="country_code"
+            control={control}
+            render={({ field }) => (
+              <Select
+                value={field.value}
+                onChange={field.onChange}
+                options={options}
+                placeholder="Select Country"
+                error={errors.country_code?.message}
+              />
+            )}
+          />
 
-          <div>
-            <Controller
-              name="phone_number"
-              control={control}
-              render={({ field }) => (
-                <PhoneInput
-                  defaultCountry="GB"
-                  value={field.value}
-                  onChange={(value) => {
-                    field.onChange(value);
-                    setValue("phone_number", value, { shouldValidate: true });
-                    setPhoneError("");
-                  }}
-                  className="react-international-phone-input-container w-full"
-                />
-              )}
-            />
-            <p className="text-red-500 text-sm">{errors.phone_number?.message || phoneError}</p>
-          </div>
+          <Controller
+            name="phone_number"
+            control={control}
+            render={({ field }) => (
+              <PhoneInput
+                value={field.value}
+                onChange={(value) => {
+                  field.onChange(value);
+                  setValue("phone_number", value, { shouldValidate: true });
+                  setPhoneError("");
+                }}
+                error={errors.phone_number?.message || phoneError}
+              />
+            )}
+          />
 
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Password"
-              {...register("password")}
-              className={`w-full bg-white dark:bg-gray-900 border rounded px-3 py-2 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-accent ${
-                errors.password ? "border-red-500" : "border-gray-300 dark:border-gray-700"
-              }`}
-            />
-            <span
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500 dark:text-gray-300"
-            >
-              <Icon icon={showPassword ? "mdi:eye-off" : "mdi:eye"} width="20" />
-            </span>
-            <p className="text-red-500 text-sm">{errors.password?.message}</p>
-          </div>
+          <TextInput
+            type="password"
+            placeholder="Password"
+            {...register("password")}
+            error={errors.password?.message}
+          />
 
-          <div>
-            <input
-              type="text"
-              placeholder="Promo Code (Optional)"
-              {...register("promo_code")}
-              className="w-full bg-white dark:bg-gray-900 border rounded px-3 py-2 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 border-gray-300 dark:border-gray-700 focus:outline-none focus:border-accent"
-            />
-          </div>
+          <TextInput placeholder="Promo Code (Optional)" {...register("promo_code")} />
 
           <p className="text-center text-xs text-gray-500 dark:text-gray-400">
             By registering you agree to our <span className="text-accent cursor-pointer">Privacy Policy</span>,{" "}
             <span className="text-accent cursor-pointer">Terms of Use</span>
           </p>
 
-          <button
+          <AccentButton
             type="submit"
-            disabled={isSubmitting}
-            className={`w-full bg-accent text-white py-2 rounded font-semibold transition ${
-              isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
-            } flex justify-center items-center gap-2`}
-          >
-            {isSubmitting ? <Spinner color="white" /> : "Register with EquityFX"}
-          </button>
+            loading={isSubmitting}
+            text="Register with EquityFX"
+            spinner={<Spinner color="white" />}
+          />
 
           <p className="text-center text-sm text-gray-600 dark:text-gray-400">
             Already have an account?{" "}

@@ -6,9 +6,10 @@ import * as Yup from "yup";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
 import token from "@/lib/utilities";
-import Icon from "@/components/ui/Icon";
 import { useNavigate } from "react-router-dom";
 import Spinner from "@/components/ui/Spinner";
+import TextInput from "@/components/form/TextInput";
+import AccentButton from "@/components/ui/AccentButton";
 
 const schema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -17,7 +18,6 @@ const schema = Yup.object().shape({
 
 const LoginPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -75,35 +75,14 @@ const LoginPage = () => {
         </h1>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-4">
-          <div>
-            <input
-              type="email"
-              placeholder="Enter Your Email"
-              {...register("email")}
-              className={`w-full bg-white dark:bg-gray-900 border rounded px-3 py-2 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-accent transition ${
-                errors.email ? "border-red-500" : "border-gray-300 dark:border-gray-700"
-              }`}
-            />
-            <p className="text-red-500 text-sm mt-1">{errors.email?.message}</p>
-          </div>
+          <TextInput type="email" placeholder="Enter Your Email" {...register("email")} error={errors.email?.message} />
 
-          <div className="relative">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Enter Your Password"
-              {...register("password")}
-              className={`w-full bg-white dark:bg-gray-900 border rounded px-3 py-2 text-gray-800 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:border-accent transition ${
-                errors.password ? "border-red-500" : "border-gray-300 dark:border-gray-700"
-              }`}
-            />
-            <span
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500 dark:text-gray-300"
-            >
-              <Icon icon={showPassword ? "mdi:eye-off" : "mdi:eye"} width="20" />
-            </span>
-            <p className="text-red-500 text-sm mt-1">{errors.password?.message}</p>
-          </div>
+          <TextInput
+            type="password"
+            placeholder="Enter Your Password"
+            {...register("password")}
+            error={errors.password?.message}
+          />
 
           <div className="flex justify-end text-sm">
             <a href="/forgot-password" className="text-accent font-medium">
@@ -111,15 +90,7 @@ const LoginPage = () => {
             </a>
           </div>
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className={`w-full bg-accent text-white py-2 rounded font-semibold transition ${
-              isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-accent/90"
-            } flex justify-center items-center gap-2`}
-          >
-            {isSubmitting ? <Spinner color="white" /> : "Login"}
-          </button>
+          <AccentButton type="submit" loading={isSubmitting} spinner={<Spinner color="white" />} text="Login" />
 
           <p className="text-center text-sm text-gray-600 dark:text-gray-400">
             Don't have an account?{" "}
