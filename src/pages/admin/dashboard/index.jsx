@@ -6,6 +6,7 @@ import Notification from "@/components/ui/Notification";
 import Badge from "@/components/ui/Badge";
 import Spinner from "@/components/ui/Spinner";
 import token from "@/lib/utilities";
+import Heading from "@/components/ui/Heading";
 
 const AdminDashboard = () => {
   const user = token.getUserData();
@@ -41,10 +42,7 @@ const AdminDashboard = () => {
   if (loading || !stats) {
     return (
       <DefaultLayout>
-        <div className="flex flex-col items-center justify-center py-20">
-          <Spinner />
-          <p className="text-center text-gray-500 mt-4">Loading dashboard stats...</p>
-        </div>
+        <Spinner message="Loading dashboard stats..." />
       </DefaultLayout>
     );
   }
@@ -66,66 +64,64 @@ const AdminDashboard = () => {
 
   return (
     <DefaultLayout>
-      <div className="py-5">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-2">Welcome, {userName}</h1>
-        <p className="text-gray-600 dark:text-gray-400 mb-10">
-          Here is an overview of the system analytics. Monitor user activity, transactions, and other key stats at a
-          glance.
-        </p>
+      <Heading>Welcome, {userName}</Heading>
+      <p className="text-gray-600 dark:text-gray-400 mb-6 text-sm">
+        Here is an overview of the system analytics. Monitor user activity, transactions, and other key stats at a
+        glance.
+      </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <Card
-            icon="mdi:account-group-outline"
-            title="Total Users"
-            value={stats.users.total}
-            badges={[{ text: `Verified: ${stats.users.verifiedEmails}`, color: "green" }]}
-          />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <Card
+          icon="mdi:account-group-outline"
+          title="Total Users"
+          value={stats.users.total}
+          badges={[{ text: `Verified: ${stats.users.verifiedEmails}`, color: "green" }]}
+        />
 
-          <Card icon="mdi:account-outline" title="Total Clients" value={stats.users.clients} />
+        <Card icon="mdi:account-outline" title="Total Clients" value={stats.users.clients} />
 
-          <Card
-            icon="mdi:bank-transfer-in"
-            title="Deposits"
-            value={`$${Number(stats.deposits.totalAmount).toLocaleString()}`}
-            badges={[
-              { text: `Approved: ${stats.deposits.approved}`, color: "green" },
-              { text: `Pending: ${stats.deposits.pending}`, color: "yellow" },
-              { text: `Rejected: ${stats.deposits.rejected}`, color: "red" },
-            ]}
-          />
+        <Card
+          icon="mdi:bank-transfer-in"
+          title="Deposits"
+          value={`$${Number(stats.deposits.totalAmount).toLocaleString()}`}
+          badges={[
+            { text: `Approved: ${stats.deposits.approved}`, color: "green" },
+            { text: `Pending: ${stats.deposits.pending}`, color: "yellow" },
+            { text: `Rejected: ${stats.deposits.rejected}`, color: "red" },
+          ]}
+        />
 
-          <Card
-            icon="mdi:bank-transfer-out"
-            title="Withdrawals"
-            value={`$${Number(stats.withdrawals.totalAmount).toLocaleString()}`}
-            badges={[
-              { text: `Approved: ${stats.withdrawals.approved}`, color: "green" },
-              { text: `Pending: ${stats.withdrawals.pending}`, color: "yellow" },
-              { text: `Rejected: ${stats.withdrawals.rejected}`, color: "red" },
-            ]}
-          />
+        <Card
+          icon="mdi:bank-transfer-out"
+          title="Withdrawals"
+          value={`$${Number(stats.withdrawals.totalAmount).toLocaleString()}`}
+          badges={[
+            { text: `Approved: ${stats.withdrawals.approved}`, color: "green" },
+            { text: `Pending: ${stats.withdrawals.pending}`, color: "yellow" },
+            { text: `Rejected: ${stats.withdrawals.rejected}`, color: "red" },
+          ]}
+        />
 
-          <Card
-            icon="mdi:file-document-outline"
-            title="KYC Docs"
-            value={stats.kyc.total}
-            badges={[
-              { text: `Approved: ${stats.kyc.approved}`, color: "green" },
-              { text: `Pending: ${stats.kyc.pending}`, color: "yellow" },
-              { text: `Rejected: ${stats.kyc.rejected}`, color: "red" },
-            ]}
-          />
+        <Card
+          icon="mdi:file-document-outline"
+          title="KYC Docs"
+          value={stats.kyc.total}
+          badges={[
+            { text: `Approved: ${stats.kyc.approved}`, color: "green" },
+            { text: `Pending: ${stats.kyc.pending}`, color: "yellow" },
+            { text: `Rejected: ${stats.kyc.rejected}`, color: "red" },
+          ]}
+        />
 
-          <Card
-            icon="mdi:ticket-outline"
-            title="Support Tickets"
-            value={stats.tickets.total}
-            badges={[
-              { text: `Open: ${stats.tickets.open}`, color: "yellow" },
-              { text: `Closed: ${stats.tickets.closed}`, color: "green" },
-            ]}
-          />
-        </div>
+        <Card
+          icon="mdi:ticket-outline"
+          title="Support Tickets"
+          value={stats.tickets.total}
+          badges={[
+            { text: `Open: ${stats.tickets.open}`, color: "yellow" },
+            { text: `Closed: ${stats.tickets.closed}`, color: "green" },
+          ]}
+        />
       </div>
     </DefaultLayout>
   );

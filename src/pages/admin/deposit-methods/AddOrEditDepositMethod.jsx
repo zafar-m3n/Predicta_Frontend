@@ -4,6 +4,8 @@ import DefaultLayout from "@/layouts/DefaultLayout";
 import DepositMethodForm from "./components/DepositMethodForm";
 import API from "@/services/index";
 import Notification from "@/components/ui/Notification";
+import Heading from "@/components/ui/Heading";
+import GrayButton from "@/components/ui/GrayButton";
 
 const AddOrEditDepositMethod = () => {
   const { id } = useParams();
@@ -97,23 +99,13 @@ const AddOrEditDepositMethod = () => {
 
   return (
     <DefaultLayout>
-      <div className="py-5">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200">{pageTitle}</h1>
-          <button
-            onClick={() => navigate("/admin/deposit-methods")}
-            className={`bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-4 py-2 rounded font-medium transition ${
-              isSubmitting ? "opacity-50 cursor-not-allowed" : "hover:bg-gray-300 dark:hover:bg-gray-700"
-            }`}
-            disabled={isSubmitting}
-          >
-            Back
-          </button>
-        </div>
+      <div className="flex justify-between items-center mb-6">
+        <Heading>{pageTitle}</Heading>
+        <GrayButton onClick={() => navigate("/admin/deposit-methods")} text="Back" disabled={isSubmitting} />
+      </div>
 
-        <div className="bg-white dark:bg-gray-800 shadow rounded p-6">
-          <DepositMethodForm initialData={initialData} onSubmit={handleSubmit} isSubmitting={isSubmitting} />
-        </div>
+      <div className="bg-white dark:bg-gray-800 shadow rounded p-6">
+        <DepositMethodForm initialData={initialData} onSubmit={handleSubmit} isSubmitting={isSubmitting} />
       </div>
     </DefaultLayout>
   );
