@@ -1,15 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { ThemeContext } from "@/context/ThemeContext";
-import { useLocation } from "react-router-dom";
 import SidebarWallet from "./SidebarWallet";
 import SidebarMenu from "./SidebarMenu";
 import logo from "@/assets/logo.png";
 import logoWhite from "@/assets/logo-white.png";
 import token from "@/lib/utilities";
 
-const Sidebar = ({ menuOpen, setMenuOpen }) => {
+const Sidebar = ({ menuOpen }) => {
   const { theme } = useContext(ThemeContext);
-  const location = useLocation();
 
   const user = token.getUserData();
   const userRole = user?.role || "client";
@@ -54,22 +52,6 @@ const Sidebar = ({ menuOpen, setMenuOpen }) => {
 
   const menuItems = userRole === "admin" ? adminMenu : clientMenu;
 
-  const [transferOpen, setTransferOpen] = useState(false);
-  const [mt5Open, setMt5Open] = useState(false);
-
-  useEffect(() => {
-    if (
-      userRole === "client" &&
-      (location.pathname.includes("/deposits") || location.pathname.includes("/withdrawal"))
-    ) {
-      setTransferOpen(true);
-      setMt5Open(false);
-    } else if (userRole === "client" && location.pathname.includes("/mt5")) {
-      setTransferOpen(false);
-      setMt5Open(true);
-    }
-  }, [location.pathname, userRole]);
-
   return (
     <div
       className={`fixed top-0 bottom-0 left-0 w-64 bg-white dark:bg-gray-800 shadow-xl z-50 transform transition-transform duration-300 ease-in-out
@@ -82,13 +64,7 @@ const Sidebar = ({ menuOpen, setMenuOpen }) => {
 
       {userRole === "client" && <SidebarWallet />}
 
-      <SidebarMenu
-        menuItems={menuItems}
-        transferOpen={transferOpen}
-        setTransferOpen={setTransferOpen}
-        mt5Open={mt5Open}
-        setMt5Open={setMt5Open}
-      />
+      <SidebarMenu menuItems={menuItems} />
     </div>
   );
 };
