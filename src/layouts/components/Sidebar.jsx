@@ -55,6 +55,7 @@ const Sidebar = ({ menuOpen, setMenuOpen }) => {
   const menuItems = userRole === "admin" ? adminMenu : clientMenu;
 
   const [transferOpen, setTransferOpen] = useState(false);
+  const [mt5Open, setMt5Open] = useState(false);
 
   useEffect(() => {
     if (
@@ -62,6 +63,10 @@ const Sidebar = ({ menuOpen, setMenuOpen }) => {
       (location.pathname.includes("/deposits") || location.pathname.includes("/withdrawal"))
     ) {
       setTransferOpen(true);
+      setMt5Open(false);
+    } else if (userRole === "client" && location.pathname.includes("/mt5")) {
+      setTransferOpen(false);
+      setMt5Open(true);
     }
   }, [location.pathname, userRole]);
 
@@ -77,7 +82,13 @@ const Sidebar = ({ menuOpen, setMenuOpen }) => {
 
       {userRole === "client" && <SidebarWallet />}
 
-      <SidebarMenu menuItems={menuItems} transferOpen={transferOpen} setTransferOpen={setTransferOpen} />
+      <SidebarMenu
+        menuItems={menuItems}
+        transferOpen={transferOpen}
+        setTransferOpen={setTransferOpen}
+        mt5Open={mt5Open}
+        setMt5Open={setMt5Open}
+      />
     </div>
   );
 };

@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/Icon";
 import token from "@/lib/utilities";
 
-const SidebarMenu = ({ menuItems, transferOpen, setTransferOpen }) => {
+const SidebarMenu = ({ menuItems, transferOpen, setTransferOpen, mt5Open, setMt5Open }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -34,43 +34,83 @@ const SidebarMenu = ({ menuItems, transferOpen, setTransferOpen }) => {
         const activeParent = isChildActive(item.children);
 
         return item.children ? (
-          <div key={idx}>
-            <button
-              onClick={() => setTransferOpen(!transferOpen)}
-              className={`flex items-center w-full p-2 rounded-lg transition hover:bg-accent/10 focus:outline-none ${
-                activeParent ? "bg-accent text-white font-semibold shadow" : ""
-              }`}
-            >
-              <Icon icon={item.icon} width={20} className={`mr-3 ${activeParent ? "text-white" : "text-accent"}`} />
-              <span className={`dark:text-gray-200 ${transferOpen || activeParent ? "" : "text-gray-700"}`}>
-                {item.label}
-              </span>
-              <Icon
-                icon="mdi:chevron-down"
-                width={18}
-                className={`ml-auto transition-transform dark:text-gray-200 hover:bg-accent/10 ${
-                  transferOpen || activeParent ? "rotate-180" : "text-gray-700"
+          item.children.length === 2 ? (
+            <div key={idx}>
+              <button
+                onClick={() => setTransferOpen(!transferOpen)}
+                className={`flex items-center w-full p-2 rounded-lg transition hover:bg-accent/10 focus:outline-none ${
+                  activeParent ? "bg-accent text-white font-semibold shadow" : ""
                 }`}
-              />
-            </button>
-            {(transferOpen || activeParent) && (
-              <div className="ml-7 mt-1 space-y-1">
-                {item.children.map((child, cIdx) => (
-                  <Link
-                    key={cIdx}
-                    to={child.path}
-                    className={`block py-2 px-3 rounded-lg transition ${
-                      location.pathname === child.path
-                        ? "bg-accent text-white font-semibold shadow"
-                        : "text-gray-600 dark:text-gray-300 hover:bg-accent/10"
-                    }`}
-                  >
-                    {child.label}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
+              >
+                <Icon icon={item.icon} width={20} className={`mr-3 ${activeParent ? "text-white" : "text-accent"}`} />
+                <span className={`dark:text-gray-200 ${transferOpen || activeParent ? "" : "text-gray-700"}`}>
+                  {item.label}
+                </span>
+                <Icon
+                  icon="mdi:chevron-down"
+                  width={18}
+                  className={`ml-auto transition-transform dark:text-gray-200 hover:bg-accent/10 ${
+                    transferOpen || activeParent ? "rotate-180" : "text-gray-700"
+                  }`}
+                />
+              </button>
+              {(transferOpen || activeParent) && (
+                <div className="ml-7 mt-1 space-y-1">
+                  {item.children.map((child, cIdx) => (
+                    <Link
+                      key={cIdx}
+                      to={child.path}
+                      className={`block py-2 px-3 rounded-lg transition ${
+                        location.pathname === child.path
+                          ? "bg-accent text-white font-semibold shadow"
+                          : "text-gray-600 dark:text-gray-300 hover:bg-accent/10"
+                      }`}
+                    >
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div key={idx}>
+              <button
+                onClick={() => setMt5Open(!mt5Open)}
+                className={`flex items-center w-full p-2 rounded-lg transition hover:bg-accent/10 focus:outline-none ${
+                  activeParent ? "bg-accent text-white font-semibold shadow" : ""
+                }`}
+              >
+                <Icon icon={item.icon} width={20} className={`mr-3 ${activeParent ? "text-white" : "text-accent"}`} />
+                <span className={`dark:text-gray-200 ${mt5Open || activeParent ? "" : "text-gray-700"}`}>
+                  {item.label}
+                </span>
+                <Icon
+                  icon="mdi:chevron-down"
+                  width={18}
+                  className={`ml-auto transition-transform dark:text-gray-200 hover:bg-accent/10 ${
+                    mt5Open || activeParent ? "rotate-180" : "text-gray-700"
+                  }`}
+                />
+              </button>
+              {(mt5Open || activeParent) && (
+                <div className="ml-7 mt-1 space-y-1">
+                  {item.children.map((child, cIdx) => (
+                    <Link
+                      key={cIdx}
+                      to={child.path}
+                      className={`block py-2 px-3 rounded-lg transition ${
+                        location.pathname === child.path
+                          ? "bg-accent text-white font-semibold shadow"
+                          : "text-gray-600 dark:text-gray-300 hover:bg-accent/10"
+                      }`}
+                    >
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          )
         ) : (
           <Link
             key={idx}
