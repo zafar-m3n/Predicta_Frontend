@@ -24,6 +24,15 @@ const Sidebar = ({ menuOpen, setMenuOpen }) => {
         { label: "Withdrawal", path: "/withdrawals" },
       ],
     },
+    {
+      label: "MT5",
+      icon: "arcticons:metatrader-5",
+      children: [
+        { label: "Create Account", path: "/mt5/create" },
+        { label: "MT5 Deposit", path: "/mt5/deposit" },
+        { label: "MT5 Withdrawal", path: "/mt5/withdrawal" },
+      ],
+    },
     { label: "Wallet History", icon: "mdi:wallet-outline", path: "/wallet-history" },
     { label: "Tickets", icon: "mdi:headset", path: "/tickets" },
     { label: "Market Events", icon: "mdi:calendar-month-outline", path: "/market-events" },

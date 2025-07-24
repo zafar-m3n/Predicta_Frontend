@@ -18,6 +18,9 @@ import TicketsPage from "@/pages/client/tickets";
 import SupportTicketDetails from "@/pages/client/tickets/SupportTicketDetails";
 import MarketEventsPage from "@/pages/client/market-events";
 import ProfilePage from "@/pages/client/profile";
+import MT5CreateAccount from "@/pages/client/mt5/MT5CreateAccount";
+import MT5Deposit from "@/pages/client/mt5/MT5Deposit";
+import MT5Withdrawal from "@/pages/client/mt5/MT5Withdrawal";
 
 import AdminDashboardPage from "@/pages/admin/dashboard";
 import Documents from "@/pages/admin/documents";
@@ -42,6 +45,9 @@ function App() {
     { path: "/deposits", element: DepositsPage },
     { path: "/deposits/new/:methodId", element: DepositRequestPage },
     { path: "/withdrawals", element: WithdrawalsPage },
+    { path: "/mt5/create", element: MT5CreateAccount },
+    { path: "/mt5/deposit", element: MT5Deposit },
+    { path: "/mt5/withdrawal", element: MT5Withdrawal },
     { path: "/wallet-history", element: WalletHistoryPage },
     { path: "/tickets", element: TicketsPage },
     { path: "/tickets/:ticketId", element: SupportTicketDetails },

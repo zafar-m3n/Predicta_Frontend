@@ -42,11 +42,7 @@ const SidebarMenu = ({ menuItems, transferOpen, setTransferOpen }) => {
               }`}
             >
               <Icon icon={item.icon} width={20} className={`mr-3 ${activeParent ? "text-white" : "text-accent"}`} />
-              <span
-                className={`dark:text-gray-200 hover:bg-accent/10 ${
-                  transferOpen || activeParent ? "" : "text-gray-700"
-                }`}
-              >
+              <span className={`dark:text-gray-200 ${transferOpen || activeParent ? "" : "text-gray-700"}`}>
                 {item.label}
               </span>
               <Icon
