@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Table from "@/components/ui/Table";
 import Badge from "@/components/ui/Badge";
 import Icon from "@/components/ui/Icon";
 import Modal from "@/components/ui/Modal";
@@ -11,19 +12,6 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
   const [confirmModal, setConfirmModal] = useState({ open: false, action: null, document: null });
   const [rejectionNote, setRejectionNote] = useState("");
   const [previewModal, setPreviewModal] = useState({ open: false, documentPath: "" });
-
-  const getDocumentLabel = (type) => {
-    switch (type) {
-      case "id_card":
-        return "ID Card";
-      case "drivers_license":
-        return "Driver's License";
-      case "utility_bill":
-        return "Utility Bill";
-      default:
-        return type;
-    }
-  };
 
   const handleActionClick = (action, document) => {
     setRejectionNote("");
@@ -43,144 +31,94 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
     setPreviewModal({ open: true, documentPath: path });
   };
 
+  const getDocumentLabel = (type) => {
+    switch (type) {
+      case "id_card":
+        return "ID Card";
+      case "drivers_license":
+        return "Driver's License";
+      case "utility_bill":
+        return "Utility Bill";
+      default:
+        return type;
+    }
+  };
+
+  const columns = [
+    { key: "id", label: "ID" },
+    { key: "user", label: "User" },
+    { key: "document_type", label: "Document Type" },
+    { key: "status", label: "Status" },
+    { key: "submitted_at", label: "Submitted At" },
+    { key: "actions", label: "Actions" },
+  ];
+
+  const renderCell = (doc, col) => {
+    switch (col.key) {
+      case "user":
+        return (
+          <div>
+            <div>{doc.User?.full_name}</div>
+            <div className="text-xs text-gray-600 dark:text-gray-400">{doc.User?.email}</div>
+          </div>
+        );
+      case "document_type":
+        return getDocumentLabel(doc.document_type);
+      case "status":
+        return (
+          <Badge
+            text={doc.status}
+            color={doc.status === "approved" ? "green" : doc.status === "rejected" ? "red" : "yellow"}
+            size="sm"
+          />
+        );
+      case "submitted_at":
+        return formatDate(doc.submitted_at);
+      case "actions":
+        return (
+          <div className="flex space-x-2">
+            <button
+              onClick={() => handleViewDocument(doc.document_path)}
+              className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+            >
+              <Icon icon="mdi:eye" width="18" className="text-gray-800 dark:text-gray-200" />
+            </button>
+            {doc.status === "pending" && (
+              <>
+                <button
+                  onClick={() => handleActionClick("approve", doc)}
+                  className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                >
+                  <Icon icon="mdi:check" width="18" className="text-gray-800 dark:text-gray-200" />
+                </button>
+                <button
+                  onClick={() => handleActionClick("reject", doc)}
+                  className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+                >
+                  <Icon icon="mdi:close" width="18" className="text-gray-800 dark:text-gray-200" />
+                </button>
+              </>
+            )}
+          </div>
+        );
+      default:
+        return doc[col.key];
+    }
+  };
+
   return (
     <>
-      <div className="overflow-x-auto rounded shadow hidden md:block">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-white dark:bg-gray-700">
-            <tr>
-              {["ID", "User", "Document Type", "Status", "Submitted At", "Actions"].map((heading) => (
-                <th
-                  key={heading}
-                  className="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider"
-                >
-                  {heading}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-            {documents.length === 0 ? (
-              <tr>
-                <td colSpan="6" className="p-4 text-center text-gray-600 dark:text-gray-400">
-                  No documents found.
-                </td>
-              </tr>
-            ) : (
-              documents.map((doc) => (
-                <tr
-                  key={doc.id}
-                  className="even:bg-gray-200 even:dark:bg-gray-700 odd:bg-gray-100 odd:dark:bg-gray-800"
-                >
-                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{doc.id}</td>
-                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                    {doc.User?.full_name}
-                    <br />
-                    <span className="text-xs text-gray-600 dark:text-gray-400">{doc.User?.email}</span>
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                    {getDocumentLabel(doc.document_type)}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                    <Badge
-                      text={doc.status}
-                      color={doc.status === "approved" ? "green" : doc.status === "rejected" ? "red" : "yellow"}
-                      size="sm"
-                    />
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                    {formatDate(doc.submitted_at)}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 space-x-2">
-                    <button
-                      onClick={() => handleViewDocument(doc.document_path)}
-                      className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                    >
-                      <Icon icon="mdi:eye" width="18" className="text-gray-800 dark:text-gray-200" />
-                    </button>
-                    {doc.status === "pending" && (
-                      <>
-                        <button
-                          onClick={() => handleActionClick("approve", doc)}
-                          className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                        >
-                          <Icon icon="mdi:check" width="18" className="text-gray-800 dark:text-gray-200" />
-                        </button>
-                        <button
-                          onClick={() => handleActionClick("reject", doc)}
-                          className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                        >
-                          <Icon icon="mdi:close" width="18" className="text-gray-800 dark:text-gray-200" />
-                        </button>
-                      </>
-                    )}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <Table
+        columns={columns}
+        data={documents}
+        renderCell={renderCell}
+        emptyMessage="No documents found."
+        className="mb-4"
+      />
 
-      {/* Mobile Cards */}
-      <div className="md:hidden space-y-4">
-        {documents.length === 0 ? (
-          <div className="p-4 text-center text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 rounded shadow">
-            No documents found.
-          </div>
-        ) : (
-          documents.map((doc) => (
-            <div key={doc.id} className="bg-white dark:bg-gray-800 p-4 rounded shadow space-y-2">
-              <div className="flex justify-between items-center">
-                <div className="text-sm font-semibold text-gray-700 dark:text-gray-200">#{doc.id}</div>
-                <Badge
-                  text={doc.status}
-                  color={doc.status === "approved" ? "green" : doc.status === "rejected" ? "red" : "yellow"}
-                  size="sm"
-                />
-              </div>
-              <div className="text-sm text-gray-700 dark:text-gray-200">
-                <strong>User:</strong> {doc.User?.full_name}
-                <br />
-                <span className="text-xs text-gray-500 dark:text-gray-400">{doc.User?.email}</span>
-              </div>
-              <div className="text-sm text-gray-700 dark:text-gray-200">
-                <strong>Type:</strong> {getDocumentLabel(doc.document_type)}
-              </div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">
-                <strong>Submitted:</strong> {formatDate(doc.submitted_at)}
-              </div>
-              <div className="flex flex-wrap gap-2 pt-2">
-                <button
-                  onClick={() => handleViewDocument(doc.document_path)}
-                  className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition text-sm text-black dark:text-gray-200"
-                >
-                  <Icon icon="mdi:eye" width="18" className="me-1" /> View
-                </button>
-                {doc.status === "pending" && (
-                  <>
-                    <button
-                      onClick={() => handleActionClick("approve", doc)}
-                      className="inline-flex items-center px-2 py-1 border border-green-300 dark:border-green-600 rounded hover:bg-green-50 dark:hover:bg-green-900 transition text-sm text-green-600 dark:text-green-400"
-                    >
-                      <Icon icon="mdi:check" width="18" className="mr-1" /> Approve
-                    </button>
-                    <button
-                      onClick={() => handleActionClick("reject", doc)}
-                      className="inline-flex items-center px-2 py-1 border border-red-300 dark:border-red-600 rounded hover:bg-red-50 dark:hover:bg-red-900 transition text-sm text-red-600 dark:text-red-400"
-                    >
-                      <Icon icon="mdi:close" width="18" className="mr-1" /> Reject
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-          ))
-        )}
-      </div>
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} className="mt-2" />
 
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} className="mt-4" />
-
+      {/* Confirm Modal */}
       <Modal
         isOpen={confirmModal.open}
         onClose={() => setConfirmModal({ open: false, action: null, document: null })}
@@ -216,6 +154,7 @@ const DocumentsTable = ({ documents, onApprove, onReject, currentPage, totalPage
         </div>
       </Modal>
 
+      {/* Preview Modal */}
       <Modal
         isOpen={previewModal.open}
         onClose={() => setPreviewModal({ open: false, documentPath: "" })}

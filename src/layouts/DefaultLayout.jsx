@@ -9,7 +9,7 @@ const DefaultLayout = ({ children }) => {
   const location = useLocation();
 
   return (
-    <div className="flex h-screen bg-gray-50 font-dm-sans overflow-hidden relative dark:bg-gray-900">
+    <div className="flex h-screen bg-white font-dm-sans overflow-hidden relative dark:bg-gray-900/95">
       <Sidebar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
       <div
         onClick={() => setMenuOpen(false)}

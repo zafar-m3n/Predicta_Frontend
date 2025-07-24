@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import API from "@/services/index";
-import Notification from "@/components/ui/Notification";
+import Table from "@/components/ui/Table";
 import Modal from "@/components/ui/Modal";
+import Notification from "@/components/ui/Notification";
 import AddWithdrawalMethodForm from "./AddWithdrawalMethodsForm";
 import Spinner from "@/components/ui/Spinner";
 import Heading from "@/components/ui/Heading";
@@ -36,9 +37,23 @@ const WithdrawalMethodsTable = () => {
   const bankMethods = methods.filter((m) => m.type === "bank" && m.status === "active");
   const cryptoMethods = methods.filter((m) => m.type === "crypto" && m.status === "active");
 
-  if (loading) {
-    return <Spinner message="Loading withdrawal details" />;
-  }
+  const bankColumns = [
+    { key: "id", label: "ID" },
+    { key: "bank_name", label: "Bank Name" },
+    { key: "account_number", label: "Account Number" },
+    { key: "account_name", label: "Account Name" },
+  ];
+
+  const cryptoColumns = [
+    { key: "id", label: "ID" },
+    { key: "network", label: "Network" },
+    { key: "wallet_address", label: "Wallet Address" },
+  ];
+
+  const renderBankCell = (method, col) => method[col.key] || "-";
+  const renderCryptoCell = (method, col) => method[col.key] || "-";
+
+  if (loading) return <Spinner message="Loading withdrawal details" />;
 
   return (
     <div className="w-full">
@@ -51,55 +66,12 @@ const WithdrawalMethodsTable = () => {
           </div>
         </div>
 
-        <div className="overflow-x-auto rounded">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-700">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  ID
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Bank Name
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Account Number
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Account Name
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
-              {bankMethods.length === 0 ? (
-                <tr>
-                  <td colSpan="4" className="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
-                    No bank details methods found.
-                  </td>
-                </tr>
-              ) : (
-                bankMethods.map((method) => (
-                  <tr
-                    key={method.id}
-                    className="odd:bg-gray-50 even:bg-white dark:odd:bg-gray-800/90 dark:even:bg-gray-900"
-                  >
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                      {method.id}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                      {method.bank_name}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                      {method.account_number}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                      {method.account_name}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+        <Table
+          columns={bankColumns}
+          data={bankMethods}
+          renderCell={renderBankCell}
+          emptyMessage="No bank details methods found."
+        />
       </div>
 
       {/* Crypto Section */}
@@ -111,51 +83,15 @@ const WithdrawalMethodsTable = () => {
           </div>
         </div>
 
-        <div className="overflow-x-auto rounded">
-          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-50 dark:bg-gray-700">
-              <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  ID
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Network
-                </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  Wallet Address
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-800">
-              {cryptoMethods.length === 0 ? (
-                <tr>
-                  <td colSpan="3" className="px-4 py-6 text-center text-gray-500 dark:text-gray-400">
-                    No crypto withdrawal details found.
-                  </td>
-                </tr>
-              ) : (
-                cryptoMethods.map((method) => (
-                  <tr
-                    key={method.id}
-                    className="odd:bg-gray-50 even:bg-white dark:odd:bg-gray-800/90 dark:even:bg-gray-900"
-                  >
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                      {method.id}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                      {method.network}
-                    </td>
-                    <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                      {method.wallet_address}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+        <Table
+          columns={cryptoColumns}
+          data={cryptoMethods}
+          renderCell={renderCryptoCell}
+          emptyMessage="No crypto withdrawal details found."
+        />
       </div>
 
+      {/* Modals */}
       <Modal isOpen={isBankModalOpen} onClose={() => setIsBankModalOpen(false)} title="Add Bank Withdrawal Details">
         <AddWithdrawalMethodForm type="bank" onSuccess={fetchMethods} onClose={() => setIsBankModalOpen(false)} />
       </Modal>

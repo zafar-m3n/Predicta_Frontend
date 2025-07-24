@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Table from "@/components/ui/Table";
 import Badge from "@/components/ui/Badge";
 import Icon from "@/components/ui/Icon";
 import Pagination from "@/components/ui/Pagination";
@@ -39,160 +40,73 @@ const UserTable = ({ users, onEdit, onDelete, onView, currentPage, totalPages, o
     setUserToDelete(null);
   };
 
+  const columns = [
+    { key: "id", label: "ID" },
+    { key: "full_name", label: "Name" },
+    { key: "email", label: "Email" },
+    { key: "phone_number", label: "Phone" },
+    { key: "country_code", label: "Country" },
+    { key: "role", label: "Role" },
+    { key: "promo_code", label: "Promo Code" },
+    { key: "email_verified", label: "Verified" },
+    { key: "actions", label: "Actions" },
+  ];
+
+  const renderCell = (user, col) => {
+    switch (col.key) {
+      case "phone_number":
+        return formatPhoneNumber(user.phone_number);
+      case "country_code":
+        return getCountryName(user.country_code);
+      case "role":
+        return <Badge text={user.role} color={user.role === "admin" ? "blue" : "gray"} size="sm" />;
+      case "promo_code":
+        return user.promo_code || "N/A";
+      case "email_verified":
+        return (
+          <Badge
+            text={user.email_verified ? "Verified" : "Not Verified"}
+            color={user.email_verified ? "green" : "red"}
+            size="sm"
+          />
+        );
+      case "actions":
+        return (
+          <div className="space-x-2 flex flex-wrap justify-end">
+            <button
+              onClick={() => onView(user)}
+              className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+              title="View"
+            >
+              <Icon icon="mdi:eye" width="18" className="text-gray-800 dark:text-gray-200" />
+            </button>
+            <button
+              onClick={() => onEdit(user)}
+              className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+              title="Edit"
+            >
+              <Icon icon="mdi:pencil" width="18" className="text-gray-800 dark:text-gray-200" />
+            </button>
+            <button
+              onClick={() => confirmDelete(user)}
+              className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+              title="Delete"
+            >
+              <Icon icon="mdi:trash-can" width="18" className="text-gray-800 dark:text-gray-200" />
+            </button>
+          </div>
+        );
+      default:
+        return user[col.key];
+    }
+  };
+
   return (
     <>
-      {/* Desktop table view */}
-      <div className="overflow-x-auto rounded shadow hidden md:block">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-white dark:bg-gray-950">
-            <tr>
-              {["ID", "Name", "Email", "Phone", "Country", "Role", "Promo Code", "Verified", "Actions"].map(
-                (heading) => (
-                  <th
-                    key={heading}
-                    className="px-4 py-2 text-left text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider"
-                  >
-                    {heading}
-                  </th>
-                )
-              )}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-            {users.length === 0 ? (
-              <tr>
-                <td colSpan="9" className="p-4 text-center text-gray-600 dark:text-gray-400">
-                  No users found.
-                </td>
-              </tr>
-            ) : (
-              users.map((user) => (
-                <tr
-                  key={user.id}
-                  className="even:bg-gray-200 even:dark:bg-gray-700 odd:bg-gray-100 odd:dark:bg-gray-800"
-                >
-                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{user.id}</td>
-                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                    {user.full_name}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">{user.email}</td>
-                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                    {formatPhoneNumber(user.phone_number)}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                    {getCountryName(user.country_code)}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                    <Badge text={user.role} color={user.role === "admin" ? "blue" : "gray"} size="sm" />
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                    {user.promo_code || "N/A"}
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                    <Badge
-                      text={user.email_verified ? "Verified" : "Not Verified"}
-                      color={user.email_verified ? "green" : "red"}
-                      size="sm"
-                    />
-                  </td>
-                  <td className="px-4 py-2 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 space-x-2">
-                    <button
-                      onClick={() => onView(user)}
-                      className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                      title="View"
-                    >
-                      <Icon icon="mdi:eye" width="18" className="text-gray-800 dark:text-gray-200" />
-                    </button>
-                    <button
-                      onClick={() => onEdit(user)}
-                      className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                      title="Edit"
-                    >
-                      <Icon icon="mdi:pencil" width="18" className="text-gray-800 dark:text-gray-200" />
-                    </button>
-                    <button
-                      onClick={() => confirmDelete(user)}
-                      className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-                      title="Delete"
-                    >
-                      <Icon icon="mdi:trash-can" width="18" className="text-gray-800 dark:text-gray-200" />
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <Table columns={columns} data={users} renderCell={renderCell} emptyMessage="No users found." className="mb-4" />
 
-      {/* Mobile card layout */}
-      <div className="md:hidden space-y-4">
-        {users.length === 0 ? (
-          <div className="p-4 text-center text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 rounded shadow">
-            No users found.
-          </div>
-        ) : (
-          users.map((user) => (
-            <div key={user.id} className="bg-white dark:bg-gray-800 p-4 rounded shadow space-y-2">
-              <div className="flex justify-between items-center">
-                <div className="text-sm font-semibold text-gray-700 dark:text-gray-200">#{user.id}</div>
-                <Badge
-                  text={user.email_verified ? "Verified" : "Not Verified"}
-                  color={user.email_verified ? "green" : "red"}
-                  size="sm"
-                />
-              </div>
-              <div className="text-sm text-gray-700 dark:text-gray-200">
-                <strong>Name:</strong> {user.full_name}
-              </div>
-              <div className="text-sm text-gray-700 dark:text-gray-200">
-                <strong>Email:</strong> {user.email}
-              </div>
-              <div className="text-sm text-gray-700 dark:text-gray-200">
-                <strong>Phone:</strong> {formatPhoneNumber(user.phone_number)}
-              </div>
-              <div className="text-sm text-gray-700 dark:text-gray-200">
-                <strong>Country:</strong> {getCountryName(user.country_code)}
-              </div>
-              <div className="text-sm text-gray-700 dark:text-gray-200">
-                <strong>Role:</strong>{" "}
-                <Badge text={user.role} color={user.role === "admin" ? "blue" : "gray"} size="sm" />
-              </div>
-              <div className="text-sm text-gray-700 dark:text-gray-200">
-                <strong>Promo Code:</strong> {user.promo_code || "N/A"}
-              </div>
-              <div className="flex flex-wrap gap-2 pt-2">
-                <button
-                  onClick={() => onView(user)}
-                  className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition text-sm text-black dark:text-white"
-                  title="View"
-                >
-                  <Icon icon="mdi:eye" width="18" className="mr-1" /> View
-                </button>
-                <button
-                  onClick={() => onEdit(user)}
-                  className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-900 transition text-sm text-black dark:text-white"
-                  title="Edit"
-                >
-                  <Icon icon="mdi:pencil" width="18" className="mr-1" /> Edit
-                </button>
-                <button
-                  onClick={() => confirmDelete(user)}
-                  className="inline-flex items-center px-2 py-1 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-900 transition text-sm text-black dark:text-white"
-                  title="Delete"
-                >
-                  <Icon icon="mdi:trash-can" width="18" className="mr-1" /> Delete
-                </button>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
+      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
 
-      {/* Pagination */}
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} className="mt-4" />
-
-      {/* Delete confirmation modal */}
       <Modal isOpen={deleteModalOpen} onClose={() => setDeleteModalOpen(false)} title="Confirm Delete" size="md">
         <div className="bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 px-4 py-2 rounded mb-4 font-medium">
           This action cannot be undone.
