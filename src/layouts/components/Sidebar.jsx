@@ -64,7 +64,7 @@ const Sidebar = ({ menuOpen }) => {
 
       {userRole === "client" && <SidebarWallet />}
 
-      <SidebarMenu menuItems={menuItems} />
+      <SidebarMenu menuItems={menuItems} className="custom-scrollbar" />
     </div>
   );
 };

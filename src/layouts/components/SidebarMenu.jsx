@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import Icon from "@/components/ui/Icon";
 import token from "@/lib/utilities";
 
-const SidebarMenu = ({ menuItems }) => {
+const SidebarMenu = ({ menuItems, className = "" }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [openMenus, setOpenMenus] = useState({});
@@ -21,7 +21,7 @@ const SidebarMenu = ({ menuItems }) => {
   const isChildActive = (children) => children?.some((child) => location.pathname === child.path);
 
   return (
-    <nav className="mt-6 flex-1 px-3 pb-4 space-y-1 overflow-y-auto">
+    <nav className={`mt-6 flex-1 px-3 pb-4 space-y-1 overflow-y-auto ${className}`}>
       {menuItems.map((item, idx) => {
         const isActive = location.pathname === item.path;
         const hasChildren = Array.isArray(item.children);
