@@ -1,17 +1,10 @@
 import React from "react";
 
-const Table = ({
-  columns = [],
-  data = [],
-  renderCell,
-  emptyMessage = "No records found.",
-  className = "",
-  mobileBreakpoint = "sm",
-}) => {
+const Table = ({ columns = [], data = [], renderCell, emptyMessage = "No records found.", className = "" }) => {
   return (
     <div className={`w-full ${className}`}>
       {/* Desktop Table */}
-      <div className={`hidden ${mobileBreakpoint}:block overflow-x-auto rounded shadow`}>
+      <div className={`hidden md:block overflow-x-auto rounded shadow`}>
         <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
           <thead className="bg-accent/20 dark:bg-accent/30">
             <tr>
@@ -51,7 +44,7 @@ const Table = ({
       </div>
 
       {/* Mobile Stacked Layout */}
-      <div className={`${mobileBreakpoint}:hidden space-y-4`}>
+      <div className={`md:hidden space-y-4`}>
         {data.length === 0 ? (
           <div className="p-4 text-center text-gray-700 dark:text-gray-300 bg-accent/10 dark:bg-accent/20 rounded shadow">
             {emptyMessage}
