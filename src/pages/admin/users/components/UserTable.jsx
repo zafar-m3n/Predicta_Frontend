@@ -101,6 +101,8 @@ const UserTable = ({ users, onEdit, onDelete, onView, currentPage, totalPages, o
     }
   };
 
+  console.log("Users", users);
+
   return (
     <>
       <Table columns={columns} data={users} renderCell={renderCell} emptyMessage="No users found." className="mb-4" />
