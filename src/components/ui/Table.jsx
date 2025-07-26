@@ -6,7 +6,7 @@ const Table = ({
   renderCell,
   emptyMessage = "No records found.",
   className = "",
-  mobileBreakpoint = "md",
+  mobileBreakpoint = "sm",
 }) => {
   return (
     <div className={`w-full ${className}`}>
